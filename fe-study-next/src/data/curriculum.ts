@@ -6452,6 +6452,157 @@ ABC分析: Aが品目数の上位20%で売上の80%を占める（パレート�
           },
         ],
       },
+      {
+        id: 'b3-4',
+        title: '動的計画法・最短経路',
+        content: `
+<h3>動的計画法（Dynamic Programming: DP）とは</h3>
+<p>問題を<strong>重複するサブ問題</strong>に分割し、各サブ問題の解を表（テーブル）に記録しながら解く手法です。「記憶しながら解く」のが特徴で、再帰+メモ化と本質的に同じです。</p>
+<p>適用条件：</p>
+<ol>
+  <li><strong>最適部分構造</strong>: 問題の最適解がサブ問題の最適解から構成できる</li>
+  <li><strong>重複部分問題</strong>: 同じサブ問題が複数回登場する</li>
+</ol>
+
+<h3>DP の基本パターン：フィボナッチ数列</h3>
+<pre>
+// 再帰では F(5) の計算で F(3) が2回、F(2) が3回呼ばれる（無駄）
+// DP（ボトムアップ）では表に順番に埋めていく
+
+dp[0] ← 0
+dp[1] ← 1
+i を 2 から n まで繰り返す:
+    dp[i] ← dp[i-1] + dp[i-2]
+dp[n] を返す
+
+// F(5) の計算例
+// dp = [0, 1, 1, 2, 3, 5]
+// 計算量: O(n)、空間: O(n)
+</pre>
+
+<h3>0/1ナップサック問題</h3>
+<p>重さと価値を持つ n 個のアイテムを、重量上限 W のナップサックに詰める問題（各アイテムは0個か1個のみ選択可）。</p>
+<pre>
+// dp[i][w] = 最初のi個のアイテムから重さw以内で選んだときの最大価値
+アイテム: [(重さ2, 価値3), (重さ3, 価値4), (重さ4, 価値5)]
+重量上限 W = 5
+
+dp[0][w] ← 0  // アイテム0個のとき価値0
+
+i を 1 から n まで繰り返す:
+    w を 0 から W まで繰り返す:
+        もし items[i].重さ > w なら:
+            dp[i][w] ← dp[i-1][w]  // このアイテムは入らない
+        そうでなければ:
+            dp[i][w] ← max(dp[i-1][w],                          // 入れない
+                           dp[i-1][w - items[i].重さ] + items[i].価値) // 入れる
+
+// dp[3][5] = 7  (重さ2の価値3 + 重さ3の価値4 = 合計重さ5, 価値7)
+// 計算量: O(n × W)
+</pre>
+
+<h3>最長共通部分列（LCS）</h3>
+<p>2つの文字列に共通して現れる最長の部分列（連続でなくてもよい）を求める問題。</p>
+<pre>
+// 文字列 X="ABCB", Y="BDCAB" の LCS は "BCB" (長さ3)
+
+dp[i][j] = X[1..i] と Y[1..j] の LCS の長さ
+
+i を 1 から |X| まで繰り返す:
+    j を 1 から |Y| まで繰り返す:
+        もし X[i] = Y[j] なら:
+            dp[i][j] ← dp[i-1][j-1] + 1  // 文字が一致
+        そうでなければ:
+            dp[i][j] ← max(dp[i-1][j], dp[i][j-1])
+
+// 計算量: O(|X| × |Y|)
+</pre>
+
+<h3>ダイクストラ法（最短経路）</h3>
+<p>重み付きグラフで、1つの始点から全頂点への最短経路を求めるアルゴリズム。<strong>負の重みは使えない</strong>点に注意。</p>
+<pre>
+関数 ダイクストラ(グラフ, 始点):
+    dist ← 全頂点を∞で初期化, dist[始点] ← 0
+    未確定頂点の集合 ← 全頂点
+
+    未確定頂点が空になるまで繰り返す:
+        u ← 未確定頂点の中で dist が最小の頂点
+        未確定頂点から u を削除
+
+        u の各隣接頂点 v に対して:
+            もし dist[u] + 辺(u,v)の重み < dist[v] なら:
+                dist[v] ← dist[u] + 辺(u,v)の重み  // 距離を更新
+
+    dist を返す
+
+// 優先度キュー（ヒープ）を使うと O((V + E) log V)
+</pre>
+
+<h3>DP vs 貪欲法</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">手法</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">考え方</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">保証</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">代表例</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>DP</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">全パターンを表に記録して最適解を求める</td><td style="padding:5px 8px;border:1px solid var(--color-border)">最適解を保証</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ナップサック・LCS</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>貪欲法</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">各ステップで局所最適な選択をする</td><td style="padding:5px 8px;border:1px solid var(--color-border)">問題によっては最適解を保証しない</td><td style="padding:5px 8px;border:1px solid var(--color-border)">コイン問題・クラスカル法</td></tr>
+</table>
+        `,
+        questions: [
+          {
+            id: 1066,
+            question: '動的計画法（DP）の適用条件として正しいものを2つ選んだ組み合わせはどれか。',
+            choices: [
+              '最適部分構造と重複部分問題が存在する',
+              '問題の解が一意に決まる',
+              '全探索より必ず遅い',
+              '負の重みを持つグラフにも必ず適用できる',
+            ],
+            answer: 0,
+            explanation: '動的計画法の適用には「最適部分構造（サブ問題の最適解から全体の最適解が構成できる）」と「重複部分問題（同じサブ問題が複数回登場する）」の2条件が必要です。全探索より高速であることがDPの利点です。',
+          },
+          {
+            id: 1067,
+            question: 'ナップサック問題（0/1型）をDPで解くとき、dp[i][w]が表す意味として正しいものはどれか。',
+            choices: [
+              'i番目のアイテムの価値',
+              '最初のi個のアイテムから重さw以内で選んだときの最大価値',
+              'i番目のアイテムを必ず入れたときの重さw以内の最大価値',
+              '重さw以下のアイテムの個数',
+            ],
+            answer: 1,
+            explanation: 'dp[i][w]は「最初のi個のアイテムの中から、合計重量w以内で選んだときに得られる最大の価値」を表します。この定義からi番目のアイテムを「入れる」か「入れない」かの選択をDP遷移として記述します。',
+          },
+          {
+            id: 1068,
+            question: 'フィボナッチ数列をDPで計算したとき（F(0)=0, F(1)=1）、F(6)の値はどれか。',
+            choices: ['6', '7', '8', '13'],
+            answer: 2,
+            explanation: 'F(2)=1, F(3)=2, F(4)=3, F(5)=5, F(6)=8 です。DPでは表に順番に値を埋めていくため、F(5)+F(4)=5+3=8 と計算できます。',
+          },
+          {
+            id: 1069,
+            question: 'ダイクストラ法で解決できる問題として正しいものはどれか。',
+            choices: [
+              '負の重みを含むグラフでの最短経路',
+              '重み付きグラフ（非負の重み）での最短経路',
+              'グラフの連結成分の個数',
+              'グラフのトポロジカルソート',
+            ],
+            answer: 1,
+            explanation: 'ダイクストラ法は非負の重みを持つグラフで、単一始点から全頂点への最短経路を求めます。負の重みがあるとベルマンフォード法を使います。グラフの連結成分はDFS/BFS、トポロジカルソートはDAGのDFSで求めます。',
+          },
+          {
+            id: 1070,
+            question: '優先度キュー（ヒープ）を使ったダイクストラ法の時間計算量はどれか（V=頂点数、E=辺数）。',
+            choices: ['O(V²)', 'O(V × E)', 'O((V + E) log V)', 'O(E log E)'],
+            answer: 2,
+            explanation: '優先度キュー（ヒープ）を使ったダイクストラ法の計算量はO((V + E) log V)です。単純な配列で実装するとO(V²)です。辺の数が少ない疎なグラフではヒープを使った実装が有利です。',
+          },
+        ],
+      },
     ],
   },
   {
@@ -6940,6 +7091,182 @@ is-a=継承（犬は動物）、has-a=委譲（車はエンジンを持つ）。
             ],
             answer: 1,
             explanation: 'Adapterパターンは既存クラスのインタフェースを、クライアントが期待する別のインタフェースに変換します。電源コンセントのアダプタと同じ概念で、互換性のない既存コードを変更せずに再利用できます。',
+          },
+        ],
+      },
+      {
+        id: 'b4-4',
+        title: 'SOLID原則・UML基礎',
+        content: `
+<h3>SOLID原則とは</h3>
+<p>Robert C. Martin が提唱した、オブジェクト指向設計の5つの指針です。保守性・拡張性・テスト容易性の高いコードを書くための原則です。</p>
+
+<h3>S — 単一責任原則（Single Responsibility Principle）</h3>
+<p>「クラスは1つの責任（理由）のみで変更される」べきです。</p>
+<pre>
+// 悪い例: UserクラスがDB保存とメール送信の両方を担う
+クラス User:
+    メソッド save():      // DB担当
+    メソッド sendEmail(): // メール担当 ← 別責任！
+
+// 良い例: 責任を分割する
+クラス User:           // データ担当
+クラス UserRepository: // DB保存担当
+クラス EmailService:   // メール担当
+</pre>
+
+<h3>O — 開放閉鎖原則（Open/Closed Principle）</h3>
+<p>「拡張には開いており（Open）、修正には閉じている（Closed）」べきです。新機能追加時に既存コードを変更しない設計が理想です。</p>
+<pre>
+// 悪い例: 新形状を追加するたびに既存コードを修正
+関数 面積計算(形状):
+    もし 形状.種類 = "円" なら: ...
+    もし 形状.種類 = "四角" なら: ...   // 新形状で変更が必要
+
+// 良い例: 抽象クラスで拡張
+抽象クラス 形状:
+    抽象メソッド 面積(): 数値
+
+クラス 円 extends 形状:
+    メソッド 面積(): 3.14 × 半径²
+
+クラス 三角形 extends 形状:     // 既存コード変更なしで追加
+    メソッド 面積(): 底辺 × 高さ ÷ 2
+</pre>
+
+<h3>L — リスコフ置換原則（Liskov Substitution Principle）</h3>
+<p>「サブクラスは親クラスと置換可能でなければならない」。子クラスが親クラスの期待を裏切ると問題が起きます。</p>
+<pre>
+// 問題例: 正方形は長方形のサブクラスとして正しいか？
+クラス 長方形:
+    メソッド 幅を設定(w): 自身.幅 ← w
+    メソッド 高さを設定(h): 自身.高さ ← h
+    メソッド 面積(): 幅 × 高さ
+
+クラス 正方形 extends 長方形:
+    メソッド 幅を設定(w):
+        自身.幅 ← w
+        自身.高さ ← w   // 正方形なので高さも変える
+
+// 長方形として扱うと期待と違う動作になる → LSP違反
+r ← 正方形()
+r.幅を設定(4)
+r.高さを設定(5)
+表示(r.面積())  // 25 が返る（期待値は20）
+</pre>
+
+<h3>I — インタフェース分離原則（Interface Segregation Principle）</h3>
+<p>「クライアントが使わないメソッドへの依存を強制してはならない」。大きなインタフェースは小さく分割する。</p>
+<pre>
+// 悪い例: 1つの肥大インタフェース
+インタフェース 動物:
+    歩く()
+    飛ぶ()   // 鳥以外には不要
+    泳ぐ()   // 魚以外には不要
+
+// 良い例: 分割
+インタフェース 歩ける: 歩く()
+インタフェース 飛べる: 飛ぶ()
+インタフェース 泳げる: 泳ぐ()
+
+クラス 犬 implements 歩ける, 泳げる:  // 飛ぶは実装しなくてよい
+</pre>
+
+<h3>D — 依存性逆転原則（Dependency Inversion Principle）</h3>
+<p>「上位モジュールは下位モジュールに直接依存してはならない。どちらも抽象（インタフェース）に依存すべき」。</p>
+<pre>
+// 悪い例: 上位クラスが具体的な実装クラスに依存
+クラス 注文サービス:
+    db ← MySQLデータベース()  // 具体実装に直接依存
+
+// 良い例: インタフェースを通じて依存
+インタフェース データベース:
+    保存(データ)
+
+クラス MySQL implements データベース: 保存(データ): ...
+クラス PostgreSQL implements データベース: 保存(データ): ...
+
+クラス 注文サービス:
+    コンストラクタ(db: データベース):  // 抽象に依存
+        自身.db ← db              // MySQL でも PostgreSQL でも差し替え可能
+</pre>
+
+<h3>UMLクラス図の基本記法</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">記号</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">意味</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">例</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>実線＋矢印（→）</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">関連（Association）— 使う関係</td><td style="padding:5px 8px;border:1px solid var(--color-border)">注文 → 商品</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>白抜き三角（△）</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">継承（Generalization）— is-a関係</td><td style="padding:5px 8px;border:1px solid var(--color-border)">犬 ▷ 動物</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>破線＋白抜き三角</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">実現（Realization）— インタフェース実装</td><td style="padding:5px 8px;border:1px solid var(--color-border)">MySQL ▷ DB</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>白抜きひし形（◇）</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">集約（Aggregation）— has-a（弱い）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">部署 ◇ 社員</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>塗りひし形（◆）</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">コンポジション（Composition）— has-a（強い）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">家 ◆ 部屋</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>多重度 1..* / 0..1</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">端点の数量制約</td><td style="padding:5px 8px;border:1px solid var(--color-border)">1人が0..* 注文を持つ</td></tr>
+</table>
+<p><strong>集約 vs コンポジション</strong>: 集約は部品が独立して存在できる（社員は部署がなくなっても存在する）。コンポジションは全体が消えると部品も消える（家が取り壊されると部屋も消える）。</p>
+        `,
+        questions: [
+          {
+            id: 1071,
+            question: 'SOLID原則の「S」（単一責任原則）の説明として正しいものはどれか。',
+            choices: [
+              'クラスは最低1つの抽象メソッドを持つべきである',
+              'クラスは1つの責任のみを持ち、1つの理由でのみ変更される',
+              'サブクラスは親クラスと置換可能でなければならない',
+              '上位モジュールは下位モジュールに直接依存してはならない',
+            ],
+            answer: 1,
+            explanation: '単一責任原則（SRP）は「クラスを変更する理由はただ1つであるべき」という原則です。複数の責任を持つクラスは変更の影響範囲が広がり、バグの原因になりやすいです。選択肢3はリスコフ置換原則、選択肢4は依存性逆転原則です。',
+          },
+          {
+            id: 1072,
+            question: '開放閉鎖原則（OCP）に従った設計の特徴として正しいものはどれか。',
+            choices: [
+              '新機能追加時に既存クラスを直接修正する',
+              '新機能追加時に既存クラスを修正せず、新しいクラスを追加して拡張する',
+              'インタフェースを使わずに直接クラス間で通信する',
+              '全メソッドをpublicにして外部から自由に変更できるようにする',
+            ],
+            answer: 1,
+            explanation: '開放閉鎖原則は「拡張には開いており（新クラス追加可）、修正には閉じている（既存コード変更不要）」という原則です。抽象クラスやインタフェースを使うことで、既存コードを変更せずに新機能を追加できます。',
+          },
+          {
+            id: 1073,
+            question: 'UMLクラス図で「継承（is-a関係）」を表す記号はどれか。',
+            choices: [
+              '実線に塗りつぶしひし形（◆）',
+              '実線に白抜きひし形（◇）',
+              '実線に白抜き三角形（△）の矢印',
+              '破線に通常の矢印',
+            ],
+            answer: 2,
+            explanation: 'UMLクラス図で継承（Generalization）は白抜き三角形（△）の矢印で表します。子クラスから親クラスに向けて引きます。塗りひし形はコンポジション、白抜きひし形は集約、破線矢印は依存関係を表します。',
+          },
+          {
+            id: 1074,
+            question: 'UMLクラス図の「コンポジション（Composition）」が示す関係として正しいものはどれか。',
+            choices: [
+              'has-a 関係で、部品が独立して存在できる',
+              'has-a 関係で、全体が消えると部品も消える強い所有関係',
+              'is-a 関係で、サブクラスが親クラスを継承する',
+              'インタフェースをクラスが実装する関係',
+            ],
+            answer: 1,
+            explanation: 'コンポジション（強い集約）は「全体が消えると部品も消える」強い所有関係です（例：家が取り壊されると部屋も消える）。これに対し集約（弱い集約）は部品が独立して存在できる関係（例：社員は部署がなくなっても存在する）です。',
+          },
+          {
+            id: 1075,
+            question: '依存性逆転原則（DIP）の目的として正しいものはどれか。',
+            choices: [
+              '上位モジュールが下位モジュールの具体実装に直接依存することで結合を強める',
+              'インタフェース（抽象）を挟むことで上位・下位モジュールの結合を疎にする',
+              'クラスを1つの責任のみに集中させる',
+              'サブクラスが親クラスの期待を裏切らないようにする',
+            ],
+            answer: 1,
+            explanation: '依存性逆転原則（DIP）は上位・下位モジュールがともにインタフェース（抽象）に依存することで、具体実装の変更が上位モジュールに影響しないようにする原則です。Dependency Injection（DI）はDIPを実現する代表的な手法です。選択肢3はSRP、選択肢4はLSPの説明です。',
           },
         ],
       },
