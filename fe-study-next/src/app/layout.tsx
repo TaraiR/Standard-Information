@@ -28,12 +28,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ja">
       <body>
+        <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('fe-theme');if(t)document.documentElement.dataset.theme=t;else if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark';}catch(e){}` }} />
+        <script dangerouslySetInnerHTML={{ __html: `(function(){var b=document.createElement('button');b.className='scroll-top-btn';b.setAttribute('aria-label','ページ上部へ戻る');b.textContent='↑';b.style.display='none';b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});document.addEventListener('DOMContentLoaded',function(){document.body.appendChild(b);window.addEventListener('scroll',function(){b.style.display=window.scrollY>320?'flex':'none';},{passive:true});});})();` }} />
         <Navbar />
         <div className="page-wrapper">
           {children}
         </div>
         <footer className="site-footer">
-          <p>基本情報技術者試験 学習サイト — 無料で学べる教材</p>
+          <div className="site-footer-inner">
+            <p className="site-footer-name">基本情報技術者試験 学習サイト — 無料で学べる教材</p>
+            <p className="site-footer-notice">
+              本サイトは非公式の学習支援サイトです。IPA・試験実施機関とは無関係です。内容の正確性は保証しません。
+            </p>
+            <nav className="site-footer-links">
+              <a href="/disclaimer">免責事項</a>
+              <span>·</span>
+              <a href="https://www.ipa.go.jp/shiken/kubun/fe.html" target="_blank" rel="noopener noreferrer">IPA 公式サイト</a>
+              <span>·</span>
+              <a href="https://www.fe-siken.com/fekakomon.php" target="_blank" rel="noopener noreferrer">過去問道場</a>
+            </nav>
+          </div>
         </footer>
         <Analytics />
       </body>

@@ -3,6 +3,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { curriculum } from '@/data/curriculum';
+import { useProgress } from '@/hooks/useProgress';
+import ThemeToggle from './ThemeToggle';
+import SearchBox from './SearchBox';
 
 const Navbar: React.FC = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -12,6 +15,7 @@ const Navbar: React.FC = () => {
 
   const subjectA = curriculum.filter(c => c.subject === 'A');
   const subjectB = curriculum.filter(c => c.subject === 'B');
+  const { isComplete } = useProgress();
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -41,6 +45,19 @@ const Navbar: React.FC = () => {
         </Link>
 
         <div className="nav-desktop">
+          <SearchBox />
+          <Link href="/glossary" className={`mock-quiz-nav-link${pathname === '/glossary' ? ' active' : ''}`}>
+            📖 用語集
+          </Link>
+          <Link href="/formulas" className={`mock-quiz-nav-link${pathname === '/formulas' ? ' active' : ''}`}>
+            📐 公式集
+          </Link>
+          <Link href="/quiz" className={`mock-quiz-nav-link${pathname === '/quiz' ? ' active' : ''}`}>
+            📝 模擬テスト
+          </Link>
+          <Link href="/stats" className={`mock-quiz-nav-link${pathname === '/stats' ? ' active' : ''}`}>
+            📊 統計
+          </Link>
           {(['A', 'B'] as const).map(subject => {
             const chapters = subject === 'A' ? subjectA : subjectB;
             return (
@@ -60,7 +77,9 @@ const Navbar: React.FC = () => {
                         href={`/chapter/${ch.id}`}
                         className={`dropdown-item ${pathname === `/chapter/${ch.id}` ? 'active' : ''}`}
                       >
-                        <span className="dropdown-num">{i + 1}</span>
+                        {isComplete(ch.id)
+                          ? <span className="dropdown-num nav-check">✓</span>
+                          : <span className="dropdown-num">{i + 1}</span>}
                         {ch.title}
                       </Link>
                     ))}
@@ -71,6 +90,7 @@ const Navbar: React.FC = () => {
           })}
         </div>
 
+        <ThemeToggle />
         <button className="hamburger" onClick={() => setMobileOpen(!mobileOpen)} aria-label="メニュー">
           <span /><span /><span />
         </button>
@@ -78,6 +98,21 @@ const Navbar: React.FC = () => {
 
       {mobileOpen && (
         <div className="mobile-menu">
+          <div className="mobile-search">
+            <SearchBox />
+          </div>
+          <Link href="/glossary" className={`mobile-link mock-quiz-mobile-link${pathname === '/glossary' ? ' active' : ''}`}>
+            📖 用語集
+          </Link>
+          <Link href="/formulas" className={`mobile-link mock-quiz-mobile-link${pathname === '/formulas' ? ' active' : ''}`}>
+            📐 公式まとめ
+          </Link>
+          <Link href="/quiz" className={`mobile-link mock-quiz-mobile-link${pathname === '/quiz' ? ' active' : ''}`}>
+            📝 総合模擬テスト
+          </Link>
+          <Link href="/stats" className={`mobile-link mock-quiz-mobile-link${pathname === '/stats' ? ' active' : ''}`}>
+            📊 学習統計
+          </Link>
           {(['A', 'B'] as const).map(subject => {
             const chapters = subject === 'A' ? subjectA : subjectB;
             return (
@@ -89,7 +124,10 @@ const Navbar: React.FC = () => {
                     href={`/chapter/${ch.id}`}
                     className={`mobile-link ${pathname === `/chapter/${ch.id}` ? 'active' : ''}`}
                   >
-                    <span className="mobile-num">{i + 1}</span>{ch.title}
+                    {isComplete(ch.id)
+                      ? <span className="mobile-num nav-check">✓</span>
+                      : <span className="mobile-num">{i + 1}</span>}
+                    {ch.title}
                   </Link>
                 ))}
               </div>

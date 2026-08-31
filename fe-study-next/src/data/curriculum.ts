@@ -48,6 +48,7 @@ const baseChapters: Chapter[] = [
 <ul>
   <li><strong>10進数</strong>: 基数10。0〜9の10種類。日常生活で使う。</li>
   <li><strong>2進数</strong>: 基数2。0と1の2種類。コンピュータ内部。</li>
+  <li><strong>8進数</strong>: 基数8。0〜7の8種類。Unixのファイルパーミッション等で使う。</li>
   <li><strong>16進数</strong>: 基数16。0〜9とA〜Fの16種類。2進数を短く書くため。</li>
 </ul>
 
@@ -69,12 +70,27 @@ const baseChapters: Chapter[] = [
 <p>各桁の「重み（2の累乗）」を掛けて合計します。右端が2<sup>0</sup>=1、左に1桁ずれるごとに2倍になります。</p>
 <pre>
   ビット列:   1    0    1    1
-  桁の重み:  2<sup>3</sup>   2<sup>2</sup>   2<sup>1</sup>   2<sup>0</sup>
+  桁の重み:  2³   2²   2¹   2⁰
              = 8  = 4  = 2  = 1
 
   計算: 1×8 + 0×4 + 1×2 + 1×1 = 8+0+2+1 = 11
 </pre>
 <p>コツ: <strong>1があるところだけ重みを足す</strong>（0のところは0なので無視できる）</p>
+
+<h3>8進数とは（Unix・組み込みで登場）</h3>
+<p>8進数は0〜7の8種類の数字を使います。8 = 2<sup>3</sup> なので、<strong>2進数3桁 = 8進数1桁</strong>が対応します。</p>
+<p>Unixのファイルパーミッション（<code>chmod 755</code>の755など）がよく知られた例です。</p>
+<p><strong>2進数 ↔ 8進数の変換</strong>：右から3ビットずつグループ化して対応する8進数の桁に変換します。</p>
+<pre>
+  2進数: 101 111 010
+  8進数:  5   7   2  →  572(8)
+
+  確認（10進数で）: 5×64 + 7×8 + 2×1 = 320+56+2 = 378
+</pre>
+<p><strong>8進数 → 10進数</strong>：各桁に8の累乗の重みを掛けて合計します。</p>
+<pre>
+  17(8) = 1×8¹ + 7×8⁰ = 8 + 7 = 15(10)
+</pre>
 
 <h3>2進数 ↔ 16進数の変換（最重要！）</h3>
 <p>2進数4桁 = 16進数1桁という対応を使います。これが最もよく使う変換です。</p>
@@ -88,15 +104,34 @@ const baseChapters: Chapter[] = [
 <p><code>1010 1111</code>(2) → <code>1010</code>=A, <code>1111</code>=F → <code>AF</code>(16)</p>
 <p><strong>例2: 16進数 → 2進数</strong></p>
 <p><code>3C</code>(16) → 3=<code>0011</code>, C=<code>1100</code> → <code>0011 1100</code>(2)</p>
+<p><strong>例3: 16進数 → 10進数</strong></p>
+<p><code>2A</code>(16) = 2×16<sup>1</sup> + 10×16<sup>0</sup> = 32 + 10 = <strong>42</strong>(10)</p>
+
+<h3>各進数の特徴まとめ</h3>
+<table style="border-collapse:collapse;width:100%;font-size:13px">
+  <thead>
+    <tr style="background:var(--surface)">
+      <th style="border:1px solid var(--border);padding:6px 10px">進数</th>
+      <th style="border:1px solid var(--border);padding:6px 10px">使う数字</th>
+      <th style="border:1px solid var(--border);padding:6px 10px">2進数との対応</th>
+      <th style="border:1px solid var(--border);padding:6px 10px">主な用途</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style="border:1px solid var(--border);padding:6px 10px">2進数</td><td style="border:1px solid var(--border);padding:6px 10px">0, 1</td><td style="border:1px solid var(--border);padding:6px 10px">—</td><td style="border:1px solid var(--border);padding:6px 10px">コンピュータ内部</td></tr>
+    <tr><td style="border:1px solid var(--border);padding:6px 10px">8進数</td><td style="border:1px solid var(--border);padding:6px 10px">0〜7</td><td style="border:1px solid var(--border);padding:6px 10px">3桁 = 1桁</td><td style="border:1px solid var(--border);padding:6px 10px">Unixパーミッション</td></tr>
+    <tr><td style="border:1px solid var(--border);padding:6px 10px">16進数</td><td style="border:1px solid var(--border);padding:6px 10px">0〜9, A〜F</td><td style="border:1px solid var(--border);padding:6px 10px">4桁 = 1桁</td><td style="border:1px solid var(--border);padding:6px 10px">メモリアドレス・色コード</td></tr>
+  </tbody>
+</table>
 
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-16進数はプログラムやメモリアドレスの表記でよく出ます。<code>0x</code>で始まる表記（<code>0xFF</code>など）が16進数のサインです。A=10, B=11, C=12, D=13, E=14, F=15 は必ず覚えましょう。
+16進数はプログラムやメモリアドレスの表記でよく出ます。<code>0x</code>で始まる表記（<code>0xFF</code>など）が16進数のサインです。A=10, B=11, C=12, D=13, E=14, F=15 は必ず覚えましょう。8進数はUnixパーミッションで登場します（<code>chmod 755</code> など）。
 </div>
 
 <div class="caution-box">
 <strong>⚠️ よくある間違い</strong><br/>
-「余りを上から読む」ミスが多いです。必ず<strong>下から</strong>読みましょう。また、2進数→10進数の変換で「桁数を1から始める」人がいますが、右端は2<sup>0</sup>=1（2の0乗）です。
+「余りを上から読む」ミスが多いです。必ず<strong>下から</strong>読みましょう。また、2進数→10進数の変換で「桁数を1から始める」人がいますが、右端は2<sup>0</sup>=1（2の0乗）です。8進数と16進数でグループ化するビット数（3桁 vs 4桁）を混同しないよう注意。
 </div>
         `,
         diagram: 'binary',
@@ -127,7 +162,21 @@ const baseChapters: Chapter[] = [
             question: '2進数 4桁で表せる最大の10進数はいくつか。',
             choices: ['8', '15', '16', '32'],
             answer: 1,
-            explanation: '2進数4桁の最大値は 1111(2) = 8+4+2+1 = 15 です。n桁で表せる最大値は 2<sup>n</sup>-1 です。',
+            explanation: '2進数4桁の最大値は 1111(2) = 8+4+2+1 = 15 です。n桁で表せる最大値は 2ⁿ-1 です。',
+          },
+          {
+            id: 112,
+            question: '2進数 101 111(2) を8進数に変換したものはどれか。',
+            choices: ['47', '57', '67', '75'],
+            answer: 1,
+            explanation: '右から3ビットずつ区切ると 101 | 111。101(2)=5、111(2)=7 なので 57(8) です。',
+          },
+          {
+            id: 113,
+            question: '16進数の 2A を10進数に変換したものはどれか。',
+            choices: ['32', '40', '42', '52'],
+            answer: 2,
+            explanation: '2×16¹ + A(=10)×16⁰ = 32 + 10 = 42 です。',
           },
         ],
       },
@@ -186,9 +235,25 @@ const baseChapters: Chapter[] = [
 負の最大絶対値が正の最大値より1大きいことに注意。
 </div>
 
+<h3>2の補数を使った引き算の例</h3>
+<p>コンピュータが <code>9 - 5</code> を計算する手順を実際に見てみましょう（4ビット）。</p>
+<ol>
+  <li>+5 = <code>0101</code> の2の補数（= -5）を求める: ビット反転 → <code>1010</code>、+1 → <code>1011</code></li>
+  <li>9(<code>1001</code>) + (-5)(<code>1011</code>) = <code>10100</code></li>
+  <li>4ビットに収めると <code>0100</code> = 4 ✓（5ビット目の繰り上がりは無視）</li>
+</ol>
+<p>このように、引き算を「負数の足し算」に置き換えることで、CPUは加算回路だけで引き算を実現しています。</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+「8ビット符号付きで表せる最小値は？」→ <strong>-128</strong>（= -2<sup>7</sup>）<br/>
+「最大値は？」→ <strong>127</strong>（= 2<sup>7</sup>-1）<br/>
+負の最大絶対値が正の最大値より1大きいことに注意。MSB（最上位ビット）が1なら負の数。
+</div>
+
 <div class="caution-box">
 <strong>⚠️ よくある間違い</strong><br/>
-「-128の2の補数は何か？」という問題。-128は8ビットで <code>10000000</code>。これをビット反転+1すると <code>10000000</code> に戻ります（オーバーフロー）。-128の2の補数は表現できません。
+「-128の2の補数は何か？」という問題。-128は8ビットで <code>10000000</code>。これをビット反転+1すると <code>10000000</code> に戻ります（オーバーフロー）。-128の絶対値は8ビット符号付きでは表現できません。
 </div>
         `,
         diagram: 'complement',
@@ -198,7 +263,7 @@ const baseChapters: Chapter[] = [
             question: '8ビットの符号付き2進数で表せる最小値はどれか。',
             choices: ['-255', '-128', '-127', '0'],
             answer: 1,
-            explanation: 'nビット符号付きの最小値は -2<sup>n</sup>⁻¹ です。8ビットなら -2<sup>7</sup> = -128 です。',
+            explanation: 'nビット符号付きの最小値は -2^(n-1) です。8ビットなら -2^7 = -128 です。',
           },
           {
             id: 104,
@@ -206,6 +271,27 @@ const baseChapters: Chapter[] = [
             choices: ['1010', '1011', '0110', '1001'],
             answer: 1,
             explanation: 'ビット反転(0101→1010)して1を加える(1010+1=1011)。よって1011が-5を表します。',
+          },
+          {
+            id: 114,
+            question: '8ビット符号付き2進数 10000001 が表す10進数の値はどれか。',
+            choices: ['-1', '-127', '129', '-129'],
+            answer: 1,
+            explanation: 'MSBが1なので負の数。2の補数を求める: ビット反転(01111110)+1 = 01111111 = 127。よって -127 です。',
+          },
+          {
+            id: 115,
+            question: '16ビット符号付き整数で表せる正の最大値はどれか。',
+            choices: ['32767', '32768', '65535', '65536'],
+            answer: 0,
+            explanation: '16ビット符号付きの最大値は 2^15 - 1 = 32768 - 1 = 32767 です。',
+          },
+          {
+            id: 116,
+            question: '符号付き8ビット整数で 127 + 1 を計算したとき、結果はどうなるか。',
+            choices: ['128', '-128', '0', '-1'],
+            answer: 1,
+            explanation: '127(01111111) + 1(00000001) = 10000000(2) = -128 となります。これが整数オーバーフローです。',
           },
         ],
       },
@@ -268,6 +354,33 @@ const baseChapters: Chapter[] = [
   10100 → 00101（= 5 = 20 ÷ 4 = 20 ÷ 2<sup>2</sup>）
 </pre>
 
+<h3>NAND と NOR（論理ゲートの基本）</h3>
+<p>ANDやORを反転させた演算で、ハードウェア設計の基本要素です。</p>
+<p><strong>NAND（NOT AND）</strong>: ANDの結果を反転。「両方1のときだけ0、それ以外は1」</p>
+<p>重要な性質: NANDだけですべての論理演算を実現できる（<strong>汎用ゲート</strong>）。実際のIC設計ではNANDゲートが最も多用されます。</p>
+<p><strong>NOR（NOT OR）</strong>: ORの結果を反転。「どちらかが1なら0、両方0のときだけ1」</p>
+<p>NORも同様に汎用ゲートです。</p>
+
+<table style="border-collapse:collapse;font-size:13px;margin:12px 0">
+  <thead>
+    <tr style="background:var(--surface)">
+      <th style="border:1px solid var(--border);padding:6px 12px">A</th>
+      <th style="border:1px solid var(--border);padding:6px 12px">B</th>
+      <th style="border:1px solid var(--border);padding:6px 12px">AND</th>
+      <th style="border:1px solid var(--border);padding:6px 12px">OR</th>
+      <th style="border:1px solid var(--border);padding:6px 12px">XOR</th>
+      <th style="border:1px solid var(--border);padding:6px 12px">NAND</th>
+      <th style="border:1px solid var(--border);padding:6px 12px">NOR</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">0</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">0</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">0</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">0</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">0</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center"><strong>1</strong></td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center"><strong>1</strong></td></tr>
+    <tr><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">0</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">1</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">0</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">1</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">1</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center"><strong>1</strong></td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center"><strong>0</strong></td></tr>
+    <tr><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">1</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">0</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">0</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">1</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">1</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center"><strong>1</strong></td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center"><strong>0</strong></td></tr>
+    <tr><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">1</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">1</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">1</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">1</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center">0</td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center"><strong>0</strong></td><td style="border:1px solid var(--border);padding:6px 12px;text-align:center"><strong>0</strong></td></tr>
+  </tbody>
+</table>
+
 <h3>算術シフトと論理シフト</h3>
 <p><strong>論理シフト</strong>: 符号を考慮せず、ずれた部分に0を補う。符号なし整数向け。</p>
 <p><strong>算術シフト</strong>: 右シフト時に符号ビット（MSB）を保持したまま補う。符号付き整数向け。</p>
@@ -279,7 +392,7 @@ const baseChapters: Chapter[] = [
 
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-ド・モルガンの法則は毎回必ず出ます。「NOT(A AND B)」を見たら即座に「NOT(A) OR NOT(B)」と変換できるようにしましょう。シフト演算は「左nビット = ×2<sup>n</sup>」「右nビット = ÷2<sup>n</sup>」を丸暗記。
+ド・モルガンの法則は毎回必ず出ます。「NOT(A AND B)」を見たら即座に「NOT(A) OR NOT(B)」と変換できるようにしましょう。シフト演算は「左nビット = ×2<sup>n</sup>」「右nビット = ÷2<sup>n</sup>」を丸暗記。NANDは「両方1のときだけ0」が特徴です。
 </div>
         `,
         diagram: 'logic',
@@ -303,7 +416,7 @@ const baseChapters: Chapter[] = [
             question: '10進数の 3 を2ビット左シフトした結果はどれか。',
             choices: ['6', '9', '12', '24'],
             answer: 2,
-            explanation: '左シフト2ビットは ×2<sup>2</sup> = ×4 です。3 × 4 = 12 です。',
+            explanation: '左シフト2ビットは ×2² = ×4 です。3 × 4 = 12 です。',
           },
           {
             id: 106,
@@ -311,6 +424,20 @@ const baseChapters: Chapter[] = [
             choices: ['NOT(A) AND NOT(B)', 'NOT(A) OR NOT(B)', 'A OR B', 'A AND B'],
             answer: 1,
             explanation: 'ド・モルガンの法則: NOT(A AND B) = NOT(A) OR NOT(B) です。',
+          },
+          {
+            id: 117,
+            question: 'A=1, B=1 のとき、A NAND B の結果はどれか。',
+            choices: ['0', '1', '2', '-1'],
+            answer: 0,
+            explanation: 'NANDはANDの反転です。A AND B = 1 なので NAND = NOT(1) = 0 です。両方が1のときだけ0になります。',
+          },
+          {
+            id: 118,
+            question: '符号付き8ビット整数 11110000 を1ビット算術右シフトした結果はどれか。',
+            choices: ['01111000', '11111000', '00111100', '10111000'],
+            answer: 1,
+            explanation: '算術右シフトは符号ビット（MSB=1）を保持します。11110000 → 11111000 です。これは -16 → -8 に相当します。',
           },
         ],
       },
@@ -354,14 +481,31 @@ const baseChapters: Chapter[] = [
 <p><strong>オーバーフロー</strong>: 表現できる最大値を超える（∞になる）</p>
 <p><strong>アンダーフロー</strong>: 表現できる最小値より小さくなる（0になる）</p>
 
+<h3>特殊な値（IEEE 754）</h3>
+<p>IEEE 754では通常の数値以外に特殊な値が定義されています。</p>
+<ul>
+  <li><strong>+∞ / -∞（無限大）</strong>: ゼロ除算（1.0 ÷ 0.0）の結果など</li>
+  <li><strong>NaN（Not a Number）</strong>: 0 ÷ 0 や √-1 など、数値として意味をなさない計算結果</li>
+  <li><strong>+0 と -0</strong>: 符号ビットが異なる2種類のゼロが存在する（計算結果は同じ）</li>
+</ul>
+
+<h3>誤差を減らす工夫</h3>
+<p>桁落ちを回避するには、<strong>引き算の前に式を変形</strong>することが有効です。</p>
+<p>例: √(x+1) - √x は x が大きいと桁落ちが起きます。</p>
+<p>変形: √(x+1) - √x = 1 / (√(x+1) + √x) として計算すると桁落ちを回避できます。</p>
+
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-誤差の種類は名前と説明の対応を確実に覚えましょう。特に「桁落ち=近い値の差で有効桁が減る」「情報落ち=大きさが極端に違う数の加算で小さい方が消える」という区別が出ます。
+誤差の種類は名前と説明の対応を確実に覚えましょう。<br/>
+・<strong>丸め誤差</strong>: 有限桁で表現する際の切り捨て/切り上げ<br/>
+・<strong>桁落ち</strong>: 近い値の差 → 有効桁数が激減<br/>
+・<strong>情報落ち</strong>: 大きさが極端に違う数の加算 → 小さい値が消える<br/>
+・<strong>打ち切り誤差</strong>: 無限級数を有限項で打ち切ることで生じる誤差
 </div>
 
 <div class="caution-box">
 <strong>⚠️ よくある間違い</strong><br/>
-「桁落ち」と「情報落ち」を混同しやすいです。桁落ちは<strong>差（引き算）</strong>、情報落ちは<strong>和（足し算）</strong>で起きると覚えると区別しやすいです。
+「桁落ち」と「情報落ち」を混同しやすいです。桁落ちは<strong>差（引き算）</strong>、情報落ちは<strong>和（足し算）</strong>で起きると覚えると区別しやすいです。また 0.1 + 0.2 ≠ 0.3 になる原因は「丸め誤差」です。
 </div>
         `,
         diagram: 'floatingpoint',
@@ -379,6 +523,32 @@ const baseChapters: Chapter[] = [
             choices: ['16', '32', '64', '128'],
             answer: 1,
             explanation: 'IEEE 754の単精度（float）は32ビット（符号1+指数8+仮数23）、倍精度（double）は64ビットです。',
+          },
+          {
+            id: 119,
+            question: '浮動小数点演算で 1,000,000 + 0.000001 を計算したとき、0.000001 の情報が失われてしまう誤差を何というか。',
+            choices: ['桁落ち', '丸め誤差', '情報落ち', '打ち切り誤差'],
+            answer: 2,
+            explanation: '情報落ちは、絶対値が大きく異なる数同士を加算したとき、小さい方の数の情報が失われる誤差です。',
+          },
+          {
+            id: 120,
+            question: 'IEEE 754 倍精度浮動小数点数（double）の構成として正しいものはどれか。',
+            choices: [
+              '符号1ビット + 指数部8ビット + 仮数部23ビット',
+              '符号1ビット + 指数部11ビット + 仮数部52ビット',
+              '符号1ビット + 指数部8ビット + 仮数部55ビット',
+              '符号2ビット + 指数部11ビット + 仮数部51ビット',
+            ],
+            answer: 1,
+            explanation: 'IEEE 754 倍精度（64ビット）は 符号1 + 指数11 + 仮数52 の構成です。単精度は 符号1 + 指数8 + 仮数23（32ビット）。',
+          },
+          {
+            id: 121,
+            question: '浮動小数点演算で 0 ÷ 0 を計算した結果として IEEE 754 で定義されている値はどれか。',
+            choices: ['0', '∞（無限大）', 'NaN', 'エラーで計算不能'],
+            answer: 2,
+            explanation: 'IEEE 754 では 0÷0 のような不定形の計算結果は NaN（Not a Number）として定義されています。1÷0 は ±∞ です。',
           },
         ],
       },
@@ -429,14 +599,93 @@ const baseChapters: Chapter[] = [
 <p><strong>Shift_JIS</strong></p>
 <p>日本語対応の文字コード。主にWindowsのレガシーシステムで使用。ASCII文字は1バイト、日本語は2バイト。文字化けの原因になりやすい。</p>
 
+<h3>データ圧縮の基本</h3>
+<p>データを小さくすることを<strong>圧縮</strong>といいます。大きく2種類に分かれます。</p>
+
+<p><strong>可逆圧縮（ロスレス圧縮）</strong></p>
+<p>圧縮前のデータを完全に復元できる方式です。テキスト・プログラム・表計算データなど、<strong>情報を一切失えないデータ</strong>に使います。</p>
+<ul>
+  <li>ZIP・PNG・GIF・FLAC などが可逆圧縮</li>
+  <li>ハフマン符号化・ランレングス符号化などのアルゴリズムを使用</li>
+</ul>
+
+<p><strong>非可逆圧縮（ロッシー圧縮）</strong></p>
+<p>人間が気づきにくい情報を削除することで高い圧縮率を実現します。<strong>完全な復元はできません</strong>が、画像・音声・動画など知覚データに向いています。</p>
+<ul>
+  <li>JPEG・MP3・AAC・H.264/H.265 などが非可逆圧縮</li>
+</ul>
+
+<p><strong>ランレングス符号化（RLE）の例</strong></p>
+<p>同じ値の連続を「値×回数」で表す最もシンプルな可逆圧縮です。</p>
+<pre>
+  元データ: AAABBBBBCCDDDDDD
+  圧縮後:   A3 B5 C2 D6  （大幅に短縮）
+</pre>
+<p>白黒2値画像やFAXデータに特に有効です。</p>
+
+<h3>主な画像ファイル形式（頻出！）</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">形式</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">圧縮</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">色数</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">特徴・用途</th>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>JPEG</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">非可逆</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">約1,677万色</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">写真・グラデーションに最適。保存のたびに画質劣化。</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>PNG</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">可逆</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">フルカラー</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">透過（アルファチャンネル）対応。Web画像・イラストに適す。何度保存しても劣化なし。</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>GIF</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">可逆</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">最大256色</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">アニメーション対応。色数制限あり。単純な図・アイコン向き。</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>BMP</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">無圧縮</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">フルカラー</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">Windowsの標準形式。圧縮しないためファイルサイズが大きい。</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>SVG</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">ベクター</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">制限なし</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">拡大縮小しても劣化しないXMLベースの形式。ロゴ・アイコン向き。</td>
+  </tr>
+</table>
+
+<h3>動画・音声の主なファイル形式</h3>
+<ul>
+  <li><strong>MP4 / H.264（H.265）</strong>: 現在の動画の主流。非可逆圧縮で高圧縮・高品質。</li>
+  <li><strong>MPEG-2</strong>: DVDや地デジ放送で使用される動画規格。</li>
+  <li><strong>MP3</strong>: 音声の非可逆圧縮形式。人間が聞き取りにくい音域を削除して圧縮。</li>
+  <li><strong>AAC</strong>: MP3より高品質な音声圧縮。スマートフォンや配信サービスで主流。</li>
+  <li><strong>WAV / FLAC</strong>: 非圧縮・可逆圧縮の音声形式。音楽制作・マスタリング用。</li>
+</ul>
+
+<h3>サンプリングと標本化定理</h3>
+<p>アナログ音声をデジタル化する際、一定時間ごとに値を取り出す操作を<strong>標本化（サンプリング）</strong>といいます。</p>
+<p><strong>標本化定理（ナイキスト定理）</strong>: 元の信号の最高周波数の<strong>2倍以上</strong>のサンプリング周波数が必要です。</p>
+<p>CDの音楽は最高20,000Hzの音を収録するため、44,100Hz（44.1kHz）でサンプリングしています（20,000×2 = 40,000Hz 以上を満たす）。</p>
+
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-データ容量計算は「ピクセル数 × ビット深度 ÷ 8」の公式を覚えましょう。1KB=1000Bではなく<strong>1KB=1024B</strong>（2の10乗）です。HDDメーカーは1KB=1000Bで表示するため、Windowsで表示されるサイズと異なります。
+データ容量計算は「ピクセル数 × ビット深度 ÷ 8」の公式を覚えましょう。1KB=1000Bではなく<strong>1KB=1024B</strong>（2の10乗）です。圧縮は「可逆（ZIP/PNG）」と「非可逆（JPEG/MP3）」を区別。テキスト・プログラムには可逆圧縮、画像・音声には非可逆も使えます。<br/>
+画像形式: JPEG=非可逆・写真向き、PNG=可逆・透過対応、GIF=可逆・256色・アニメーション対応、BMP=無圧縮・大容量。
 </div>
 
 <div class="caution-box">
 <strong>⚠️ よくある間違い</strong><br/>
-「UTF-8で日本語1文字=2バイト」は誤りです。UTF-8での日本語（ひらがな・漢字）は<strong>3バイト</strong>です。Shift_JISが2バイトなので混同しないよう注意。
+「UTF-8で日本語1文字=2バイト」は誤りです。UTF-8での日本語（ひらがな・漢字）は<strong>3バイト</strong>です。Shift_JISが2バイトなので混同しないよう注意。また JPEG は非可逆圧縮なので、保存を繰り返すたびに画質が劣化します。
 </div>
         `,
         diagram: 'datasize',
@@ -446,7 +695,7 @@ const baseChapters: Chapter[] = [
             question: '1 MBは何バイトか。',
             choices: ['1,000バイト', '1,024バイト', '1,048,576バイト', '1,000,000バイト'],
             answer: 2,
-            explanation: '1 MB = 2<sup>20</sup> byte = 1,024 × 1,024 = 1,048,576バイトです。SI単位（10<sup>6</sup>）と混同しないよう注意。',
+            explanation: '1 MB = 2²⁰ byte = 1,024 × 1,024 = 1,048,576バイトです。SI単位（10⁶）と混同しないよう注意。',
           },
           {
             id: 110,
@@ -461,6 +710,20 @@ const baseChapters: Chapter[] = [
             choices: ['500', '1,000', '1,500', '2,000'],
             answer: 2,
             explanation: '500文字 × 3バイト/文字 = 1,500バイトです。',
+          },
+          {
+            id: 122,
+            question: '圧縮後のデータを元の状態に完全に復元できる圧縮方式はどれか。',
+            choices: ['JPEG', 'MP3', 'H.264', 'PNG'],
+            answer: 3,
+            explanation: 'PNGは可逆圧縮（ロスレス）形式です。JPEG・MP3・H.264はいずれも非可逆圧縮（ロッシー）で、元のデータを完全には復元できません。',
+          },
+          {
+            id: 123,
+            question: 'CD音質の音声データ（サンプリング周波数44,100Hz、16ビット、ステレオ）の1秒あたりのデータ量は何バイトか。',
+            choices: ['44,100バイト', '88,200バイト', '176,400バイト', '352,800バイト'],
+            answer: 2,
+            explanation: '44,100サンプル/秒 × 16ビット/サンプル ÷ 8ビット/バイト × 2チャネル（ステレオ）= 44,100 × 2 × 2 = 176,400バイトです。',
           },
         ],
       },
@@ -477,7 +740,9 @@ const baseChapters: Chapter[] = [
         title: 'コンピュータの5大装置',
         content: `
 <h3>コンピュータの設計思想：フォン・ノイマン型</h3>
-<p>現代のコンピュータは1940年代に数学者ジョン・フォン・ノイマンが提唱した「<strong>プログラム内蔵方式</strong>」に基づいています。データとプログラム（命令）を同じメモリに格納し、CPUが順番に命令を読み出して実行するという考え方です。スマートフォンからスーパーコンピュータまで、この基本設計は変わっていません。</p>
+<p>現代のコンピュータは1940年代に数学者ジョン・フォン・ノイマンが提唱した「<strong>プログラム内蔵方式（ストアードプログラム方式）</strong>」に基づいています。データとプログラム（命令）を<strong>同じメモリ</strong>に格納し、CPUが順番に命令を読み出して実行するという考え方です。スマートフォンからスーパーコンピュータまで、この基本設計は変わっていません。</p>
+
+<p>これ以前の計算機はプログラムをハードウェアの配線で表現していたため、別の計算をするには物理的な配線を変更する必要がありました。フォン・ノイマン型ではプログラムをデータとして書き換えるだけで別の処理ができ、<strong>汎用コンピュータ</strong>が実現しました。</p>
 
 <h3>5大装置の役割と関係</h3>
 <p>どんな複雑なコンピュータも、本質的に5つの装置で構成されています。</p>
@@ -498,6 +763,8 @@ const baseChapters: Chapter[] = [
   <li><strong>アキュムレータ（ACC）</strong>: 演算の入力・出力を保持するレジスタ。「累算器」とも呼ぶ。</li>
   <li><strong>汎用レジスタ</strong>: プログラムが自由に使える複数のレジスタ。中間結果の保存などに使用。</li>
   <li><strong>フラグレジスタ（状態レジスタ）</strong>: 演算結果の状態ビットを格納。ゼロフラグ・キャリーフラグ・オーバーフローフラグなど。条件分岐の判断に使う。</li>
+  <li><strong>MAR（メモリアドレスレジスタ）</strong>: CPUがメモリにアクセスする際、読み書きするアドレスを一時保持。</li>
+  <li><strong>MDR（メモリデータレジスタ）</strong>: メモリから読み出したデータ、またはメモリへ書き込むデータを一時保持。</li>
 </ul>
 
 <h3>主記憶（RAM）・ROM・補助記憶の違い</h3>
@@ -505,14 +772,16 @@ const baseChapters: Chapter[] = [
 <p>CPUが直接アクセスできる「作業台」です。プログラム実行中はRAM上にデータが展開されます。電源を切るとデータが消える<strong>揮発性</strong>メモリ。現在のPCは8〜64GB程度。</p>
 
 <p><strong>ROM（Read Only Memory）</strong></p>
-<p>読み出し専用の<strong>不揮発性</strong>メモリ。電源を切ってもデータが保持される。PCのBIOS（起動プログラム）やスマートフォンのファームウェアに使用。</p>
+<p>読み出し専用の<strong>不揮発性</strong>メモリ。電源を切ってもデータが保持される。PCのBIOS/UEFI（コンピュータ起動時の初期化プログラム）やスマートフォンのファームウェアに使用。フラッシュROMは書き換え可能な不揮発性メモリで、USBメモリ・SSD・SDカードに使われている。</p>
 
 <p><strong>補助記憶（HDD/SSD）</strong></p>
 <p>大容量・不揮発性のストレージ。主記憶より1000〜100000倍遅いが、電源オフでも保持。OSやアプリの「保存」先。</p>
 
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-「CPUに含まれる装置は？」→ 制御装置と演算装置（ALU）の2つです。記憶装置はCPUの外にあります。「電源オフでデータが消える」→ RAM（揮発性）。「電源オフでも残る」→ ROM・HDD・SSD（不揮発性）。
+「CPUに含まれる装置は？」→ 制御装置と演算装置（ALU）の2つ。記憶装置はCPUの外。<br/>
+「電源オフでデータが消える」→ RAM（揮発性）。「電源オフでも残る」→ ROM・HDD・SSD（不揮発性）。<br/>
+「フォン・ノイマン型の特徴」→ プログラム内蔵方式（データと命令を同じメモリに格納）。
 </div>
         `,
         diagram: 'cpu',
@@ -537,6 +806,25 @@ const baseChapters: Chapter[] = [
             choices: ['アキュムレータ', 'フラグレジスタ', 'プログラムカウンタ', '命令レジスタ'],
             answer: 2,
             explanation: 'プログラムカウンタ（PC）は次に実行する命令のメモリアドレスを保持します。命令実行のたびに自動的に更新されます。',
+          },
+          {
+            id: 209,
+            question: 'フォン・ノイマン型コンピュータの特徴として正しいものはどれか。',
+            choices: [
+              'プログラムはハードウェアの配線で表現される',
+              'データとプログラムを同じ主記憶に格納して実行する',
+              'データのみを主記憶に格納し、プログラムは専用メモリに格納する',
+              '演算装置と制御装置が別筐体に分離されている',
+            ],
+            answer: 1,
+            explanation: 'フォン・ノイマン型（プログラム内蔵方式）は、データとプログラム（命令）を同じ主記憶装置に格納し、CPUが順に読み出して実行する方式です。現代の汎用コンピュータのほぼ全てがこの方式を採用しています。',
+          },
+          {
+            id: 210,
+            question: 'PCのBIOSやUEFIを格納するのに適した記憶装置はどれか。',
+            choices: ['DRAM（主記憶）', 'フラッシュROM', 'HDD', 'レジスタ'],
+            answer: 1,
+            explanation: 'BIOS/UEFIは電源投入直後に実行される起動プログラムで、電源オフでも内容を保持する不揮発性のフラッシュROMに格納されています。DRAMは揮発性、HDDは起動前にアクセス不可、レジスタは容量不足です。',
           },
         ],
       },
@@ -589,14 +877,31 @@ const baseChapters: Chapter[] = [
   <li><strong>構造ハザード</strong>: 複数命令が同じハードウェア（メモリやALU）を同時に使おうとする場合。</li>
 </ul>
 
+<h3>パイプライン効率の計算</h3>
+<p>m段パイプラインでn命令を処理するとき、総クロック数は次の式で求められます。</p>
+<pre>
+総クロック数 = m + (n - 1)
+
+例：4段パイプライン（F/D/E/W）で8命令を処理
+= 4 + (8 - 1) = 11クロック
+
+逐次処理なら 4 × 8 = 32クロック
+→ パイプラインで約3倍高速化
+</pre>
+<p>最初の命令が全4段を通り抜けるのに4クロック、以後は1命令/1クロックで完了します。</p>
+
 <h3>さらなる高速化技術</h3>
 <p><strong>スーパースカラ</strong>: 複数のパイプラインを並列に持ち、1クロックで複数命令を同時実行。現代のCPUに搭載。</p>
-<p><strong>マルチコア</strong>: 1チップに複数のCPUコアを搭載。コア数=真の並列処理数。4コアなら4つのプログラムを同時実行可能。</p>
-<p><strong>ハイパースレッディング</strong>: 1物理コアを論理的に2コアとして見せる技術（Intel）。</p>
+<p><strong>アウトオブオーダー実行（OoO）</strong>: データハザードで詰まった命令を後回しにし、依存関係のない命令を先に実行する技術。CPUが命令の順序を入れ替えて効率化する。</p>
+<p><strong>分岐予測（Branch Prediction）</strong>: 条件分岐命令でどちらへ分岐するかを事前に予測し、予測した方向の命令をあらかじめパイプラインに流しておく技術。予測が外れるとパイプラインをフラッシュ（破棄）してやり直すコストが生じる。</p>
+<p><strong>マルチコア</strong>: 1チップに複数のCPUコアを搭載。コア数=真の並列処理数。4コアなら4つのスレッドを同時実行可能。</p>
+<p><strong>ハイパースレッディング</strong>: 1物理コアを論理的に2コアとして見せる技術（Intel）。レジスタを2セット持つことで、一方がメモリ待ちのとき他方の命令を実行できる。</p>
 
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-命令実行サイクルの順序「フェッチ→デコード→実行→ライトバック」は頻出。パイプラインのメリットは「スループット向上」、デメリットは「ハザードによるストール」です。
+命令実行サイクルの順序「フェッチ→デコード→実行→ライトバック」は頻出。<br/>
+m段パイプライン・n命令の総クロック数 = m + (n - 1)。<br/>
+パイプラインのメリットは「スループット向上」、デメリットは「ハザードによるストール」です。
 </div>
         `,
         diagram: 'pipeline',
@@ -624,6 +929,37 @@ const baseChapters: Chapter[] = [
             ],
             answer: 1,
             explanation: 'パイプラインは命令のフェッチ・デコード・実行・ライトバックを並行して行うことでスループットを向上させます。',
+          },
+          {
+            id: 211,
+            question: '4段パイプラインで10命令を処理するのに必要な最小クロック数はいくつか。',
+            choices: ['10', '13', '14', '40'],
+            answer: 1,
+            explanation: 'パイプラインの総クロック数 = 段数 + (命令数 - 1) = 4 + (10 - 1) = 13クロックです。逐次処理では4×10=40クロック必要なところを大幅に短縮できます。',
+          },
+          {
+            id: 212,
+            question: 'パイプラインのデータハザードの説明として正しいものはどれか。',
+            choices: [
+              '複数の命令が同じメモリユニットを同時に使用しようとする',
+              '条件分岐命令で次に実行する命令アドレスが確定しない',
+              '直前の命令の計算結果を次の命令がすぐに必要とするためストールが生じる',
+              'CPUとメモリのクロック差によって転送が遅延する',
+            ],
+            answer: 2,
+            explanation: 'データハザードは前の命令の演算結果がまだ確定していないのに後続命令がその値を必要とするため、パイプラインが一時停止（ストール）する現象です。アウトオブオーダー実行や転送（フォワーディング）で緩和できます。',
+          },
+          {
+            id: 213,
+            question: '分岐予測（Branch Prediction）を行う目的として正しいものはどれか。',
+            choices: [
+              '演算結果をレジスタではなくメモリに直接書き込んで高速化する',
+              '条件分岐命令での制御ハザードによるパイプラインの停止を減らす',
+              'データハザードを検出して命令の実行順序を並べ替える',
+              'キャッシュのヒット率を向上させるために命令を事前にロードする',
+            ],
+            answer: 1,
+            explanation: '分岐予測は条件分岐のどちらへ進むかを予測して先取り実行することで、制御ハザードによるパイプラインのフラッシュ（廃棄）コストを減らすための技術です。',
           },
         ],
       },
@@ -672,14 +1008,33 @@ MIPS = 2,000 ÷ 4 = 500MIPS
 
 <h3>アムダールの法則</h3>
 <p>「プログラムの一部を速くしても全体の高速化には上限がある」という法則です。</p>
-<p>例：プログラムの80%を無限に高速化できたとしても、残り20%がボトルネックとなり全体は最大<strong>5倍</strong>（= 1÷0.2）にしかなりません。</p>
-<p>「コアを増やせばどこまでも速くなるわけではない」ということを示す法則です。</p>
+<pre>
+全体の速度向上率 = 1 ÷ （(1 - 改善割合) + 改善割合 ÷ 速度向上倍率）
+
+例1: プログラムの60%を4倍速にした場合
+= 1 ÷ (0.4 + 0.6 ÷ 4)
+= 1 ÷ (0.4 + 0.15)
+= 1 ÷ 0.55 ≒ 1.82倍
+
+例2: プログラムの80%を無限に高速化した場合
+= 1 ÷ (0.2 + 0) = 1 ÷ 0.2 = 5倍が上限
+</pre>
+<p>「コアを増やせばどこまでも速くなるわけではない」ことを示す法則で、並列化の限界を教えてくれます。</p>
+
+<h3>FLOPS（浮動小数点演算性能）</h3>
+<p>科学技術計算やAI/機械学習では整数演算より浮動小数点演算の性能が重要です。<strong>FLOPS（Floating-point Operations Per Second）</strong>は1秒あたりの浮動小数点演算回数を表します。</p>
+<ul>
+  <li>1TFLOPS（テラフロップス）= 10<sup>12</sup>回/秒</li>
+  <li>現代のゲーミングGPUは10〜100TFLOPS級の性能を持つ</li>
+  <li>スーパーコンピュータは数百〜数千PFLOPS（ペタフロップス）</li>
+</ul>
 
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
 計算問題の公式は3つを関連づけて覚えましょう。<br/>
 ・MIPS = MHz ÷ CPI<br/>
 ・実行時間 = 命令数 × CPI ÷ Hz<br/>
+・アムダールの法則: 全体向上 = 1 ÷ ((1-改善割合) + 改善割合÷向上倍率)<br/>
 単位変換（GHz→MHz→Hz）ミスが最大の落とし穴です。
 </div>
 
@@ -703,6 +1058,27 @@ MIPS = 2,000 ÷ 4 = 500MIPS
             choices: ['0.3秒', '0.9秒', '1秒', '3秒'],
             answer: 1,
             explanation: '実行時間 = 9億 × 3 ÷ 3,000,000,000 = 27億 ÷ 30億 = 0.9秒です。',
+          },
+          {
+            id: 214,
+            question: 'あるプログラムの60%を無限に高速化（実行時間ゼロ）した場合、アムダールの法則による全体の速度向上率はいくつか。',
+            choices: ['1.6倍', '2.5倍', '4.0倍', '6.0倍'],
+            answer: 1,
+            explanation: '速度向上 = 1 ÷ ((1-0.6) + 0.6÷∞) = 1 ÷ (0.4 + 0) = 1 ÷ 0.4 = 2.5倍です。改善できない40%がボトルネックとなり最大2.5倍が上限となります。',
+          },
+          {
+            id: 215,
+            question: 'クロック周波数1GHz、MIPS値が500のCPUのCPIはいくつか。',
+            choices: ['0.5', '1', '2', '500'],
+            answer: 2,
+            explanation: 'MIPS = MHz ÷ CPI より、CPI = MHz ÷ MIPS = 1000 ÷ 500 = 2です。1GHz = 1000MHzに変換してから計算します。',
+          },
+          {
+            id: 222,
+            question: 'あるプログラムの80%を3倍速に改善したとき、アムダールの法則による全体の速度向上率として最も近いものはどれか。',
+            choices: ['1.4倍', '1.9倍', '2.1倍', '3.0倍'],
+            answer: 1,
+            explanation: '全体向上 = 1 ÷ ((1-0.8) + 0.8÷3) = 1 ÷ (0.2 + 0.267) = 1 ÷ 0.467 ≒ 2.14倍。選択肢の中で最も近いのは2.1倍です。残り20%が制約となり3倍未満に留まります。',
           },
         ],
       },
@@ -734,6 +1110,32 @@ MIPS = 2,000 ÷ 4 = 500MIPS
   <li><strong>時間的局所性</strong>: 最近使ったデータはすぐにまた使われる（ループ変数など）</li>
   <li><strong>空間的局所性</strong>: あるアドレスのデータを使ったら、近くのアドレスも使われやすい（配列など）</li>
 </ul>
+
+<h3>キャッシュの書き込み方式</h3>
+<p>CPUがデータを書き込む（更新する）とき、キャッシュと主記憶の同期をどう行うかに2種類の方式があります。</p>
+<ul>
+  <li>
+    <strong>ライトスルー（Write Through）</strong>: キャッシュへの書き込みと<strong>同時に主記憶にも書き込む</strong>。常にキャッシュと主記憶が一致するため一貫性が保ちやすいが、毎回主記憶にアクセスするため低速。
+  </li>
+  <li>
+    <strong>ライトバック（Write Back）</strong>: キャッシュにのみ書き込み、<strong>キャッシュから追い出されるときに初めて主記憶に書き戻す</strong>。高速だがキャッシュと主記憶の内容が一時的に異なる（ダーティビットで管理）。
+  </li>
+</ul>
+
+<h3>仮想記憶とページング</h3>
+<p>物理的なRAMは有限ですが、OSが「仮想記憶」の仕組みを使うことで、実際のRAMより大きなアドレス空間をプログラムに提供できます。</p>
+<ul>
+  <li><strong>ページング</strong>: メモリを固定サイズ（ページ、通常4KB）に分割。使用頻度の低いページを補助記憶（スワップ領域）に退避させ、必要なときにRAMに呼び戻す。</li>
+  <li><strong>ページフォルト</strong>: アクセスしたページがRAMにない場合に発生する例外。OSがディスクからページをRAMに読み込む。ページフォルトが多発するとシステムが極端に遅くなる（スラッシング）。</li>
+  <li><strong>TLB（Translation Lookaside Buffer）</strong>: 仮想アドレスから物理アドレスへの変換を高速化するキャッシュ。ページテーブルの頻繁な参照を避ける。</li>
+</ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+実効アクセス時間 = ヒット率 × キャッシュ時間 + (1-ヒット率) × 主記憶時間<br/>
+ライトスルー = 毎回主記憶に書く（一貫性重視）、ライトバック = 追い出し時に書く（速度重視）<br/>
+ページフォルト = アクセスしたページがRAMに存在しない例外
+</div>
         `,
         diagram: 'memoryhierarchy',
         questions: [
@@ -755,6 +1157,37 @@ MIPS = 2,000 ÷ 4 = 500MIPS
             ],
             answer: 1,
             explanation: 'キャッシュメモリはCPUと低速な主記憶の間の速度差を埋めるための高速バッファです。',
+          },
+          {
+            id: 216,
+            question: 'ライトスルー（Write Through）方式の説明として正しいものはどれか。',
+            choices: [
+              'キャッシュにのみ書き込み、追い出し時に主記憶へ反映する',
+              'キャッシュと主記憶に同時に書き込む',
+              '主記憶にのみ書き込み、キャッシュは読み込み専用とする',
+              'キャッシュが満杯のときだけ主記憶に書き込む',
+            ],
+            answer: 1,
+            explanation: 'ライトスルーはキャッシュへの書き込みと同時に主記憶にも書き込む方式です。常にキャッシュと主記憶の内容が一致しますが、毎回主記憶アクセスが発生するため速度面では不利です。',
+          },
+          {
+            id: 217,
+            question: 'ページフォルトの説明として正しいものはどれか。',
+            choices: [
+              'キャッシュにデータが存在しないためアクセスできない状態',
+              'CPUが要求したページが主記憶（RAM）に存在しない場合に発生する例外',
+              'ページのアクセス権限違反によって発生するセキュリティエラー',
+              'ページサイズが大きすぎてメモリに格納できない状態',
+            ],
+            answer: 1,
+            explanation: 'ページフォルトはアクセスしようとした仮想メモリのページが物理RAM上に存在しない場合に発生する例外処理です。OSがディスク（スワップ領域）から該当ページをRAMに読み込んで処理を再開します。頻発するとスラッシングが起きパフォーマンスが低下します。',
+          },
+          {
+            id: 218,
+            question: 'ヒット率95%、キャッシュアクセス時間2ns、主記憶アクセス時間80nsのとき、実効アクセス時間はいくつか。',
+            choices: ['5.9ns', '6.9ns', '8.0ns', '41ns'],
+            answer: 0,
+            explanation: '実効アクセス時間 = ヒット率×キャッシュ時間 + (1-ヒット率)×主記憶時間 = 0.95×2 + 0.05×80 = 1.9 + 4.0 = 5.9ns です。',
           },
         ],
       },
@@ -784,6 +1217,22 @@ MIPS = 2,000 ÷ 4 = 500MIPS
 <p><strong>③ DMA（Direct Memory Access）</strong></p>
 <p>DMAコントローラがCPUを介さず、<strong>直接、主記憶と入出力装置間でデータ転送</strong>する方式。大量データ転送（ディスク・ネットワーク）に使用。CPUは転送完了の割り込みを受けるまで他の処理ができる。最も効率的。</p>
 
+<h3>割り込みの種類</h3>
+<p>割り込み（インタラプト）は、CPUが実行中の処理を一時中断させて別の処理を行わせる仕組みです。現代のOSの根幹をなす技術です。</p>
+<ul>
+  <li>
+    <strong>外部割り込み（ハードウェア割り込み）</strong>: 入出力装置などハードウェアから発生する。<br/>
+    例：キーを押す、マウスクリック、ネットワークパケット到着、タイマー割り込み（OSのスケジューリングに使用）
+  </li>
+  <li>
+    <strong>内部割り込み（ソフトウェア割り込み・例外）</strong>: CPUが命令を実行中に検出するエラーや特殊状態。<br/>
+    例：ゼロ除算、不正なメモリアクセス（セグメンテーション違反）、ページフォルト、オーバーフロー
+  </li>
+  <li>
+    <strong>ソフトウェア割り込み（システムコール）</strong>: プログラムが意図的にOSの機能を呼び出すために発生させる割り込み。ファイル読み書き・ネットワーク通信などOSのカーネル機能を利用するために使う。
+  </li>
+</ul>
+
 <h3>主なインタフェース規格</h3>
 <ul>
   <li><strong>USB（Universal Serial Bus）</strong>: 最も普及した汎用外部インタフェース。ホットプラグ（電源を切らずに抜き差し可能）対応。USB3.2で最大20Gbps。</li>
@@ -792,10 +1241,19 @@ MIPS = 2,000 ÷ 4 = 500MIPS
   <li><strong>SATA</strong>: HDD・SSDの接続規格。最大600MB/s。NVMeより低速だが普及。</li>
 </ul>
 
+<h3>RAID（ストレージの冗長化・高速化）</h3>
+<p>複数台のHDD/SSDを組み合わせてデータの可用性や性能を向上させる技術です。</p>
+<ul>
+  <li><strong>RAID 0（ストライピング）</strong>: データを複数ドライブに分散して書き込む。読み書き速度が向上するが、1台でも故障するとデータ全滅。冗長性なし。</li>
+  <li><strong>RAID 1（ミラーリング）</strong>: 2台のドライブに同じデータを書き込む。1台が故障しても継続稼動。容量は1台分しか使えない。</li>
+  <li><strong>RAID 5</strong>: 3台以上のドライブにデータとパリティ（誤り訂正情報）を分散。1台故障まで復旧可能。容量効率が良い。</li>
+</ul>
+
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
 「DMAの説明は？」→ CPUを介さずに主記憶と入出力装置間でデータ転送する方式。<br/>
-「アドレスバス32ビットで管理できる最大メモリは？」→ 2<sup>32</sup> byte = 4GB。
+「アドレスバス32ビットで管理できる最大メモリは？」→ 2<sup>32</sup> byte = 4GB。<br/>
+「RAID1の特徴は？」→ ミラーリング（同じデータを2台に書く）で1台故障に耐えられる。
 </div>
         `,
         diagram: 'bus',
@@ -818,6 +1276,42 @@ MIPS = 2,000 ÷ 4 = 500MIPS
             choices: ['2GB', '4GB', '8GB', '16GB'],
             answer: 1,
             explanation: '32ビットで表せるアドレス数は2<sup>32</sup> = 約43億。1アドレス=1バイトなら 2<sup>32</sup> byte = 4GB です。',
+          },
+          {
+            id: 219,
+            question: 'ポーリング（プログラムI/O）方式のデメリットとして最も適切なものはどれか。',
+            choices: [
+              '割り込みが多発するとCPUの処理が遅延する',
+              'CPUが入出力装置の状態確認に占有され、他の処理ができない',
+              'DMAコントローラが必要なためハードウェアコストが高い',
+              'データの転送順序が保証されない',
+            ],
+            answer: 1,
+            explanation: 'ポーリング方式はCPUが入出力装置の完了を繰り返し確認し続けるため、CPUが入出力待ちに拘束されてしまいます。これはCPU利用効率が低く、割り込みI/OやDMAで解決されます。',
+          },
+          {
+            id: 220,
+            question: '外部割り込みの例として最も適切なものはどれか。',
+            choices: [
+              'プログラムがゼロ除算を実行した',
+              'プログラムが存在しないメモリアドレスにアクセスした',
+              'キーボードからキー入力があった',
+              'プログラムが明示的にシステムコールを呼び出した',
+            ],
+            answer: 2,
+            explanation: 'キーボード入力はハードウェアデバイス（外部）からCPUへ通知される外部割り込み（ハードウェア割り込み）の典型例です。ゼロ除算・不正アクセスは内部割り込み（例外）、システムコールはソフトウェア割り込みです。',
+          },
+          {
+            id: 221,
+            question: 'RAID 1（ミラーリング）の説明として正しいものはどれか。',
+            choices: [
+              '複数のドライブにデータを分散して書き込むことで読み書き速度を向上させる',
+              '同じデータを2台のドライブに書き込み、1台が故障しても継続できる',
+              'パリティ情報を分散して保存し、1台の故障からデータを復元できる',
+              '全ドライブのデータを1台のバックアップドライブに集約する',
+            ],
+            answer: 1,
+            explanation: 'RAID 1はミラーリングとも呼ばれ、2台のドライブにまったく同じデータを書き込みます。1台が故障しても残りの1台でシステムを継続でき、高い可用性が得られます。ただし使える実効容量は1台分のみです。',
           },
         ],
       },
@@ -874,9 +1368,28 @@ MIPS = 2,000 ÷ 4 = 500MIPS
   <li>動画配信・音声通話（VoIP）・DNS・オンラインゲームに使用</li>
 </ul>
 
+<h3>ポート番号：アプリケーションの「部屋番号」</h3>
+<p>同じPCで複数のアプリが同時にネットワーク通信できるのは、<strong>ポート番号</strong>のおかげです。IPアドレスがPCの住所なら、ポート番号は部屋番号です。</p>
+<ul>
+  <li>0〜1023: <strong>ウェルノウンポート</strong>（HTTP=80、HTTPS=443など、OSが予約）</li>
+  <li>1024〜49151: 登録済みポート（アプリが使う）</li>
+  <li>49152〜65535: 動的ポート（クライアント側が一時的に使う）</li>
+</ul>
+<p>「IPアドレス:ポート番号」の組み合わせが<strong>ソケット</strong>と呼ばれ、TCP/IP通信の接続の単位です。</p>
+
+<h3>ARP（Address Resolution Protocol）</h3>
+<p>同じLAN内でパケットを届けるには、IPアドレスだけでなく相手の<strong>MACアドレス</strong>も必要です。ARPはIPアドレスからMACアドレスを調べるプロトコルです。</p>
+<ol>
+  <li>「192.168.1.5 のMACアドレスを教えて」とブロードキャスト（全員に問い合わせ）</li>
+  <li>192.168.1.5 の機器だけが「私のMACアドレスは XX:XX:XX:XX:XX:XX です」と返答</li>
+  <li>結果をARPキャッシュに保存して次回以降の通信に使う</li>
+</ol>
+<p>ARPはOSI第3層（ネットワーク層）と第2層（データリンク層）の橋渡しをするプロトコルです。</p>
+
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-OSIの層番号と役割の対応は最頻出。特に「IPアドレス=第3層（ネットワーク層）」「MACアドレス=第2層（データリンク層）」「TCP/UDP=第4層（トランスポート層）」を確実に覚えましょう。
+OSIの層番号と役割の対応は最頻出。特に「IPアドレス=第3層（ネットワーク層）」「MACアドレス=第2層（データリンク層）」「TCP/UDP=第4層（トランスポート層）」を確実に覚えましょう。<br/>
+ARP = IPアドレス → MACアドレスに変換するプロトコル（同一LAN内）
 </div>
 
 <div class="caution-box">
@@ -911,6 +1424,30 @@ OSIの層番号と役割の対応は最頻出。特に「IPアドレス=第3層�
             ],
             answer: 1,
             explanation: 'TCPの接続確立はSYN（接続要求）→SYN-ACK（確認応答）→ACK（確認）の3ステップです。',
+          },
+          {
+            id: 310,
+            question: 'ARP（Address Resolution Protocol）の説明として正しいものはどれか。',
+            choices: [
+              'ドメイン名をIPアドレスに変換するプロトコル',
+              'IPアドレスからMACアドレスを取得するプロトコル',
+              'プライベートIPアドレスをグローバルIPアドレスに変換するプロトコル',
+              'パケットの経路を自動的に選択するプロトコル',
+            ],
+            answer: 1,
+            explanation: 'ARPは同一LAN内で相手のIPアドレスからMACアドレスを調べるプロトコルです。ブロードキャストで問い合わせ、該当機器がMACアドレスを返します。',
+          },
+          {
+            id: 311,
+            question: 'TCPがUDPと比べて「信頼性が高い」理由として正しいものはどれか。',
+            choices: [
+              '転送速度が速いのでパケットロスが起きにくい',
+              '受信確認（ACK）があり、未達のパケットを自動再送する',
+              'UDP より小さいヘッダを使うので効率的に転送できる',
+              '接続確立が不要なのでオーバーヘッドが少ない',
+            ],
+            answer: 1,
+            explanation: 'TCPは各パケットに受信確認（ACK）が必要で、一定時間内にACKが返らない場合は自動的に再送します。順序番号でパケットの順序も保証されます。これがTCPの信頼性の根拠です。',
           },
         ],
       },
@@ -973,11 +1510,38 @@ IPアドレス:     192.168.1.10
 <h3>なぜプライベートアドレスが存在するのか</h3>
 <p>IPv4は43億個しかアドレスがありません。世界中のすべての機器にグローバルIPを割り当てると不足します。そこで家庭・会社内部はプライベートアドレス（同じアドレスを世界中で再利用可能）を使い、インターネット接続時だけ<strong>NAT（ネットワークアドレス変換）</strong>で1つのグローバルIPを共有する仕組みが普及しています。</p>
 
+<h3>サブネット計算の練習</h3>
+<p>ホスト部のビット数から使えるホスト数を計算できることが重要です。</p>
+<pre>
+サブネット /24 → ホスト部 8ビット → 2⁸ - 2 = 254台
+サブネット /25 → ホスト部 7ビット → 2⁷ - 2 = 126台
+サブネット /26 → ホスト部 6ビット → 2⁶ - 2 =  62台
+サブネット /27 → ホスト部 5ビット → 2⁵ - 2 =  30台
+サブネット /28 → ホスト部 4ビット → 2⁴ - 2 =  14台
+
+例: 192.168.1.0/26 のネットワーク
+  ネットワークアドレス: 192.168.1.0
+  使えるホスト:         192.168.1.1 〜 192.168.1.62
+  ブロードキャスト:     192.168.1.63
+  → 62台が使える
+</pre>
+
+<h3>IPv6</h3>
+<p>IPv4の枯渇問題を根本的に解決する次世代IPプロトコルです。</p>
+<ul>
+  <li><strong>128ビット</strong>アドレス空間 → 2<sup>128</sup>≒340澗個（事実上無限）</li>
+  <li>16進数・コロン区切りで表現: <code>2001:0db8:85a3:0000:0000:8a2e:0370:7334</code></li>
+  <li>連続するゼロは <code>::</code> で省略可能: <code>2001:db8::1</code></li>
+  <li>プライベートアドレスが不要 → NATなしで直接通信可能</li>
+  <li>IPsecによるセキュリティが標準装備</li>
+  <li>ブロードキャストを廃止し、<strong>マルチキャスト・エニーキャスト</strong>を使用</li>
+</ul>
+
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
 サブネット計算の公式：使えるホスト数 = 2^(ホスト部ビット数) - 2<br/>
-/24 → 254台、/25 → 126台、/26 → 62台<br/>
-プライベートアドレスの範囲（特に192.168.x.x）は必ず覚えましょう。
+/24 → 254台、/25 → 126台、/26 → 62台、/27 → 30台<br/>
+IPv6は128ビット、16進コロン区切り、アドレス枯渇問題の解決策です。
 </div>
         `,
         diagram: 'ipaddress',
@@ -995,6 +1559,32 @@ IPアドレス:     192.168.1.10
             choices: ['8.8.8.0/24', '192.168.0.0/16', '127.0.0.0/8', '224.0.0.0/4'],
             answer: 1,
             explanation: '192.168.0.0〜192.168.255.255はプライベートアドレス範囲です。8.8.8.xはGoogleのDNS（グローバル）、127.x.x.xはループバック、224.x.x.xはマルチキャストです。',
+          },
+          {
+            id: 312,
+            question: 'サブネット /26 のネットワークで使用できるホスト数はいくつか。',
+            choices: ['30台', '62台', '126台', '254台'],
+            answer: 1,
+            explanation: '/26はホスト部が6ビット（32-26=6）。2⁶=64 から ネットワークアドレスとブロードキャストの2つを引いて 64-2=62台です。',
+          },
+          {
+            id: 313,
+            question: 'IPv6に関する説明として正しいものはどれか。',
+            choices: [
+              '32ビットのアドレス空間を持ち、約43億個のアドレスが使える',
+              '128ビットのアドレス空間を持ち、アドレスは16進数とコロンで表現する',
+              'NATが必須で、複数の機器が1つのIPアドレスを共有する',
+              'IPv4との後方互換性のためにブロードキャストを強化した',
+            ],
+            answer: 1,
+            explanation: 'IPv6は128ビットのアドレス空間を持ち、16進数をコロンで区切った形式で表現します（例: 2001:db8::1）。アドレス数は事実上無限で、NATは不要になります。',
+          },
+          {
+            id: 320,
+            question: 'IPアドレス 192.168.10.50 に対してサブネットマスク 255.255.255.192（/26）を適用したとき、このホストが属するネットワークアドレスはどれか。',
+            choices: ['192.168.10.0', '192.168.10.50', '192.168.10.64', '192.168.10.48'],
+            answer: 0,
+            explanation: '/26 はホスト部6ビット。ブロックサイズ64。192.168.10.50 は 0〜63 のブロック（.0〜.63）に属するため、ネットワークアドレスは 192.168.10.0 です。',
           },
         ],
       },
@@ -1032,8 +1622,27 @@ IPアドレス:     192.168.1.10
   <li><strong>ダイナミックルーティング</strong>: ルーティングプロトコル（OSPF・BGP等）で自動的に経路を学習・更新。大規模ネットワーク向け。</li>
 </ul>
 
+<h3>DNSレコードの種類</h3>
+<p>DNSにはドメインに関する様々な情報を登録できます。</p>
+<ul>
+  <li><strong>Aレコード</strong>: ドメイン名 → IPv4アドレスの対応</li>
+  <li><strong>AAAAレコード</strong>: ドメイン名 → IPv6アドレスの対応</li>
+  <li><strong>MXレコード</strong>: そのドメイン宛てのメールを受け取るメールサーバを指定</li>
+  <li><strong>CNAMEレコード</strong>: ドメイン名の別名（エイリアス）を定義。<code>www.example.com</code> → <code>example.com</code> など</li>
+  <li><strong>NSレコード</strong>: そのドメインを管理するDNSサーバを指定</li>
+</ul>
+
+<h3>デフォルトゲートウェイ</h3>
+<p>自分のLAN外（異なるネットワーク）への通信を行う際に、パケットを最初に送る機器です。通常はルータがデフォルトゲートウェイとなります。</p>
+<p>例: PC（192.168.1.10）が <code>8.8.8.8</code>（Google DNS）に通信するとき<br/>→ 宛先が同一LAN外なのでデフォルトゲートウェイ（192.168.1.1 = ルータ）に転送<br/>→ ルータがインターネットへ中継</p>
+
 <h3>NAT（Network Address Translation）</h3>
-<p>プライベートIPアドレスをグローバルIPアドレスに変換する技術です。1つのグローバルIPを複数の端末で共有でき、IPv4アドレス枯渇を緩和します。<strong>NAPT（IPマスカレード）</strong>はポート番号も変換して多対一の変換を行います。</p>
+<p>プライベートIPアドレスをグローバルIPアドレスに変換する技術です。1つのグローバルIPを複数の端末で共有でき、IPv4アドレス枯渇を緩和します。</p>
+<p><strong>NAPT（IPマスカレード）</strong>はポート番号も変換して多対一の変換を行います。家庭用ルータのほぼすべてがこの方式を採用しています。</p>
+<pre>
+LAN内PC(192.168.1.10:5000) ─→ ルータ ─→ インターネット(203.0.113.1:1024)
+     ↑プライベートIP                           ↑グローバルIPに変換
+</pre>
         `,
         diagram: 'dns',
         questions: [
@@ -1055,6 +1664,37 @@ IPアドレス:     192.168.1.10
             ],
             answer: 1,
             explanation: 'DNSはドメイン名（www.example.comなど）をIPアドレスに変換する名前解決サービスです。',
+          },
+          {
+            id: 314,
+            question: 'デフォルトゲートウェイの説明として正しいものはどれか。',
+            choices: [
+              '同一LAN内の機器にIPアドレスを自動割り当てする機器',
+              '別のネットワークへパケットを転送する際に最初に送る機器',
+              'ドメイン名をIPアドレスに変換するサーバ',
+              'LAN内の機器のMACアドレスを管理する機器',
+            ],
+            answer: 1,
+            explanation: 'デフォルトゲートウェイは自分のネットワーク外への通信で最初にパケットを送る機器です。通常はルータが担当し、PCのネットワーク設定で指定します。',
+          },
+          {
+            id: 315,
+            question: 'メールサーバのアドレスを指定するDNSレコードの種類はどれか。',
+            choices: ['Aレコード', 'CNAMEレコード', 'MXレコード', 'NSレコード'],
+            answer: 2,
+            explanation: 'MXレコード（Mail eXchanger）はそのドメイン宛てのメールを受け取るメールサーバを指定するDNSレコードです。',
+          },
+          {
+            id: 321,
+            question: 'DNSの再帰的問い合わせ（フルサービスリゾルバ）の説明として正しいものはどれか。',
+            choices: [
+              'クライアントが複数のDNSサーバに並行して問い合わせを行う',
+              'DNSサーバがクライアントに代わって根本まで遡って名前解決し最終回答を返す',
+              'クライアントがルートDNSサーバから順に自分で問い合わせを繰り返す',
+              'IPアドレスからドメイン名を逆引きする問い合わせ方式',
+            ],
+            answer: 1,
+            explanation: '再帰的問い合わせはDNSリゾルバがクライアントに代わりルートDNS→TLDサーバ→権威DNSと順に問い合わせて最終的なIPアドレスを取得しクライアントに返す方式です。クライアントは1回の問い合わせで結果を得られます。',
           },
         ],
       },
@@ -1090,8 +1730,32 @@ IPアドレス:     192.168.1.10
   <li><strong>ファイアウォール</strong>: パケットを監視してアクセス制御。不正通信を遮断。</li>
 </ul>
 
+<h3>CSMA/CD（イーサネットの衝突制御）</h3>
+<p>有線LANで複数の機器が同時に送信しようとすると「衝突（コリジョン）」が起きます。CSMA/CD（Carrier Sense Multiple Access with Collision Detection）はこれを検知・回復する方式です。</p>
+<ol>
+  <li><strong>CS（キャリアセンス）</strong>: 送信前に回線が空いているか確認する</li>
+  <li><strong>MA（多重アクセス）</strong>: 空いていれば複数の機器が送信できる</li>
+  <li><strong>CD（衝突検出）</strong>: 送信中に衝突を検知したらジャム信号を送り、ランダムな時間待ってから再送する</li>
+</ol>
+<p>現代のスイッチ環境（全二重通信）では衝突が原理的に発生しないため、CSMA/CDは実質的に使われなくなっています。</p>
+
+<h3>プロキシサーバ</h3>
+<p>クライアントに代わってインターネットへのアクセスを行う中継サーバです。</p>
+<ul>
+  <li><strong>セキュリティ向上</strong>: 内部ネットワークのIPアドレスを隠蔽</li>
+  <li><strong>キャッシュ機能</strong>: 頻繁にアクセスするWebページをキャッシュして応答を高速化</li>
+  <li><strong>アクセス制御</strong>: 特定サイトへのアクセスをフィルタリング（企業での利用制限など）</li>
+  <li><strong>ログ管理</strong>: アクセスログを記録して不審な通信を監視</li>
+</ul>
+
 <h3>VPN（Virtual Private Network）</h3>
-<p>インターネット上に仮想的な専用線を構築し、安全に通信する技術です。テレワークで社内ネットワークに接続する際に使用します。データは暗号化されて転送されます。</p>
+<p>インターネット上に仮想的な専用線を構築し、安全に通信する技術です。テレワークで社内ネットワークに接続する際に使用します。データは暗号化されて転送されます。主なプロトコルはIPsec・SSL/TLS・L2TPなどです。</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+「ハブ＝第1層、スイッチ（L2）＝第2層（MACアドレス）、ルータ＝第3層（IPアドレス）」の対応は必須。<br/>
+プロキシサーバ = クライアントの代わりにアクセスする中継サーバ（キャッシュ・フィルタリング）。
+</div>
         `,
         diagram: 'network-devices',
         questions: [
@@ -1108,6 +1772,37 @@ IPアドレス:     192.168.1.10
             choices: ['DNS', 'DHCP', 'VPN', 'NAT'],
             answer: 2,
             explanation: 'VPN（仮想プライベートネットワーク）はインターネット上に暗号化された仮想専用線を構築し、安全なリモートアクセスを実現します。',
+          },
+          {
+            id: 316,
+            question: 'CSMA/CD方式の説明として正しいものはどれか。',
+            choices: [
+              '無線LANで電波の衝突を防ぐために使う送信制御方式',
+              '送信前に回線の空きを確認し、衝突を検出したらランダム時間後に再送する方式',
+              'トークンを使って送信権を順番に回す方式',
+              'データをパケットに分割して複数経路で転送する方式',
+            ],
+            answer: 1,
+            explanation: 'CSMA/CDはイーサネット（有線LAN）の衝突制御方式で、送信前にキャリアセンス（CS）し、衝突検出（CD）した場合はランダム時間待ってから再送します。スイッチ環境では衝突自体が発生しないため現在は実質不使用です。',
+          },
+          {
+            id: 317,
+            question: 'プロキシサーバを導入する目的として適切でないものはどれか。',
+            choices: [
+              'Webアクセスをキャッシュして応答を高速化する',
+              '特定のWebサイトへのアクセスをフィルタリングする',
+              '内部ネットワークのIPアドレスを外部から隠蔽する',
+              'ネットワーク機器にIPアドレスを自動割り当てする',
+            ],
+            answer: 3,
+            explanation: 'IPアドレスの自動割り当てはDHCPサーバの役割です。プロキシサーバの主な目的はキャッシュ・フィルタリング・アクセスログ記録・IPアドレス隠蔽などです。',
+          },
+          {
+            id: 322,
+            question: '無線LANのセキュリティプロトコルとして現在最も安全とされるものはどれか。',
+            choices: ['WEP', 'WPA', 'WPA2（AES）', 'WPA3'],
+            answer: 3,
+            explanation: 'WPA3は2018年に策定された最新の無線LANセキュリティ規格です。SAE（Simultaneous Authentication of Equals）ハンドシェイクによりパスワード推測攻撃への耐性が向上しています。WEPは解読済みで危険、WPA/WPA2-AESは現役ですがWPA3が最も強固です。',
           },
         ],
       },
@@ -1138,9 +1833,33 @@ IPアドレス:     192.168.1.10
 <h3>DHCP（Dynamic Host Configuration Protocol）</h3>
 <p>ネットワークに接続した端末に自動的にIPアドレス・サブネットマスク・デフォルトゲートウェイ・DNSサーバのアドレスを割り当てるプロトコルです。</p>
 
+<h3>HTTPステータスコード</h3>
+<p>サーバがクライアントのリクエストに返す3桁の番号で、処理結果を示します。</p>
+<ul>
+  <li><strong>1xx（情報）</strong>: 処理中・継続を示す</li>
+  <li><strong>2xx（成功）</strong>: 200 OK（成功）、201 Created（作成成功）</li>
+  <li><strong>3xx（リダイレクト）</strong>: 301 Moved Permanently（恒久的移動）、302 Found（一時移動）</li>
+  <li><strong>4xx（クライアントエラー）</strong>: 400 Bad Request（リクエスト不正）、401 Unauthorized（認証必要）、403 Forbidden（禁止）、<strong>404 Not Found（リソースなし）</strong></li>
+  <li><strong>5xx（サーバエラー）</strong>: <strong>500 Internal Server Error（サーバ内部エラー）</strong>、503 Service Unavailable（過負荷・メンテナンス）</li>
+</ul>
+
+<h3>Cookie とセッション</h3>
+<p>HTTPはステートレスなプロトコルのため、ブラウザの状態（ログイン状態など）を保持する仕組みが必要です。</p>
+<ul>
+  <li><strong>Cookie</strong>: サーバがブラウザに保存させる小さなデータ。次回アクセス時に自動的にサーバへ送信される。有効期限・ドメイン・Secureフラグ（HTTPS必須）・HttpOnly（JSからのアクセス禁止）などを設定できる。</li>
+  <li><strong>セッション</strong>: ログイン状態などの情報をサーバ側で管理する仕組み。クライアントにはセッションIDをCookieで渡し、サーバ側でIDと対応するデータを管理する。</li>
+</ul>
+
 <h3>SNMP・NTP</h3>
-<p><strong>SNMP</strong>: ネットワーク機器の監視・管理に使うプロトコル。</p>
-<p><strong>NTP（Network Time Protocol）</strong>: ネットワーク上の機器の時刻を同期させるプロトコル。</p>
+<p><strong>SNMP</strong>: ネットワーク機器（ルータ・スイッチ等）の状態監視・管理に使うプロトコル。MIB（Management Information Base）という形式で機器情報を管理する。</p>
+<p><strong>NTP（Network Time Protocol）</strong>: ネットワーク上の機器の時刻を同期させるプロトコル。ログの時刻一致・証明書の有効期限管理など、時刻同期はセキュリティ上も重要。</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+メールプロトコル: 送信=SMTP(25)、受信ダウンロード=POP3(110)、サーバ管理=IMAP(143)。<br/>
+HTTPステータスコード: 200=OK、301=移動、404=見つからない、500=サーバエラー。<br/>
+Cookie=クライアント保存、セッション=サーバ側保存でIDのみクライアントに渡す。
+</div>
         `,
         diagram: 'http',
         questions: [
@@ -1157,6 +1876,42 @@ IPアドレス:     192.168.1.10
             choices: ['DNS', 'DHCP', 'NAT', 'SNMP'],
             answer: 1,
             explanation: 'DHCPサーバが接続端末にIPアドレス・サブネットマスク・デフォルトゲートウェイなどを自動的に割り当てます。',
+          },
+          {
+            id: 318,
+            question: 'HTTPステータスコード 404 の意味として正しいものはどれか。',
+            choices: [
+              'リクエストは成功し、要求されたリソースを返した',
+              'リソースが恒久的に別のURLへ移動した',
+              '要求されたリソースがサーバ上に存在しない',
+              'サーバ内部でエラーが発生しリクエストを処理できなかった',
+            ],
+            answer: 2,
+            explanation: '404 Not Found は要求されたURL・リソースがサーバに存在しないことを示すクライアントエラーです。200=成功、301=恒久移動、500=サーバ内部エラーです。',
+          },
+          {
+            id: 319,
+            question: 'Cookieに関する説明として正しいものはどれか。',
+            choices: [
+              'サーバがログイン状態などを管理するためサーバ側に保存する仕組み',
+              'サーバがブラウザに保存させ、次回アクセス時に自動送信される小さなデータ',
+              'ネットワーク上の盗聴を防ぐためパケットを暗号化する技術',
+              'Webサーバへのアクセスを記録するログファイルの形式',
+            ],
+            answer: 1,
+            explanation: 'CookieはHTTPサーバがブラウザに保存させる小さなデータで、次のアクセス時に自動的にサーバへ送信されます。ログイン状態の維持や設定の保存に使います。サーバ側で状態を管理する仕組みはセッションです。',
+          },
+          {
+            id: 323,
+            question: 'HTTPSで使用されるTLSハンドシェイクの目的として正しいものはどれか。',
+            choices: [
+              'ドメイン名をIPアドレスに変換する',
+              'サーバの身元確認と通信を暗号化するための共通鍵を安全に交換する',
+              'パケットを宛先ルータに転送するための経路を決定する',
+              'ブラウザのキャッシュを最新の状態に更新する',
+            ],
+            answer: 1,
+            explanation: 'TLSハンドシェイクはサーバ証明書でサーバを認証し、その後公開鍵暗号を使って共通鍵を安全に交換します。以降の通信データはこの共通鍵（AESなど）で高速に暗号化されます（ハイブリッド暗号方式）。',
           },
         ],
       },
@@ -1192,8 +1947,51 @@ IPアドレス:     192.168.1.10
 <ul>
   <li><strong>脅威</strong>: 攻撃・災害・人的ミスなど、損害を与える可能性のある事象</li>
   <li><strong>脆弱性</strong>: セキュリティ上の弱点（バグ・設定ミス・古いソフトウェアなど）</li>
-  <li><strong>リスク対応</strong>: 回避・低減・移転（保険）・受容の4つの対策がある</li>
 </ul>
+
+<h3>リスク対応の4種類</h3>
+<p>リスクへの対処方法は4種類あります。状況によって使い分けが重要です。</p>
+<ul>
+  <li><strong>リスク回避</strong>: リスクの原因そのものをなくす（当該業務を廃止するなど）<br/>例: 個人情報を保有するサービスを廃止してリスク自体を消す</li>
+  <li><strong>リスク低減（軽減）</strong>: セキュリティ対策を講じてリスクの発生確率や影響を小さくする<br/>例: パッチ適用・ファイアウォール導入・セキュリティ教育の実施</li>
+  <li><strong>リスク移転（転嫁）</strong>: リスクの結果を第三者に転嫁する<br/>例: サイバー保険への加入・外部委託（SLA付き）</li>
+  <li><strong>リスク受容</strong>: リスクを認識した上でそのまま受け入れる（対策コスト > 損失額の場合）<br/>例: 影響が軽微で発生確率も低いリスクをそのままにする</li>
+</ul>
+
+<h3>ISMS（情報セキュリティマネジメントシステム）</h3>
+<p>組織的・継続的に情報セキュリティを管理する仕組みです。<strong>ISO/IEC 27001</strong>として国際規格化されています。</p>
+<p>PDCAサイクルで継続的に改善します：</p>
+<ul>
+  <li><strong>Plan（計画）</strong>: リスクを評価してセキュリティ方針・対策を計画する</li>
+  <li><strong>Do（実施）</strong>: 計画した対策を実施する（技術的対策・教育など）</li>
+  <li><strong>Check（評価）</strong>: 内部監査・マネジメントレビューで有効性を確認する</li>
+  <li><strong>Act（改善）</strong>: 問題点を改善して次のPlanに反映する</li>
+</ul>
+
+<h3>情報セキュリティポリシーの3文書</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">文書</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">内容</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">対象</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>基本方針</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">組織のセキュリティに対する基本的な考え方・目的</td><td style="padding:5px 8px;border:1px solid var(--color-border)">全員向け（経営層が策定）</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>対策基準</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">基本方針を実現するための具体的なルール・基準</td><td style="padding:5px 8px;border:1px solid var(--color-border)">管理者・担当者向け</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>実施手順</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">対策基準を実践するための詳細な手順書・マニュアル</td><td style="padding:5px 8px;border:1px solid var(--color-border)">現場担当者向け</td></tr>
+</table>
+
+<h3>セキュリティインシデント対応組織</h3>
+<ul>
+  <li><strong>CSIRT（Computer Security Incident Response Team）</strong>: セキュリティインシデント（不正アクセス・情報漏洩等）が発生したときに対応する専門チーム</li>
+  <li><strong>SOC（Security Operation Center）</strong>: 24時間365日でシステムを監視してインシデントを早期検出する組織</li>
+</ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+CIA: 機密性（暗号化）・完全性（ハッシュ・署名）・可用性（冗長化）の各手段を対応させて覚える。<br/>
+リスク対応4種: 回避=原因除去、低減=対策実施、移転=保険・外注、受容=そのまま。「保険加入」=移転、「パッチ適用」=低減。<br/>
+ISMS=ISO/IEC 27001に基づく情報セキュリティ管理の仕組み。PDCAで継続改善。CSIRT=インシデント対応チーム。
+</div>
         `,
         diagram: 'security',
         questions: [
@@ -1215,6 +2013,42 @@ IPアドレス:     192.168.1.10
             choices: ['機密性', '完全性', '可用性', '可用性と機密性'],
             answer: 1,
             explanation: 'デジタル署名はデータが改ざんされていないことを証明するため、主に完全性（Integrity）を保護します。',
+          },
+          {
+            id: 411,
+            question: 'リスク対応のうち「リスク移転」の例として正しいものはどれか。',
+            choices: [
+              'セキュリティパッチを適用して脆弱性を修正する',
+              'リスクが小さいため対策せずそのままにする',
+              'サイバー保険に加入してインシデント時の損害を補填できるようにする',
+              '個人情報を保有するサービス自体を廃止する',
+            ],
+            answer: 2,
+            explanation: 'リスク移転はリスクによる損害を保険・外部委託などで第三者に転嫁することです。パッチ適用=低減、そのまま許容=受容、サービス廃止=回避 です。',
+          },
+          {
+            id: 412,
+            question: 'ISMSに関する説明として正しいものはどれか。',
+            choices: [
+              '脆弱性の深刻度を0〜10で数値化する評価システム',
+              '情報セキュリティを組織的に管理するためのフレームワークでISO/IEC 27001で規格化されている',
+              '不正アクセスを検知して管理者に通知する技術的システム',
+              'マルウェアを検知・除去するためのソフトウェア',
+            ],
+            answer: 1,
+            explanation: 'ISMS（情報セキュリティマネジメントシステム）はPDCAサイクルで情報セキュリティを継続的に改善する組織的フレームワークで、ISO/IEC 27001として国際標準化されています。',
+          },
+          {
+            id: 421,
+            question: '情報セキュリティのCIA「完全性（Integrity）」を脅かす行為はどれか。',
+            choices: [
+              '許可なく秘密のファイルを閲覧する',
+              'データベースの内容を無断で書き換える',
+              'サービスを大量リクエストで停止させる',
+              'パスワードを盗聴する',
+            ],
+            answer: 1,
+            explanation: '完全性はデータが正確かつ完全であることを保証する性質です。データの無断書き換え（改ざん）はこれを脅かします。閲覧のみは機密性、サービス停止は可用性、盗聴は機密性の侵害です。',
           },
         ],
       },
@@ -1252,6 +2086,28 @@ IPアドレス:     192.168.1.10
   <li><strong>ブルートフォース攻撃</strong>: パスワードを全通り試す総当たり攻撃</li>
   <li><strong>辞書攻撃</strong>: よく使われるパスワード辞書を使って効率よく試す</li>
 </ul>
+
+<h3>その他の重要な攻撃手法</h3>
+<ul>
+  <li>
+    <strong>ゼロデイ攻撃</strong>: ソフトウェアの脆弱性が公開・修正される前（ゼロ日目）に行われる攻撃。パッチが存在しないため防御が非常に難しい。発見から修正まで「ゼロ日」しかないことが名前の由来。
+  </li>
+  <li>
+    <strong>バッファオーバーフロー</strong>: プログラムの入力バッファ（一時記憶領域）の容量を超えるデータを送り込み、隣接するメモリ領域を上書きして任意コードを実行させる攻撃。境界値チェックの不備が原因。
+  </li>
+  <li>
+    <strong>標的型攻撃（APT）</strong>: 特定の組織・個人を長期間にわたって執拗に狙う高度な攻撃。スピアフィッシングでの侵入→内部潜伏→横展開→情報窃取という段階を踏む。
+  </li>
+  <li>
+    <strong>パスワードリスト攻撃</strong>: 他のサービスから流出したパスワードリストを使い、使い回しているアカウントへの不正ログインを試みる。パスワード使い回しが最大の原因。
+  </li>
+</ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+「ゼロデイ攻撃」= パッチ未公開の脆弱性を狙う。「ランサムウェア」= 暗号化して身代金要求。<br/>
+XSS = スクリプト埋め込み、CSRF = ユーザーに意図しない操作をさせる（混同に注意）。
+</div>
         `,
         diagram: 'attack',
         questions: [
@@ -1280,6 +2136,30 @@ IPアドレス:     192.168.1.10
             choices: ['マルウェア', 'ブルートフォース攻撃', 'ソーシャルエンジニアリング', 'ゼロデイ攻撃'],
             answer: 2,
             explanation: 'ソーシャルエンジニアリングはなりすまし・電話・覗き見など人間の心理・行動を悪用した非技術的な情報窃取手法です。',
+          },
+          {
+            id: 413,
+            question: 'ランサムウェアの説明として正しいものはどれか。',
+            choices: [
+              '感染したPCの情報を秘密裏に収集して外部に送信するマルウェア',
+              'ファイルやシステムを暗号化し、復号の対価として金銭を要求するマルウェア',
+              '正規ソフトに偽装してシステムに侵入し、バックドアを作成するマルウェア',
+              'ネットワーク上で自己複製しながら拡散するマルウェア',
+            ],
+            answer: 1,
+            explanation: 'ランサムウェアはファイル・ディスクを暗号化して使用不能にし、復号鍵と引き換えに身代金（Ransom）を要求するマルウェアです。バックアップの定期取得が主な対策です。',
+          },
+          {
+            id: 414,
+            question: 'ゼロデイ攻撃の説明として正しいものはどれか。',
+            choices: [
+              'パスワードを0から9の数字のみで構成し総当たりする攻撃',
+              'ソフトウェアの脆弱性が公表・修正される前に行われる攻撃',
+              'サーバへ0バイトのパケットを大量送信してダウンさせる攻撃',
+              '初日にアクセスしたユーザーの認証情報を窃取する攻撃',
+            ],
+            answer: 1,
+            explanation: 'ゼロデイ攻撃は脆弱性が発見されてからパッチが提供されるまでの「ゼロ日」の期間に行われる攻撃です。パッチが存在しないため防御が困難で、WAFや振る舞い検知での対策が主になります。',
           },
         ],
       },
@@ -1329,9 +2209,23 @@ IPアドレス:     192.168.1.10
 <p>主な用途：パスワードの保存（平文でなくハッシュで保存）・ファイル整合性確認・デジタル署名</p>
 <p>代表例: <strong>SHA-256</strong>（256ビット、現在の標準）。MD5は脆弱性があり非推奨。</p>
 
+<h3>共通鍵の鍵管理数</h3>
+<p>n台のコンピュータが互いに共通鍵暗号で通信する場合、すべての組み合わせで異なる鍵が必要です。</p>
+<pre>
+必要な共通鍵の数 = n × (n-1) ÷ 2
+
+例: 5台のPC が互いに通信する場合
+= 5 × 4 ÷ 2 = 10本の鍵が必要
+
+例: 10台なら
+= 10 × 9 ÷ 2 = 45本の鍵が必要
+</pre>
+<p>一方、公開鍵暗号では各自が公開鍵と秘密鍵を1ペアずつ持つだけでよいので、n台で <strong>2n本</strong>（公開鍵n本+秘密鍵n本）で済みます。管理する鍵の数が劇的に少なくなるため、大規模ネットワークでは公開鍵方式が有利です。</p>
+
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-「公開鍵で暗号化→秘密鍵で復号」（暗号化通信）と「秘密鍵で署名→公開鍵で検証」（デジタル署名）を混同しないこと。用途の違いで使う鍵が逆になります。
+「公開鍵で暗号化→秘密鍵で復号」（暗号化通信）と「秘密鍵で署名→公開鍵で検証」（デジタル署名）を混同しないこと。用途の違いで使う鍵が逆になります。<br/>
+n台の共通鍵の数 = n(n-1)/2 本。10台なら45本、100台なら4,950本。
 </div>
 
 <div class="caution-box">
@@ -1359,6 +2253,37 @@ IPアドレス:     192.168.1.10
             ],
             answer: 1,
             explanation: 'ハッシュ関数は同じ入力から常に同じ固定長のハッシュ値を生成します。一方向性があり復元は不可能です。',
+          },
+          {
+            id: 415,
+            question: '6台のコンピュータが共通鍵暗号を使って互いに通信するとき、必要な鍵の総数はいくつか。',
+            choices: ['6本', '12本', '15本', '30本'],
+            answer: 2,
+            explanation: 'n台の共通鍵の数 = n×(n-1)÷2 = 6×5÷2 = 15本です。全ペアに異なる鍵が必要なため、台数が増えると鍵の管理が膨大になります。公開鍵方式なら6台で公開鍵6本+秘密鍵6本の合計12本で済みます。',
+          },
+          {
+            id: 416,
+            question: 'AESとRSAの組み合わせとして正しいものはどれか。',
+            choices: [
+              'AES=公開鍵暗号、RSA=共通鍵暗号',
+              'AES=共通鍵暗号で高速、RSA=公開鍵暗号で鍵配送問題を解決',
+              'AESもRSAも共通鍵暗号でハードウェア実装向け',
+              'AES=ハッシュ関数、RSA=デジタル署名専用',
+            ],
+            answer: 1,
+            explanation: 'AES（Advanced Encryption Standard）は共通鍵暗号で大量データの高速暗号化に使用します。RSAは公開鍵暗号で、鍵配送問題を解決できますが処理が遅いです。HTTPSではRSAで共通鍵を交換し、AESでデータを暗号化するハイブリッド方式を使います。',
+          },
+          {
+            id: 422,
+            question: 'ファイルの改ざん検知にハッシュ関数を使う理由として正しいものはどれか。',
+            choices: [
+              'ハッシュ値を復号すると元ファイルが得られるから',
+              'ファイルが1ビットでも変わるとハッシュ値が大きく変わる性質があるから',
+              'ハッシュ関数はファイルを暗号化して盗聴を防ぐから',
+              'ハッシュ値が同じなら必ず同じファイルであることが保証されるから',
+            ],
+            answer: 1,
+            explanation: 'ハッシュ関数の「雪崩効果」により、入力が1ビットでも変わるとハッシュ値が大きく変わります。これにより改ざんを高確率で検知できます。なお、異なるファイルでも同じハッシュ値になる「衝突」は原理的に起こりうるため、強力なハッシュ関数（SHA-256など）の使用が重要です。',
           },
         ],
       },
@@ -1393,6 +2318,24 @@ IPアドレス:     192.168.1.10
 
 <h3>シングルサインオン（SSO）</h3>
 <p>一度のログインで複数のシステム・サービスを利用できる仕組みです。利便性向上とパスワード管理の一元化が目的です。</p>
+<p>実装技術例：SAML（XML形式のトークン交換）、OAuth 2.0（アクセス権の委譲）、OpenID Connect（認証情報の共有）</p>
+
+<h3>PKI（公開鍵基盤）の仕組み</h3>
+<p>公開鍵暗号の最大の課題は「その公開鍵が本当に本人のものか」の確認です。PKI（Public Key Infrastructure）は<strong>認証局（CA: Certificate Authority）</strong>が電子証明書を発行して公開鍵の正当性を保証します。</p>
+<ol>
+  <li>サーバが秘密鍵と公開鍵のペアを生成し、認証局に<strong>証明書署名要求（CSR）</strong>を送る</li>
+  <li>認証局がサーバの身元を確認し、<strong>電子証明書（サーバ証明書）</strong>を発行する</li>
+  <li>ブラウザはルート認証局を信頼しており、証明書チェーンをたどって検証する</li>
+  <li>証明書が有効であれば、公開鍵が本物であると信頼できる</li>
+</ol>
+<p>HTTPSのアドレスバーの鍵マーク・「この接続は保護されています」はこの仕組みが機能していることを示します。</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+デジタル署名: 署名=送信者の秘密鍵で作成、検証=送信者の公開鍵で確認。<br/>
+MFA: 知識・所持・生体のうち異なる要素を2つ以上組み合わせること（同じ種類2回はNG）。<br/>
+PKI: 認証局（CA）が電子証明書を発行して公開鍵の正当性を保証する仕組み。
+</div>
         `,
         diagram: 'digital-signature',
         questions: [
@@ -1414,6 +2357,42 @@ IPアドレス:     192.168.1.10
             ],
             answer: 1,
             explanation: '多要素認証は知識（パスワード）・所持（スマートフォン）・生体など異なる要素を2つ以上組み合わせます。同じ種類の認証を2回行うのは多要素認証ではありません。',
+          },
+          {
+            id: 417,
+            question: 'PKIにおける認証局（CA）の役割として正しいものはどれか。',
+            choices: [
+              'ユーザーのパスワードを暗号化して保管する機関',
+              '公開鍵の正当性を保証する電子証明書を発行する機関',
+              '不正アクセスを検知してブロックするセキュリティ機器',
+              'ネットワーク上の機器にIPアドレスを割り当てる機関',
+            ],
+            answer: 1,
+            explanation: '認証局（CA）はデジタル証明書を発行し、公開鍵がその所有者のものであることを保証します。ブラウザはルートCAを信頼することでHTTPS通信の正当性を検証できます。',
+          },
+          {
+            id: 418,
+            question: 'シングルサインオン（SSO）の主な目的として正しいものはどれか。',
+            choices: [
+              'パスワードを複数のサービスで共有して記憶の負担を減らす',
+              '一度のログインで複数のシステムにアクセスできるようにして利便性と管理を向上させる',
+              '複数のパスワードを1つの強力なパスワードに変換して安全性を高める',
+              '生体認証を全システムに統一適用してセキュリティを強化する',
+            ],
+            answer: 1,
+            explanation: 'SSOは一度の認証で複数のシステム・サービスを利用できる仕組みで、ユーザーの利便性向上とパスワード管理の一元化（IT管理コスト削減）を目的とします。パスワードの共有とは異なります。',
+          },
+          {
+            id: 423,
+            question: 'TOTP（時刻同期型ワンタイムパスワード）の説明として正しいものはどれか。',
+            choices: [
+              '一度使うと無効になるパスワードで、現在時刻をもとに30秒ごとに変化する',
+              'パスワードをハッシュ化してネットワーク送信するプロトコル',
+              '公開鍵証明書を使ってサーバを認証する仕組み',
+              '複数のサービスで同じパスワードを安全に使い回すための技術',
+            ],
+            answer: 0,
+            explanation: 'TOTPは現在時刻とシークレットキーをもとに一定時間（30秒）ごとに変化するワンタイムパスワードを生成します。Google AuthenticatorなどのMFAアプリで使われ、盗まれても短時間で無効になります。',
           },
         ],
       },
@@ -1450,10 +2429,31 @@ IPアドレス:     192.168.1.10
 
 <h3>バックアップ戦略</h3>
 <ul>
-  <li><strong>フルバックアップ</strong>: 全データを毎回バックアップ。復元が簡単だが時間・容量がかかる。</li>
-  <li><strong>差分バックアップ</strong>: 前回フルバックアップ以降の変更分を保存。</li>
-  <li><strong>増分バックアップ</strong>: 前回バックアップ以降の変更分のみ保存。最も効率的だが復元時に手間がかかる。</li>
+  <li><strong>フルバックアップ</strong>: 全データを毎回バックアップ。復元が最も簡単（フルのみで復元）だが時間・容量がかかる。</li>
+  <li><strong>差分バックアップ</strong>: 前回フルバックアップ以降の変更分を保存。復元は「フル＋最新の差分」の2回。</li>
+  <li><strong>増分バックアップ</strong>: 前回バックアップ（フルまたは増分）以降の変更分のみ保存。最も容量効率が良いが、復元は「フル＋全増分」と手間がかかる。</li>
 </ul>
+<pre>
+バックアップ方式の比較:
+                バックアップ時間  バックアップ容量  復元時間
+フル             長い             大きい           短い（1回）
+差分             中程度           中程度           短い（2回）
+増分             短い             小さい           長い（複数回）
+</pre>
+
+<h3>CSIRT（コンピュータセキュリティインシデント対応チーム）</h3>
+<p>セキュリティインシデント（事故・事件）が発生したときに対応する専門チームです。インシデントの検知・分析・封じ込め・復旧・再発防止を担当します。</p>
+<ul>
+  <li><strong>社内CSIRT</strong>: 自組織のインシデントに対応する内部チーム</li>
+  <li><strong>JPCERT/CC</strong>: 日本のコンピュータ緊急対応チーム。インシデント情報の収集・分析・対応支援を行う国内調整機関</li>
+</ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+DMZ = 外部公開サーバを内部NWから隔離した中間ネットワーク領域。<br/>
+IDS=検知のみ、IPS=検知＋自動ブロック、WAF=Webアプリ特化。<br/>
+差分バックアップ復元: フル+最新差分の2回。増分: フル+全増分の複数回。
+</div>
         `,
         diagram: 'security-measures',
         questions: [
@@ -1475,6 +2475,42 @@ IPアドレス:     192.168.1.10
             choices: ['増分バックアップ', '差分バックアップ', 'フルバックアップ', 'スナップショット'],
             answer: 2,
             explanation: 'フルバックアップは毎回全データを保存します。復元が簡単な反面、時間と容量を多く消費します。',
+          },
+          {
+            id: 419,
+            question: '差分バックアップからシステムを復元するとき、必要なバックアップはどれか。',
+            choices: [
+              'フルバックアップのみ',
+              '最新の差分バックアップのみ',
+              'フルバックアップと最新の差分バックアップ',
+              'フルバックアップと全ての差分バックアップ',
+            ],
+            answer: 2,
+            explanation: '差分バックアップはフルバックアップ以降の全変更を保存するため、復元にはフルバックアップと最新の差分バックアップの2つが必要です。増分バックアップの場合はフルバックアップと全ての増分バックアップが必要になります。',
+          },
+          {
+            id: 420,
+            question: 'DMZ（非武装地帯）の説明として正しいものはどれか。',
+            choices: [
+              '社内ネットワーク全体を暗号化通信で保護する領域',
+              'インターネットと内部ネットワークの間に設けた公開サーバ用の隔離ネットワーク領域',
+              '不正パケットを自動的に遮断するファイアウォールの機能名称',
+              'マルウェアを実行して動作を解析するサンドボックス環境',
+            ],
+            answer: 1,
+            explanation: 'DMZはWebサーバ・メールサーバなど外部公開が必要なサーバを内部ネットワークから切り離した中間ネットワーク領域です。外部からDMZへのアクセスは許可しつつ、DMZから内部ネットワークへのアクセスをファイアウォールで制限することでセキュリティを確保します。',
+          },
+          {
+            id: 424,
+            question: '増分バックアップの特徴として正しいものはどれか。',
+            choices: [
+              'バックアップのたびに全データを保存するため復元が最も簡単',
+              '前回フルバックアップからの全変更を保存するため復元に2回のバックアップが必要',
+              '前回バックアップ以降の変更分のみ保存するため容量効率は最良だが復元に複数回必要',
+              'リアルタイムにデータを別ディスクに複製する方式',
+            ],
+            answer: 2,
+            explanation: '増分バックアップは前回のバックアップ（フルまたは増分）以降に変更されたデータのみを保存します。バックアップ時間・容量は最小ですが、復元時はフル＋その後の全増分バックアップが必要で手間がかかります。',
           },
         ],
       },
@@ -1550,11 +2586,39 @@ i を 1 から n-1 まで繰り返す:
     現在 ← 現在.次
 </pre>
 
-<h3>配列 vs 連結リストの使い分け</h3>
+<h3>2次元配列（行列）</h3>
+<p>行と列で構成される表形式のデータ構造です。<code>A[行][列]</code> でアクセスします。</p>
+<pre>
+// 2行3列の2次元配列
+行列 ← [[1, 2, 3],
+         [4, 5, 6]]
+
+表示する(行列[0][0])  // → 1
+表示する(行列[1][2])  // → 6
+
+// 全要素の合計
+合計 ← 0
+i を 0 から 1 まで繰り返す:      // 行
+    j を 0 から 2 まで繰り返す:  // 列
+        合計 ← 合計 + 行列[i][j]
+表示する(合計)  // → 21
+</pre>
+
+<h3>ハッシュテーブル</h3>
+<p>キーにハッシュ関数を適用して配列の添字を決定し、O(1)でデータを格納・取得するデータ構造です。</p>
 <ul>
-  <li><strong>配列</strong>: ランダムアクセスが多い場合、要素数が固定の場合</li>
-  <li><strong>連結リスト</strong>: 挿入・削除が多い場合、要素数が動的に変わる場合</li>
+  <li><strong>ハッシュ関数</strong>: キーから添字（バケット）を計算する関数</li>
+  <li><strong>衝突（コリジョン）</strong>: 異なるキーが同じ添字になる現象</li>
+  <li><strong>衝突解決</strong>: チェイン法（連結リストで複数格納）またはオープンアドレス法（空きを探す）</li>
 </ul>
+
+<h3>配列 vs 連結リストの使い分け</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)">操作</th><th style="padding:6px 8px;border:1px solid var(--color-border)">配列</th><th style="padding:6px 8px;border:1px solid var(--color-border)">連結リスト</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">インデックスアクセス</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(1) ✓速い</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(n) 遅い</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">任意位置への挿入・削除</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(n) 遅い</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(1) ✓速い</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">メモリ効率</td><td style="padding:5px 8px;border:1px solid var(--color-border)">連続領域・効率的</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ポインタ分余分に使用</td></tr>
+</table>
         `,
         diagram: 'array-list',
         questions: [
@@ -1571,6 +2635,25 @@ i を 1 から n-1 まで繰り返す:
             choices: ['インデックスによるランダムアクセス', '任意位置への挿入・削除', '末尾要素へのアクセス', 'メモリ使用量の節約'],
             answer: 1,
             explanation: '連結リストはポインタの付け替えだけで挿入・削除できるためO(1)です。配列は要素をずらす必要があるためO(n)です。',
+          },
+          {
+            id: 1021,
+            question: '2次元配列 A = [[1,2,3],[4,5,6]] のとき A[1][2] の値はどれか。',
+            choices: ['2', '3', '5', '6'],
+            answer: 3,
+            explanation: 'A[1][2] は 1行目（0始まりで2行目）の2列目（0始まりで3列目）の値 = 6 です。',
+          },
+          {
+            id: 1022,
+            question: 'ハッシュテーブルで「衝突（コリジョン）」が発生する状況はどれか。',
+            choices: [
+              '配列のインデックスが範囲外になったとき',
+              '異なるキーが同じハッシュ値（添字）になったとき',
+              'ハッシュ関数が負の値を返したとき',
+              'テーブルの全要素が埋まったとき',
+            ],
+            answer: 1,
+            explanation: '衝突（コリジョン）は異なるキーが同じハッシュ値（配列の添字）に対応するときに発生します。チェイン法やオープンアドレス法で解決します。',
           },
         ],
       },
@@ -1646,6 +2729,22 @@ i を 1 から n-1 まで繰り返す:
 値 ← キューの先頭を取り出す  // 値="B", キュー=[C]
 表示する(値)   // → B
 </pre>
+
+<h3>優先度キュー（Priority Queue）</h3>
+<p>通常のキューと異なり、<strong>優先度の高い要素から取り出す</strong>データ構造です。</p>
+<ul>
+  <li>用途: OS のタスクスケジューリング・ダイクストラ法（最短経路）・イベント管理</li>
+  <li>実装: ヒープ（Heap）を使うことが多い。取り出しが O(log n)</li>
+</ul>
+
+<h3>スタック vs キューの比較</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)"></th><th style="padding:6px 8px;border:1px solid var(--color-border)">スタック（Stack）</th><th style="padding:6px 8px;border:1px solid var(--color-border)">キュー（Queue）</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">順序</td><td style="padding:5px 8px;border:1px solid var(--color-border)">LIFO（後入れ先出し）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">FIFO（先入れ先出し）</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">追加</td><td style="padding:5px 8px;border:1px solid var(--color-border)">push（末尾へ）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">enqueue（末尾へ）</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">取り出し</td><td style="padding:5px 8px;border:1px solid var(--color-border)">pop（末尾から）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">dequeue（先頭から）</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">用途</td><td style="padding:5px 8px;border:1px solid var(--color-border)">関数コール・Undo・括弧チェック</td><td style="padding:5px 8px;border:1px solid var(--color-border)">タスク待ち・BFS・印刷待ち</td></tr>
+</table>
         `,
         diagram: 'stack-queue',
         questions: [
@@ -1669,6 +2768,18 @@ i を 1 から n-1 まで繰り返す:
             choices: ['不正', '正常', 'エラー', '不明'],
             answer: 1,
             explanation: '(→(→)→(→)→) の順に処理。開く括弧と閉じる括弧が正しく対応しているため正常です。',
+          },
+          {
+            id: 1023,
+            question: '優先度キュー（Priority Queue）の説明として正しいものはどれか。',
+            choices: [
+              '先に入れた要素から順番に取り出すデータ構造',
+              '後に入れた要素から順番に取り出すデータ構造',
+              '優先度の高い要素から取り出すデータ構造',
+              '要素を並べ替えてから取り出すデータ構造',
+            ],
+            answer: 2,
+            explanation: '優先度キューは挿入順ではなく優先度の高い要素から取り出します。OSのタスクスケジューリングやダイクストラ法に使われます。ヒープで実装されることが多いです。',
           },
         ],
       },
@@ -1725,14 +2836,33 @@ i を 1 から n-1 まで繰り返す:
     A[j+1] ← キー
 </pre>
 
+<h3>クイックソートの仕組み</h3>
+<p>基準値（ピボット）を選び、それより小さい要素を左、大きい要素を右に分割して再帰的にソートします。</p>
+<pre>
+関数 クイックソート(配列, 左, 右):
+    もし 左 >= 右 なら: 終了  // 1要素以下なら完了
+    ピボット ← 配列[(左+右) div 2]
+    i ← 左, j ← 右
+    i <= j の間繰り返す:
+        配列[i] >= ピボット になるまで i を増加
+        配列[j] <= ピボット になるまで j を減少
+        もし i <= j なら:
+            配列[i] と 配列[j] を交換
+            i ← i+1, j ← j-1
+    クイックソート(配列, 左, j)   // 左部分
+    クイックソート(配列, i, 右)   // 右部分
+</pre>
+
 <h3>ソートアルゴリズムの比較</h3>
-<ul>
-  <li><strong>バブルソート</strong>: O(n²) / 安定 / 実装簡単 / 実用では遅い</li>
-  <li><strong>選択ソート</strong>: O(n²) / 不安定 / 交換回数が少ない</li>
-  <li><strong>挿入ソート</strong>: O(n²) / 安定 / ほぼ整列済みなら速い</li>
-  <li><strong>マージソート</strong>: O(n log n) / 安定 / 分割統治法</li>
-  <li><strong>クイックソート</strong>: 平均O(n log n) / 不安定 / 実用最速の一つ</li>
-</ul>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)">アルゴリズム</th><th style="padding:6px 8px;border:1px solid var(--color-border)">計算量</th><th style="padding:6px 8px;border:1px solid var(--color-border)">安定性</th><th style="padding:6px 8px;border:1px solid var(--color-border)">特徴</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">バブルソート</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(n²)</td><td style="padding:5px 8px;border:1px solid var(--color-border)">安定</td><td style="padding:5px 8px;border:1px solid var(--color-border)">実装簡単・実用では遅い</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">選択ソート</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(n²)</td><td style="padding:5px 8px;border:1px solid var(--color-border)">不安定</td><td style="padding:5px 8px;border:1px solid var(--color-border)">交換回数が少ない</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">挿入ソート</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(n²)〜O(n)</td><td style="padding:5px 8px;border:1px solid var(--color-border)">安定</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ほぼ整列済みなら速い</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">マージソート</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(n log n)</td><td style="padding:5px 8px;border:1px solid var(--color-border)">安定</td><td style="padding:5px 8px;border:1px solid var(--color-border)">分割統治法・追加メモリ必要</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">クイックソート</td><td style="padding:5px 8px;border:1px solid var(--color-border)">平均O(n log n)</td><td style="padding:5px 8px;border:1px solid var(--color-border)">不安定</td><td style="padding:5px 8px;border:1px solid var(--color-border)">実用最速・最悪O(n²)</td></tr>
+</table>
+<p><strong>安定ソート</strong>: 同じ値の要素の相対順序が保たれるソート（バブル・挿入・マージ）。</p>
         `,
         diagram: 'sort',
         questions: [
@@ -1756,6 +2886,18 @@ i を 1 から n-1 まで繰り返す:
             choices: ['約10倍', '約100倍', '約1000倍', '同じ'],
             answer: 1,
             explanation: 'O(n²)=1,000,000回、O(n log n)≈10,000回。比率は約100倍です。nが大きくなるほど差が開きます。',
+          },
+          {
+            id: 1024,
+            question: 'クイックソートの特徴として正しいものはどれか。',
+            choices: [
+              '常にO(n log n)の計算量が保証される安定ソートである',
+              'ピボットを基準に要素を分割して再帰的にソートし、平均O(n log n)だが最悪O(n²)になる',
+              '隣接する要素を比較・交換を繰り返すシンプルなソートである',
+              '未ソート部分の最小値を選んで先頭と交換するソートである',
+            ],
+            answer: 1,
+            explanation: 'クイックソートはピボットを基準に分割・再帰する方法で平均O(n log n)の高速なソートですが、ピボット選択が悪いと最悪O(n²)になります。安定ソートではありません。',
           },
         ],
       },
@@ -1809,7 +2951,15 @@ i を 1 から n-1 まで繰り返す:
 
 <h3>ハッシュ探索 — O(1)（平均）</h3>
 <p>ハッシュ関数でキーから直接格納位置を計算する探索法です。平均的にO(1)で探索できます。</p>
-<p>ハッシュテーブル（辞書・マップ）の内部実装として使われます。</p>
+<p>ハッシュテーブル（辞書・マップ）の内部実装として使われます。衝突（コリジョン）が多いと O(n) に劣化します。</p>
+
+<h3>探索アルゴリズムの比較</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)">手法</th><th style="padding:6px 8px;border:1px solid var(--color-border)">計算量</th><th style="padding:6px 8px;border:1px solid var(--color-border)">前提条件</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">線形探索</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(n)</td><td style="padding:5px 8px;border:1px solid var(--color-border)">なし（どんな配列でも可）</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">二分探索</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(log n)</td><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>ソート済み</strong>配列が必要</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">ハッシュ探索</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(1)（平均）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ハッシュテーブル構築が必要</td></tr>
+</table>
         `,
         diagram: 'search',
         questions: [
@@ -1838,6 +2988,13 @@ i を 1 から n-1 まで繰り返す:
             ],
             answer: 2,
             explanation: '線形探索は先頭から順にO(n)で探索（ソート不要）。二分探索はソート済みを前提にO(log n)で探索できます。',
+          },
+          {
+            id: 1025,
+            question: 'ハッシュ探索の平均計算量として正しいものはどれか。',
+            choices: ['O(n²)', 'O(n)', 'O(log n)', 'O(1)'],
+            answer: 3,
+            explanation: 'ハッシュ探索はハッシュ関数でキーから直接格納位置を計算するため平均O(1)で探索できます。ただし衝突が多発すると最悪O(n)に劣化します。',
           },
         ],
       },
@@ -1913,6 +3070,15 @@ a ← b
 b ← tmp
 // a=20, b=10
 </pre>
+
+<h3>論理演算子の真理値表</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)">A</th><th style="padding:6px 8px;border:1px solid var(--color-border)">B</th><th style="padding:6px 8px;border:1px solid var(--color-border)">A AND B</th><th style="padding:6px 8px;border:1px solid var(--color-border)">A OR B</th><th style="padding:6px 8px;border:1px solid var(--color-border)">NOT A</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">true</td><td style="padding:5px 8px;border:1px solid var(--color-border)">true</td><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>true</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>true</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">false</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">true</td><td style="padding:5px 8px;border:1px solid var(--color-border)">false</td><td style="padding:5px 8px;border:1px solid var(--color-border)">false</td><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>true</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">false</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">false</td><td style="padding:5px 8px;border:1px solid var(--color-border)">true</td><td style="padding:5px 8px;border:1px solid var(--color-border)">false</td><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>true</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">true</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">false</td><td style="padding:5px 8px;border:1px solid var(--color-border)">false</td><td style="padding:5px 8px;border:1px solid var(--color-border)">false</td><td style="padding:5px 8px;border:1px solid var(--color-border)">false</td><td style="padding:5px 8px;border:1px solid var(--color-border)">true</td></tr>
+</table>
         `,
         diagram: 'flowchart',
         questions: [
@@ -1929,6 +3095,20 @@ b ← tmp
             choices: ['2', '3', '3.4', '4'],
             answer: 1,
             explanation: 'divは整数除算（商）です。17 ÷ 5 の商は3（小数点以下切り捨て）。',
+          },
+          {
+            id: 1026,
+            question: '次の擬似コードで、実行後の a と b の値の組み合わせとして正しいものはどれか。\n\na ← 10\nb ← 20\ntmp ← a\na ← b\nb ← tmp',
+            choices: ['a=10, b=20', 'a=20, b=10', 'a=20, b=20', 'a=10, b=10'],
+            answer: 1,
+            explanation: 'tmpにaの値(10)を退避してからa←b(20)、b←tmp(10)と代入。結果はa=20, b=10。tmpを使った変数交換の定型パターンです。',
+          },
+          {
+            id: 1027,
+            question: '次の式の結果を正しく表しているものはどれか。\n\n(10 > 5) AND (3 mod 2 = 0)',
+            choices: ['true', 'false', 'エラーになる', '0'],
+            answer: 1,
+            explanation: '10>5はtrue。3 mod 2=1なので 1=0 はfalse。true AND false = false。ANDは両方trueのときのみtrueになります。',
           },
         ],
       },
@@ -1988,6 +3168,26 @@ x ← 15
     表示する("未成年")
 </pre>
 
+<h3>case 式（多分岐選択）</h3>
+<p>複数の値を比較する場合、if-else を重ねるより case（switch）式が読みやすくなります。FE試験の科目B問題でも登場します。</p>
+<pre>
+// 曜日番号（1〜7）から曜日名を返す
+曜日番号 ← 3
+
+曜日番号 の値によって:
+    1 の場合: 表示する("月曜日")
+    2 の場合: 表示する("火曜日")
+    3 の場合: 表示する("水曜日")  // → ここが実行される
+    4 の場合: 表示する("木曜日")
+    5 の場合: 表示する("金曜日")
+    それ以外: 表示する("週末")
+
+// 同じ処理を if-else で書くと:
+// もし 曜日番号 = 1 なら: ... そうでなく 曜日番号 = 2 なら: ... （繰り返し）
+// → case の方がシンプルで読みやすい
+</pre>
+<p>FE試験の擬似コードでは「〜 の値によって: ○の場合: ...」という形式で表現されます。</p>
+
 <h3>擬似コードのトレース練習</h3>
 <pre>
 a ← 5
@@ -2017,6 +3217,20 @@ c ← 0
             choices: ['割り切れる', '割り切れない', '0', 'エラー'],
             answer: 1,
             explanation: '8 mod 3 = 2（8÷3の余り）。2 ≠ 0 なのでelseブランチが実行されます。',
+          },
+          {
+            id: 1028,
+            question: '次の擬似コードを実行したとき、表示される結果はどれか。\n\n点数 ← 65\nもし 点数 >= 90 なら:\n    表示する("A")\nそうでなく 点数 >= 70 なら:\n    表示する("B")\nそうでなく 点数 >= 60 なら:\n    表示する("C")\nそうでなければ:\n    表示する("D")',
+            choices: ['A', 'B', 'C', 'D'],
+            answer: 2,
+            explanation: '点数65は90未満・70未満・60以上。条件を上から評価して「点数>=60」がtrueになるのでCが表示されます。',
+          },
+          {
+            id: 1029,
+            question: '次の条件式が true になる x の値はどれか。\n\nx >= 10 AND x <= 20',
+            choices: ['5', '9', '15', '25'],
+            answer: 2,
+            explanation: 'AND条件は両方が成立する必要があります。x=15は 15>=10(true) AND 15<=20(true) で true。他の値は少なくとも一方の条件がfalseです。',
           },
         ],
       },
@@ -2104,6 +3318,20 @@ i を 1 から 10 まで繰り返す:
             answer: 1,
             explanation: 'n: 1→2→4→8→16→32。n=32になったときn<32が偽になりループ終了。実行回数は5回です。',
           },
+          {
+            id: 1030,
+            question: '次の擬似コードを実行した後の 合計 の値はどれか。\n\n合計 ← 0\ni を 1 から 10 まで繰り返す:\n    もし i mod 3 = 0 なら:\n        合計 ← 合計 + i',
+            choices: ['15', '18', '55', '10'],
+            answer: 1,
+            explanation: '3の倍数（i=3,6,9）のみ加算。3+6+9=18。mod 3 = 0 は3の倍数の判定条件です。',
+          },
+          {
+            id: 1031,
+            question: '次の二重ループは合計何回の処理Xを実行するか。\n\ni を 1 から 4 まで繰り返す:\n    j を 1 から i まで繰り返す:\n        処理X',
+            choices: ['4回', '8回', '10回', '16回'],
+            answer: 2,
+            explanation: 'i=1のとき j=1(1回)、i=2のとき j=1,2(2回)、i=3(3回)、i=4(4回)。合計1+2+3+4=10回。内ループの上限が i なので回数が変化します。',
+          },
         ],
       },
       {
@@ -2172,6 +3400,59 @@ i を 1 から 10 まで繰り返す:
 <p><strong>値渡し</strong>: 引数の<strong>コピー</strong>を渡す。関数内で変更しても元の変数は変わらない。</p>
 <p><strong>参照渡し</strong>: 引数の<strong>参照（アドレス）</strong>を渡す。関数内で変更すると元の変数も変わる。</p>
 <p>配列は参照渡しになることが多いため、関数内での変更に注意が必要です。</p>
+
+<h3>スコープ（変数の有効範囲）</h3>
+<p>変数が参照できる範囲のことです。</p>
+<pre>
+グローバル変数 count ← 0   // プログラム全体から参照可能
+
+関数 加算(a, b):
+    ローカル変数 合計 ← a + b   // この関数内のみ有効
+    count ← count + 1           // グローバル変数を更新
+    合計 を返す
+
+加算(3, 5)    // 合計=8, count=1
+// ここで 合計 を参照するとエラー（スコープ外）
+</pre>
+<ul>
+  <li><strong>ローカル変数</strong>: 関数内で宣言。関数が終わると消える。他の関数からは参照不可。</li>
+  <li><strong>グローバル変数</strong>: 関数の外で宣言。プログラム全体から参照可能。ただし多用すると管理が複雑になる。</li>
+</ul>
+
+<h3>再帰関数（Recursive Function）</h3>
+<p>関数が自分自身を呼び出す関数です。FE科目B問題で頻繁に出題されます。</p>
+<pre>
+// 階乗の計算（n! = n × (n-1) × ... × 2 × 1）
+関数 階乗(n):
+    もし n <= 1 なら:        // ← 終了条件（ベースケース）必須！
+        1 を返す
+    そうでなければ:
+        n * 階乗(n - 1) を返す  // ← 自分自身を呼び出す
+
+// 呼び出し例: 階乗(4)
+// = 4 * 階乗(3)
+// = 4 * 3 * 階乗(2)
+// = 4 * 3 * 2 * 階乗(1)
+// = 4 * 3 * 2 * 1
+// = 24
+</pre>
+<p><strong>重要</strong>: 再帰関数には必ず<strong>終了条件（ベースケース）</strong>が必要です。ないと無限に呼び出されてスタックオーバーフローになります。</p>
+
+<h3>再帰トレースの読み方</h3>
+<p>試験では「このコードの出力は？」という形で再帰の追跡問題が出ます。</p>
+<pre>
+// フィボナッチ数列（F(n) = F(n-1) + F(n-2)）
+関数 fib(n):
+    もし n <= 1 なら:
+        n を返す     // fib(0)=0, fib(1)=1
+    そうでなければ:
+        fib(n-1) + fib(n-2) を返す
+
+// fib(5) の展開:
+// fib(5) = fib(4) + fib(3)
+//        = (fib(3)+fib(2)) + (fib(2)+fib(1))
+//        = 3 + 2 = 5
+</pre>
         `,
         diagram: 'flowchart',
         questions: [
@@ -2193,6 +3474,25 @@ i を 1 から 10 まで繰り返す:
             ],
             answer: 1,
             explanation: '値渡しは引数のコピーを関数に渡すため、関数内での変更は呼び出し元の変数に影響しません。',
+          },
+          {
+            id: 1032,
+            question: '次の再帰関数 fact(4) の戻り値はどれか。\n\n関数 fact(n):\n    もし n = 1 なら:\n        1 を返す\n    そうでなければ:\n        n * fact(n-1) を返す',
+            choices: ['4', '8', '16', '24'],
+            answer: 3,
+            explanation: 'fact(4)=4×fact(3)=4×3×fact(2)=4×3×2×fact(1)=4×3×2×1=24。これは4の階乗（4!）の計算です。',
+          },
+          {
+            id: 1033,
+            question: '関数の引数として配列を参照渡しした場合の説明として正しいものはどれか。',
+            choices: [
+              '関数内で配列要素を変更しても呼び出し元は変わらない',
+              '関数内で配列要素を変更すると呼び出し元の配列も変わる',
+              '配列は参照渡しできない',
+              '参照渡しは実行速度が遅い',
+            ],
+            answer: 1,
+            explanation: '参照渡しは変数のアドレスを渡すため、関数内での変更が呼び出し元にも反映されます。配列は多くの言語で参照渡しになるため注意が必要です。',
           },
         ],
       },
@@ -2259,9 +3559,23 @@ const additionalChapters: Chapter[] = [
   <li>循環待機（プロセスが循環して待ち合う）</li>
 </ol>
 
+<h3>排他制御（ミューテックス・セマフォ）</h3>
+<p>複数スレッドが共有メモリを同時に書き換えると、データが壊れます（競合状態・レースコンディション）。これを防ぐための仕組みが<strong>排他制御</strong>です。</p>
+<ul>
+  <li>
+    <strong>ミューテックス（Mutex）</strong>: 鍵のようなもの。ロックを取得したスレッドだけが共有資源にアクセスでき、終わったらアンロックする。同時に1スレッドのみが使える（バイナリセマフォの一種）。
+  </li>
+  <li>
+    <strong>セマフォ（Semaphore）</strong>: カウンター付きの制御。「同時に最大N個まで利用可能」という制御ができる。カウンタが0になると次のスレッドは待機する。駐車場の満空表示に例えられる。
+  </li>
+</ul>
+<p>排他制御が適切でないと<strong>デッドロック</strong>（互いがロックを待つ状態）が起きるため、ロックの取得順序を統一するなどの設計が重要です。</p>
+
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-プロセスとスレッドの違い（メモリ空間の独立 vs 共有）・デッドロックの説明が頻出。スケジューリング方式は「ラウンドロビン=公平・均等」「優先度方式=重要タスク優先」を押さえましょう。
+プロセスとスレッドの違い（メモリ空間の独立 vs 共有）・デッドロックの説明が頻出。<br/>
+スケジューリング方式: ラウンドロビン=公平・均等、優先度=重要タスク優先。<br/>
+セマフォ=同時アクセス数を制限するカウンタ型の排他制御。
 </div>
         `,
         diagram: 'os',
@@ -2302,6 +3616,30 @@ const additionalChapters: Chapter[] = [
             answer: 1,
             explanation: 'デッドロックは複数プロセスが互いに相手の保持する資源を待ち続けることで、すべてのプロセスが永久に待機状態になる現象です。',
           },
+          {
+            id: 509,
+            question: 'ラウンドロビンスケジューリングの説明として正しいものはどれか。',
+            choices: [
+              '優先度の高いプロセスを常に先に実行する方式',
+              '全プロセスに均等なタイムスライスを順番に割り当てる公平な方式',
+              '最も実行時間が短いプロセスを先に実行する方式',
+              '到着した順に実行し、割り込みを許さない方式',
+            ],
+            answer: 1,
+            explanation: 'ラウンドロビンは各プロセスに一定のタイムスライス（例:10ms）を順番に割り当てます。公平性が高く、時分割処理の基本方式ですが、優先度は考慮されません。',
+          },
+          {
+            id: 510,
+            question: 'セマフォを使った排他制御の説明として正しいものはどれか。',
+            choices: [
+              '共有資源へのアクセスを完全に禁止する仕組み',
+              'カウンタを使って同時にアクセスできるスレッド数を制限する仕組み',
+              'デッドロックが発生したときに自動的に解消する仕組み',
+              'プロセス間でメモリを完全に分離するための仕組み',
+            ],
+            answer: 1,
+            explanation: 'セマフォはカウンタ値で同時アクセス数を管理します。カウンタ>0なら入れる、0になると待機します。バイナリセマフォ（0/1のみ）はミューテックスと同等の働きをします。',
+          },
         ],
       },
       {
@@ -2328,8 +3666,29 @@ const additionalChapters: Chapter[] = [
   <li><strong>最適アルゴリズム（OPT）</strong>: 将来最も長く使われないページを追い出す。理論上最高だが将来予測は不可能。</li>
 </ul>
 
+<h3>内部断片化と外部断片化</h3>
+<p>メモリ管理で無駄な空き領域が生じる現象を<strong>断片化（フラグメンテーション）</strong>といいます。</p>
+<ul>
+  <li>
+    <strong>内部断片化</strong>: 割り当てたブロックの中に使われない隙間が生じる現象。固定区画方式で起きやすい。<br/>
+    例: 100KBの区画に60KBのプロセスを配置 → 40KBが無駄になる。
+  </li>
+  <li>
+    <strong>外部断片化</strong>: 割り当てできない小さな空き領域が分散して残る現象。可変区画方式で起きやすい。<br/>
+    解消方法: <strong>コンパクション（メモリの再配置）</strong>でまとめる。
+  </li>
+</ul>
+<p>ページング方式は固定サイズのページで管理するため外部断片化がなく、仮想記憶の主流方式になっています。</p>
+
 <h3>スラッシング</h3>
 <p>ページの置換が頻繁に発生し、CPUがほとんどページ入れ替えに費やされてしまう状態です。物理メモリが極端に不足したときに発生します。</p>
+<p>対策: 物理メモリを増設する、同時実行プロセス数を減らす（ワーキングセットの制御）。</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+固定区画→内部断片化、可変区画→外部断片化（コンパクションで対策）。<br/>
+LRU=「最近使っていない」ページを追い出す。スラッシング=ページ置換が多すぎてCPUが有効に使えない状態。
+</div>
         `,
         diagram: 'paging',
         questions: [
@@ -2357,6 +3716,30 @@ const additionalChapters: Chapter[] = [
             answer: 1,
             explanation: 'LRU（Least Recently Used）は最近最も長く使われていないページを置換します。時間的局所性を活用した実用的なアルゴリズムです。',
           },
+          {
+            id: 511,
+            question: '固定区画方式のメモリ管理で発生しやすい断片化はどれか。',
+            choices: [
+              '外部断片化：割り当てられない小さな空き領域が分散する',
+              '内部断片化：割り当てたブロック内に無駄な空き領域が生じる',
+              'コンパクション：メモリを再配置して断片化を解消する',
+              '仮想断片化：仮想アドレス空間に無駄が生じる',
+            ],
+            answer: 1,
+            explanation: '固定区画方式はメモリを固定サイズに分割するため、プロセスがブロックより小さい場合、その差分が無駄（内部断片化）になります。可変区画方式では外部断片化が問題となります。',
+          },
+          {
+            id: 512,
+            question: 'スラッシングが発生したときの状態として正しいものはどれか。',
+            choices: [
+              'CPUがほとんどアイドル状態になり、プロセスが待機する',
+              'ページ置換が頻繁に起きてCPUの有効利用率が著しく低下する',
+              'メモリが増設されて処理速度が向上する',
+              'キャッシュヒット率が上がり処理が高速化する',
+            ],
+            answer: 1,
+            explanation: 'スラッシングは物理メモリ不足でページ置換（スワップ）が頻発し、CPUがページの入れ替え処理だけに費やされてスループットが大幅に低下する状態です。',
+          },
         ],
       },
       {
@@ -2381,12 +3764,57 @@ const additionalChapters: Chapter[] = [
 <p><code>./</code>（カレント）、<code>../</code>（1つ上）などの記号を使用。</p>
 <p>例: <code>../images/photo.png</code>（1つ上のフォルダのimages内）</p>
 
-<h3>ファイルのアクセス権限</h3>
-<p>Linuxでは所有者・グループ・その他に対して読み（r）・書き（w）・実行（x）の権限を設定します。</p>
-<p>例: <code>rwxr-xr--</code> → 所有者は全権限、グループは読み・実行、その他は読みのみ</p>
+<h3>ファイルのアクセス権限（Linuxパーミッション）</h3>
+<p>Linuxでは所有者・グループ・その他に対して読み（r=4）・書き（w=2）・実行（x=1）の権限を設定します。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 10px;border:1px solid var(--color-border)">表記</th><th style="padding:6px 10px;border:1px solid var(--color-border)">数値</th><th style="padding:6px 10px;border:1px solid var(--color-border)">意味</th></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)"><code>rwx</code></td><td style="padding:5px 10px;border:1px solid var(--color-border)">7</td><td style="padding:5px 10px;border:1px solid var(--color-border)">読み・書き・実行すべて許可</td></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)"><code>r-x</code></td><td style="padding:5px 10px;border:1px solid var(--color-border)">5</td><td style="padding:5px 10px;border:1px solid var(--color-border)">読み・実行のみ許可（書き不可）</td></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)"><code>r--</code></td><td style="padding:5px 10px;border:1px solid var(--color-border)">4</td><td style="padding:5px 10px;border:1px solid var(--color-border)">読みのみ許可</td></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)"><code>---</code></td><td style="padding:5px 10px;border:1px solid var(--color-border)">0</td><td style="padding:5px 10px;border:1px solid var(--color-border)">すべて禁止</td></tr>
+</table>
+<p>例: <code>rwxr-xr--</code> (754) → 所有者=全権限(7)、グループ=読み・実行(5)、その他=読みのみ(4)</p>
 
 <h3>ジャーナリング</h3>
 <p>ファイルシステムへの変更をジャーナル（ログ）に先行して記録し、障害発生時に整合性を復元する仕組みです。</p>
+
+<h3>RAID（Redundant Array of Independent Disks）</h3>
+<p>複数のディスクを組み合わせて<strong>パフォーマンス向上</strong>や<strong>冗長性（耐障害性）</strong>を実現する技術です。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">RAID種別</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">方式</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">特徴</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">耐障害性</th>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>RAID 0</strong><br/>ストライピング</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">2台以上。データを分割して複数ディスクに並行書き込み</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">読み書き高速化。容量=N台分</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">冗長性なし。1台故障でデータ全滅</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>RAID 1</strong><br/>ミラーリング</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">2台。同じデータを2台に書き込む（鏡像）</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">高い冗長性。容量=N/2台分</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">1台故障でも継続稼働可能</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>RAID 5</strong><br/>パリティ分散</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">3台以上。データとパリティ（誤り訂正情報）を全ディスクに分散</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">高速＋冗長性。容量=(N-1)台分</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">1台故障まで耐性。2台同時故障でデータ消失</td>
+  </tr>
+</table>
+<p><strong>RAID 1+0（RAID 10）</strong>: ミラーリング後にストライピング。高速＋高冗長性。最低4台必要。</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+絶対パス=ルートから記述。相対パス=現在地から記述（<code>../</code>で1つ上）。<br/>
+Linuxパーミッション: r=4, w=2, x=1 の合計。rwxr-xr--=754。<br/>
+ジャーナリング=変更を先にログへ書き、クラッシュ時の整合性を保証。<br/>
+RAID 0=高速化のみ（冗長性なし）。RAID 1=ミラーリング（1台故障耐性）。RAID 5=パリティ分散（1台故障耐性・容量効率良）。
+</div>
         `,
         diagram: 'filesystem',
         questions: [
@@ -2408,6 +3836,25 @@ const additionalChapters: Chapter[] = [
             ],
             answer: 1,
             explanation: 'ジャーナリングは変更内容をジャーナル（ログ）に先に記録することで、システムクラッシュ後にファイルシステムの整合性を素早く回復できます。',
+          },
+          {
+            id: 513,
+            question: 'Linuxのファイルパーミッション "rwxr-xr--" を数値表記にすると何か。',
+            choices: ['644', '755', '754', '777'],
+            answer: 2,
+            explanation: 'r=4, w=2, x=1 です。所有者: rwx=4+2+1=7、グループ: r-x=4+0+1=5、その他: r--=4+0+0=4 → 754 です。',
+          },
+          {
+            id: 514,
+            question: '相対パスの説明として正しいものはどれか。',
+            choices: [
+              'ルートディレクトリを起点にファイルの位置を記述するパス',
+              '現在の作業ディレクトリを起点にファイルの位置を記述するパス',
+              'ネットワーク上のファイルサーバへのパス',
+              'ファイルの絶対的な物理アドレスを示すパス',
+            ],
+            answer: 1,
+            explanation: '相対パスはカレントディレクトリ（現在の作業ディレクトリ）を起点として記述します。<code>./</code>はカレント、<code>../</code>は1つ上のディレクトリを意味します。',
           },
         ],
       },
@@ -2431,11 +3878,27 @@ const additionalChapters: Chapter[] = [
 </ul>
 
 <h3>クラウドサービスの形態</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 10px;border:1px solid var(--color-border)">種類</th><th style="padding:6px 10px;border:1px solid var(--color-border)">提供内容</th><th style="padding:6px 10px;border:1px solid var(--color-border)">例</th><th style="padding:6px 10px;border:1px solid var(--color-border)">利用者が管理</th></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)"><strong>IaaS</strong></td><td style="padding:5px 10px;border:1px solid var(--color-border)">仮想サーバ・ストレージ・NW</td><td style="padding:5px 10px;border:1px solid var(--color-border)">AWS EC2, Azure VM</td><td style="padding:5px 10px;border:1px solid var(--color-border)">OS〜アプリ</td></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)"><strong>PaaS</strong></td><td style="padding:5px 10px;border:1px solid var(--color-border)">アプリ開発・実行環境</td><td style="padding:5px 10px;border:1px solid var(--color-border)">AWS Beanstalk, GAE</td><td style="padding:5px 10px;border:1px solid var(--color-border)">アプリのみ</td></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)"><strong>SaaS</strong></td><td style="padding:5px 10px;border:1px solid var(--color-border)">完成したアプリ</td><td style="padding:5px 10px;border:1px solid var(--color-border)">Gmail, Salesforce</td><td style="padding:5px 10px;border:1px solid var(--color-border)">設定のみ</td></tr>
+</table>
+
+<h3>マイクロサービスアーキテクチャ</h3>
+<p>アプリケーションを小さな独立したサービス（マイクロサービス）に分割して構築する設計スタイルです。</p>
 <ul>
-  <li><strong>IaaS（Infrastructure as a Service）</strong>: 仮想サーバ・ストレージ・ネットワークを提供。AWS EC2・Azure VMなど。利用者がOSからアプリまで管理。</li>
-  <li><strong>PaaS（Platform as a Service）</strong>: アプリ開発・実行環境を提供。AWS Elastic Beanstalk・Google App Engineなど。利用者はアプリのみ管理。</li>
-  <li><strong>SaaS（Software as a Service）</strong>: 完成したアプリをサービスとして提供。Gmail・Salesforceなど。利用者は設定のみ。</li>
+  <li><strong>モノリシック（一枚岩）</strong>: 機能が1つのアプリにまとまっている従来型。変更の影響範囲が大きい。</li>
+  <li><strong>マイクロサービス</strong>: 機能ごとに独立したサービスに分割。サービスごとに独立デプロイ・スケールが可能。</li>
 </ul>
+<p>サービス間の通信には<strong>REST API</strong>や<strong>メッセージキュー</strong>（RabbitMQ・Kafka等）が使われます。メッセージキューはサービスを非同期につなぎ、負荷の平準化に有効です。</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+IaaS=インフラ提供、PaaS=開発環境提供、SaaS=完成ソフト提供。<br/>
+REST API=HTTPメソッドでリソース操作。GET=取得、POST=作成、PUT=更新、DELETE=削除。<br/>
+マイクロサービス=機能を独立したサービスに分割し、独立デプロイを可能にするアーキテクチャ。
+</div>
         `,
         diagram: 'cloud',
         questions: [
@@ -2457,6 +3920,30 @@ const additionalChapters: Chapter[] = [
             choices: ['POST', 'PUT', 'GET', 'DELETE'],
             answer: 2,
             explanation: 'REST APIではGETがリソースの取得、POSTが作成、PUTが更新、DELETEが削除に対応します。',
+          },
+          {
+            id: 515,
+            question: 'SaaS（Software as a Service）の説明として正しいものはどれか。',
+            choices: [
+              '仮想サーバとストレージをクラウドで提供するサービス',
+              'アプリケーション開発・実行環境をクラウドで提供するサービス',
+              '完成したソフトウェアをインターネット経由でサービスとして提供する形態',
+              'ハードウェアをクラウドから遠隔操作するサービス',
+            ],
+            answer: 2,
+            explanation: 'SaaSはGmailやSalesforceのように完成したアプリケーションをサービスとして提供します。利用者はアプリを設定して使うだけで、インフラ・OS・アプリの管理は不要です。',
+          },
+          {
+            id: 516,
+            question: 'マイクロサービスアーキテクチャの説明として正しいものはどれか。',
+            choices: [
+              'すべての機能を1つのアプリケーションにまとめて管理する方式',
+              'アプリケーションを小さな独立したサービスに分割し、それぞれを独立して開発・デプロイできるようにする設計',
+              'データベースを複数のサーバに分散配置する方式',
+              'マイクロプロセッサを使った組み込みシステムの設計手法',
+            ],
+            answer: 1,
+            explanation: 'マイクロサービスは機能単位で独立したサービスに分割するアーキテクチャです。サービスごとに独立してデプロイ・スケールでき、大規模システムの開発効率と保守性を高めます。',
           },
         ],
       },
@@ -2489,7 +3976,38 @@ const additionalChapters: Chapter[] = [
 </ul>
 
 <h3>Kubernetes（K8s）</h3>
-<p>複数のコンテナを自動的に管理・スケールする<strong>コンテナオーケストレーション</strong>ツールです。Google発で現在クラウド展開の標準になっています。</p>
+<p>複数のコンテナを自動的に管理・スケールする<strong>コンテナオーケストレーション</strong>ツールです。Google発で現在クラウド展開の標準になっています。主な機能:</p>
+<ul>
+  <li><strong>自動スケーリング</strong>: 負荷に応じてコンテナ数を自動増減</li>
+  <li><strong>自己修復</strong>: 障害が発生したコンテナを自動再起動</li>
+  <li><strong>ローリングアップデート</strong>: 無停止でコンテナをバージョンアップ</li>
+</ul>
+
+<h3>サーバレスコンピューティング</h3>
+<p>サーバの管理を一切せず、コードのみを書いて実行できるクラウドサービスの形態です。</p>
+<ul>
+  <li>実際にはサーバは存在するが、利用者はサーバを意識しない</li>
+  <li>関数単位でコードを実行（Function as a Service: FaaS）</li>
+  <li>代表例: <strong>AWS Lambda</strong>・Azure Functions・Google Cloud Functions</li>
+  <li>イベント駆動型（HTTPリクエスト・ファイルアップロード・タイマーなどをトリガーに実行）</li>
+  <li>実行時間・実行回数に応じた課金で、アイドル時のコスト不要</li>
+</ul>
+
+<h3>CI/CD（継続的インテグレーション / 継続的デリバリー）</h3>
+<p>コードの変更を頻繁かつ自動的にテスト・ビルド・デプロイするプロセスです。</p>
+<ul>
+  <li><strong>CI（Continuous Integration）</strong>: コードのコミット時に自動でビルド・テストを実行。バグを早期発見。</li>
+  <li><strong>CD（Continuous Delivery/Deployment）</strong>: テスト通過後に自動でステージング・本番環境へデプロイ。</li>
+</ul>
+<p>代表ツール: GitHub Actions・Jenkins・GitLab CI</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+コンテナ=OSカーネル共有で軽量、VM=ゲストOSを持ち完全分離。<br/>
+Kubernetes=複数コンテナを自動管理するオーケストレーションツール。<br/>
+サーバレス（FaaS）=サーバ管理不要・イベント駆動・使った分だけ課金。<br/>
+CI=自動テスト、CD=自動デプロイ。合わせてCI/CD。
+</div>
         `,
         diagram: 'virtualization',
         questions: [
@@ -2516,6 +4034,174 @@ const additionalChapters: Chapter[] = [
             ],
             answer: 1,
             explanation: 'ハイパーバイザー型（ベアメタル型）はOS不要でハードウェア上に直接動作するため、オーバーヘッドが小さく高性能です。データセンターで広く使われます。',
+          },
+          {
+            id: 517,
+            question: 'Kubernetes（K8s）の主な役割として正しいものはどれか。',
+            choices: [
+              'Dockerイメージを作成するための設計ツール',
+              '複数のコンテナを自動管理・スケールするオーケストレーションツール',
+              'ハイパーバイザー型仮想化を実現するソフトウェア',
+              '仮想マシンのスナップショットを管理するツール',
+            ],
+            answer: 1,
+            explanation: 'Kubernetesは複数のコンテナを自動でデプロイ・スケール・管理するオーケストレーションツールです。自動スケーリング・自己修復・無停止アップデートが主な機能です。',
+          },
+          {
+            id: 518,
+            question: 'サーバレスコンピューティング（FaaS）の説明として正しいものはどれか。',
+            choices: [
+              'サーバが物理的に存在しないクラウドサービス',
+              '利用者がサーバを管理せずコード（関数）のみを実行でき、実行分だけ課金される形態',
+              '仮想マシンを自動的にスケールさせる仕組み',
+              'データベースをサーバ不要で利用できるサービス',
+            ],
+            answer: 1,
+            explanation: 'サーバレス（FaaS）はAWS Lambdaに代表され、利用者はサーバ管理不要でコード（関数）のみを記述します。イベント駆動で実行され、実行時間・回数に応じた課金なのでアイドル時のコストがかかりません。',
+          },
+        ],
+      },
+      {
+        id: 'a5-6',
+        title: 'クラウドコンピューティング',
+        content: `
+<h3>クラウドコンピューティングとは</h3>
+<p>インターネット経由でサーバ・ストレージ・データベース・ソフトウェアなどのITリソースを<strong>必要なときに必要なだけ</strong>利用できる仕組みです。自社でサーバを購入・管理する「オンプレミス」と対照的です。</p>
+
+<h3>サービスモデル（SaaS / PaaS / IaaS）</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">モデル</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">提供範囲</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">利用者が管理するもの</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">代表例</th>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>SaaS</strong><br/><small>Software as a Service</small></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">アプリまで全て提供</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">データのみ</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">Gmail・Slack・Salesforce・Office 365</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>PaaS</strong><br/><small>Platform as a Service</small></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">OS・ミドルウェアまで提供</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">アプリ・データ</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">AWS Elastic Beanstalk・Google App Engine・Heroku</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>IaaS</strong><br/><small>Infrastructure as a Service</small></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">仮想サーバ・ネットワーク・ストレージを提供</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">OS・ミドルウェア・アプリ・データ</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">AWS EC2・Azure VM・GCP Compute Engine</td>
+  </tr>
+</table>
+<div class="point-box">
+<strong>覚え方</strong>: 上に行くほど「自分で管理するものが少ない」。<br/>
+SaaS（全おまかせ）→ PaaS（アプリだけ作る）→ IaaS（OSから自分で管理）
+</div>
+
+<h3>展開モデル</h3>
+<ul>
+  <li><strong>パブリッククラウド</strong>: AWS・Azure・GCPなど事業者が提供する共有インフラ。初期費用ゼロ・従量課金。</li>
+  <li><strong>プライベートクラウド</strong>: 特定の企業・組織だけが使う専用クラウド環境。セキュリティ・カスタマイズ性に優れる。</li>
+  <li><strong>ハイブリッドクラウド</strong>: パブリックとプライベートを組み合わせて利用。機密データはプライベート、処理能力が必要な時はパブリックへ拡張（クラウドバースティング）。</li>
+  <li><strong>マルチクラウド</strong>: 複数のクラウド事業者を組み合わせて利用。特定事業者への依存（ベンダーロックイン）を回避。</li>
+</ul>
+
+<h3>クラウドのメリット・デメリット</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">メリット</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">デメリット</th>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">初期投資が不要（資本支出→運用支出へ）</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">長期では総コストが高くなる場合がある</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">需要に応じた柔軟なスケールアップ・ダウン</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">インターネット依存（障害時に影響大）</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">世界中のデータセンターで高可用性を実現</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">ベンダーロックインのリスク</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">最新技術（AI・ML・セキュリティ）をすぐ利用可能</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">機密データの社外保管に関するコンプライアンス懸念</td>
+  </tr>
+</table>
+
+<h3>主要クラウドサービス（三大クラウド）</h3>
+<ul>
+  <li><strong>AWS（Amazon Web Services）</strong>: 世界シェア1位。EC2（仮想サーバ）・S3（ストレージ）・RDS（DB）・Lambda（サーバレス）など200以上のサービス。</li>
+  <li><strong>Azure（Microsoft Azure）</strong>: シェア2位。Active DirectoryなどMicrosoft製品との親和性が高く、企業向けに強い。</li>
+  <li><strong>GCP（Google Cloud Platform）</strong>: シェア3位。BigQuery（大規模データ解析）・AI/ML系サービスが強み。</li>
+</ul>
+
+<h3>クラウドセキュリティの責任共有モデル</h3>
+<p>クラウドでのセキュリティ責任は、クラウド事業者と利用者で分担します。</p>
+<ul>
+  <li><strong>事業者の責任</strong>: 物理インフラ・ネットワーク・ハイパーバイザーのセキュリティ</li>
+  <li><strong>利用者の責任</strong>: OS設定・アプリ・データ・アクセス権限の管理（IaaSの場合）</li>
+  <li>SaaSでは利用者の責任範囲は最小（データとアクセス管理のみ）</li>
+</ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+SaaS＝アプリまで全提供、PaaS＝開発基盤まで提供、IaaS＝仮想サーバのみ提供。<br/>
+パブリック（共有）・プライベート（専用）・ハイブリッド（組み合わせ）の3展開モデル。<br/>
+ベンダーロックイン＝特定クラウドへの過度な依存で乗り換えが困難になること。
+</div>
+        `,
+        questions: [
+          {
+            id: 1050,
+            question: 'SaaS（Software as a Service）の説明として最も適切なものはどれか。',
+            choices: [
+              '仮想サーバやストレージなどのインフラだけを提供し、OSやアプリは利用者が管理する',
+              'OSやミドルウェアまでを提供し、利用者はアプリケーションの開発・実行に専念できる',
+              'アプリケーションまでを含む全ITリソースをネット経由で提供し、利用者はデータ管理のみ行う',
+              'オンプレミスのサーバを仮想化してインターネットから利用可能にするサービス',
+            ],
+            answer: 2,
+            explanation: 'SaaSはアプリケーションを含むすべてをサービスとして提供します。利用者はブラウザやアプリからアクセスするだけでよく、インフラ・OS・ミドルウェアの管理は不要です。Gmail・Slack・Salesforceが代表例です。',
+          },
+          {
+            id: 1051,
+            question: 'クラウドの展開モデルのうち、機密性の高いデータは自社専用環境に置きつつ、高負荷時にはパブリッククラウドへ処理を拡張する形態はどれか。',
+            choices: [
+              'パブリッククラウド',
+              'プライベートクラウド',
+              'ハイブリッドクラウド',
+              'マルチクラウド',
+            ],
+            answer: 2,
+            explanation: 'ハイブリッドクラウドはパブリックとプライベートを組み合わせた形態です。機密データはプライベートクラウドで安全に管理しつつ、必要時にパブリッククラウドの処理能力を活用するクラウドバースティングが実現できます。',
+          },
+          {
+            id: 1052,
+            question: 'IaaS（Infrastructure as a Service）を利用する場合、利用者が自分で管理する必要があるものはどれか。',
+            choices: [
+              '物理サーバとネットワーク機器',
+              'ハイパーバイザーの保守',
+              'OSのインストールとパッチ適用',
+              '電源・空調などのデータセンター設備',
+            ],
+            answer: 2,
+            explanation: 'IaaSでは物理インフラ・ネットワーク・仮想化レイヤーはクラウド事業者が管理します。利用者はその上のOSから上（OS・ミドルウェア・アプリ・データ）を管理する責任があります。',
+          },
+          {
+            id: 1053,
+            question: 'ベンダーロックインの説明として正しいものはどれか。',
+            choices: [
+              '特定のクラウド事業者のサービスに深く依存し、他への乗り換えが困難になること',
+              '複数のクラウド事業者を同時に利用してコストを最適化すること',
+              'クラウド事業者がサービスの仕様を一方的に変更できる権限を持つこと',
+              '利用者がクラウドのデータセンターを物理的に施錠管理できないこと',
+            ],
+            answer: 0,
+            explanation: 'ベンダーロックインとは、特定クラウド事業者の独自サービス（専用DB・独自API等）に依存しすぎることで、他社へ移行するコストが非常に高くなる状態です。マルチクラウド戦略がその対策の一つです。',
           },
         ],
       },
@@ -2598,14 +4284,86 @@ FROM 社員
 LEFT JOIN 部署 ON 社員.部署ID = 部署.部署ID;
 </pre>
 
+<h3>サブクエリと DISTINCT</h3>
+<pre>
+-- DISTINCT: 重複を除いて取得
+SELECT DISTINCT 部署ID FROM 社員;
+
+-- サブクエリ: SELECT内にSELECTを入れ子にする
+-- 例: 平均年齢より高い社員を取得
+SELECT 氏名, 年齢
+FROM 社員
+WHERE 年齢 > (SELECT AVG(年齢) FROM 社員);
+
+-- IN句でのサブクエリ（東京の部署に所属する社員）
+SELECT 氏名 FROM 社員
+WHERE 部署ID IN (SELECT 部署ID FROM 部署 WHERE 所在地 = '東京');
+</pre>
+
+<h3>NULLの扱い</h3>
+<p>SQLでNULLは「不明・未設定」を意味し、通常の比較演算子では検索できません。</p>
+<pre>
+-- NG: WHERE 電話番号 = NULL  （常に偽になる）
+-- OK: IS NULL / IS NOT NULL を使う
+SELECT * FROM 社員 WHERE 電話番号 IS NULL;
+SELECT * FROM 社員 WHERE 電話番号 IS NOT NULL;
+</pre>
+
+<h3>DDL（Data Definition Language）— テーブル定義</h3>
+<p>テーブル自体を作成・変更・削除する命令です。</p>
+<pre>
+-- CREATE TABLE: テーブル作成
+CREATE TABLE 社員 (
+    社員ID   INT         PRIMARY KEY,
+    氏名     VARCHAR(50) NOT NULL,
+    年齢     INT,
+    部署ID   INT         REFERENCES 部署(部署ID)  -- 外部キー
+);
+
+-- ALTER TABLE: 列を追加する
+ALTER TABLE 社員 ADD 入社日 DATE;
+
+-- DROP TABLE: テーブルを削除する（元に戻せない）
+DROP TABLE 社員;
+</pre>
+
+<h3>VIEW（ビュー）— 仮想テーブル</h3>
+<p>SELECTの結果に名前をつけて「仮想テーブル」として扱える仕組みです。実データは保存せず、参照時に毎回SQLが実行されます。</p>
+<pre>
+-- ビューの作成（東京在籍の社員のみ見せるビュー）
+CREATE VIEW 東京社員 AS
+    SELECT 社員ID, 氏名, 年齢
+    FROM 社員
+    WHERE 部署ID IN (SELECT 部署ID FROM 部署 WHERE 所在地 = '東京');
+
+-- ビューはテーブルと同じように参照できる
+SELECT * FROM 東京社員 WHERE 年齢 >= 30;
+</pre>
+<p>用途：複雑なSQLを隠蔽してシンプルに見せる・必要な列だけを公開してアクセス制御する。</p>
+
+<h3>INDEX（インデックス）— 検索高速化</h3>
+<p>特定の列に索引（目次）を作成して検索を高速化する仕組みです。主キーには自動的に作成されます。</p>
+<pre>
+-- インデックスの作成
+CREATE INDEX idx_年齢 ON 社員(年齢);
+
+-- インデックスがあると WHERE 年齢 = 30 の検索が高速化される
+-- インデックスがなければ全行スキャン（O(n)）
+-- インデックスがあれば B木探索（O(log n)）
+</pre>
+<p>注意：インデックスは検索を高速化しますが、INSERT/UPDATE/DELETE時にインデックスも更新されるため書き込みは遅くなります。</p>
+
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAVING=GROUP BY後の集計結果に条件。JOINの種類（INNER=一致のみ、LEFT=左テーブル全件）も区別して覚えましょう。
+WHERE=グループ化前の条件、HAVING=GROUP BY後の集計条件（違いは必出）。<br/>
+INNER JOIN=一致した行のみ、LEFT JOIN=左テーブル全件（右がなければNULL）。<br/>
+NULLの比較は = NULL ではなく IS NULL を使う。サブクエリ=SELECT内にSELECTを入れる。<br/>
+DDL: CREATE=作成、ALTER=変更、DROP=削除。VIEW=仮想テーブル（実データは持たない）。INDEX=検索高速化（B木）。
 </div>
 
 <div class="caution-box">
 <strong>⚠️ よくある間違い</strong><br/>
-「SELECT * FROM 社員 WHERE AVG(年齢) > 30」は誤りです。集計関数（AVG・COUNT等）はWHEREでは使えません。集計後の条件にはHAVINGを使います。
+集計関数（AVG・COUNT等）はWHEREでは使えません。集計後の条件にはHAVINGを使います。
 </div>
         `,
         diagram: 'database',
@@ -2643,6 +4401,30 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             answer: 1,
             explanation: 'LEFT JOINは左テーブルの全行を返し、右テーブルに一致する行がない場合はNULLを補完します。',
           },
+          {
+            id: 607,
+            question: 'SQLでNULL値を持つ行を検索するとき正しい書き方はどれか。',
+            choices: [
+              'WHERE 電話番号 = NULL',
+              'WHERE 電話番号 != NULL',
+              'WHERE 電話番号 IS NULL',
+              'WHERE 電話番号 == NULL',
+            ],
+            answer: 2,
+            explanation: 'NULLは「不明な値」を意味するため = では比較できません。IS NULL または IS NOT NULL を使います。',
+          },
+          {
+            id: 608,
+            question: 'サブクエリの説明として正しいものはどれか。',
+            choices: [
+              'テーブルを結合するためのSQL構文',
+              'SELECT文の中に別のSELECT文を入れ子にした構造',
+              'グループ化した結果に条件を指定する句',
+              '重複した行を除外して取得するオプション',
+            ],
+            answer: 1,
+            explanation: 'サブクエリはSELECT文の中にさらにSELECT文を入れる構造です。WHERE句やFROM句などで使用でき、動的な条件指定に活用されます。',
+          },
         ],
       },
       {
@@ -2650,27 +4432,79 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
         title: 'データベース設計と正規化',
         content: `
 <h3>ER図（Entity-Relationship Diagram）</h3>
-<p>データベースの論理設計を視覚化する図です。エンティティ（実体）、属性、リレーションシップ（関係）で構成されます。</p>
+<p>データベースの論理設計を視覚化する図です。エンティティ（実体）・属性・リレーションシップ（関係）で構成され、テーブル設計の前に作成します。</p>
 <ul>
   <li><strong>1対1</strong>: 社員1人に対してパスポート1冊</li>
-  <li><strong>1対多</strong>: 部署1つに対して社員複数人</li>
-  <li><strong>多対多</strong>: 学生複数人が複数の授業を受講（中間テーブルが必要）</li>
+  <li><strong>1対多</strong>: 部署1つに対して社員複数人（最も多い）</li>
+  <li><strong>多対多</strong>: 学生複数人が複数の授業を受講 → <strong>中間テーブル</strong>（受講テーブル）が必要</li>
 </ul>
 
-<h3>正規化</h3>
-<p>データの冗長性を排除して整合性を保つための設計手法です。</p>
+<h3>正規化とは</h3>
+<p>データの<strong>冗長性を排除</strong>して整合性を保つための設計手法です。正規化しないと「更新異常」（データを1か所変えると他の行とずれる）が発生します。</p>
+
+<h3>正規化の手順（具体例）</h3>
+<p>例: 「注文」テーブルを設計する</p>
+
+<p><strong>非正規形（問題あり）</strong></p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.85em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:5px 8px;border:1px solid var(--color-border)">注文ID</th><th style="padding:5px 8px;border:1px solid var(--color-border)">顧客名</th><th style="padding:5px 8px;border:1px solid var(--color-border)">商品（複数）</th><th style="padding:5px 8px;border:1px solid var(--color-border)">担当者</th><th style="padding:5px 8px;border:1px solid var(--color-border)">担当部署</th></tr>
+  <tr><td style="padding:4px 8px;border:1px solid var(--color-border)">1001</td><td style="padding:4px 8px;border:1px solid var(--color-border)">田中</td><td style="padding:4px 8px;border:1px solid var(--color-border)">商品A, 商品B</td><td style="padding:4px 8px;border:1px solid var(--color-border)">山田</td><td style="padding:4px 8px;border:1px solid var(--color-border)">営業部</td></tr>
+</table>
+
+<p><strong>第1正規形（1NF）</strong>: 1セルに値を1つだけ（繰り返しグループを行に分解）</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.85em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:5px 8px;border:1px solid var(--color-border)">注文ID</th><th style="padding:5px 8px;border:1px solid var(--color-border)">商品ID</th><th style="padding:5px 8px;border:1px solid var(--color-border)">顧客名</th><th style="padding:5px 8px;border:1px solid var(--color-border)">担当者</th><th style="padding:5px 8px;border:1px solid var(--color-border)">担当部署</th></tr>
+  <tr><td style="padding:4px 8px;border:1px solid var(--color-border)">1001</td><td style="padding:4px 8px;border:1px solid var(--color-border)">A</td><td style="padding:4px 8px;border:1px solid var(--color-border)">田中</td><td style="padding:4px 8px;border:1px solid var(--color-border)">山田</td><td style="padding:4px 8px;border:1px solid var(--color-border)">営業部</td></tr>
+  <tr><td style="padding:4px 8px;border:1px solid var(--color-border)">1001</td><td style="padding:4px 8px;border:1px solid var(--color-border)">B</td><td style="padding:4px 8px;border:1px solid var(--color-border)">田中</td><td style="padding:4px 8px;border:1px solid var(--color-border)">山田</td><td style="padding:4px 8px;border:1px solid var(--color-border)">営業部</td></tr>
+</table>
+<p>主キー=（注文ID, 商品ID）の複合キー。ただし「顧客名」は注文IDだけで決まる（<strong>部分関数従属</strong>＝問題）。</p>
+
+<p><strong>第2正規形（2NF）</strong>: 部分関数従属を排除 → 注文IDだけで決まる列を別テーブルに分離</p>
 <ul>
-  <li><strong>第1正規形（1NF）</strong>: 各フィールドが原子値（繰り返しグループを排除）。1セルに1つの値のみ。</li>
-  <li><strong>第2正規形（2NF）</strong>: 1NF + 部分関数従属を排除。全ての非キー属性が主キー全体に従属。</li>
-  <li><strong>第3正規形（3NF）</strong>: 2NF + 推移関数従属を排除。非キー属性間の依存を解消。</li>
+  <li>注文明細テーブル (注文ID, 商品ID) ← 主キー全体に従属する列のみ</li>
+  <li>注文テーブル (注文ID, 顧客名, 担当者, 担当部署) ← 注文IDだけで決まる列</li>
 </ul>
+<p>しかし「担当者→担当部署」という依存（<strong>推移関数従属</strong>）がまだ残っている。</p>
+
+<p><strong>第3正規形（3NF）</strong>: 推移関数従属を排除 → 非キー属性間の依存を分離</p>
+<ul>
+  <li>注文テーブル (注文ID, 顧客名, 担当者ID)</li>
+  <li>担当者テーブル (担当者ID, 担当者名, 担当部署) ← 担当者に関する情報を独立させる</li>
+</ul>
+
+<h3>正規化のまとめ</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)">正規形</th><th style="padding:6px 8px;border:1px solid var(--color-border)">排除するもの</th><th style="padding:6px 8px;border:1px solid var(--color-border)">キーワード</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>1NF</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">繰り返しグループ</td><td style="padding:5px 8px;border:1px solid var(--color-border)">1セル1値・原子値</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>2NF</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">部分関数従属</td><td style="padding:5px 8px;border:1px solid var(--color-border)">主キーの一部だけで決まる列を分離</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>3NF</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">推移関数従属</td><td style="padding:5px 8px;border:1px solid var(--color-border)">非キー属性が別の非キー属性に依存する関係を分離</td></tr>
+</table>
 
 <h3>インデックス</h3>
-<p>検索を高速化するための補助データ構造です。本の索引と同じ仕組みで、特定の列に対して作成します。</p>
-<p>メリット: 検索・JOIN が高速になる。デメリット: INSERT/UPDATE/DELETE が遅くなる、ストレージを消費する。</p>
+<p>検索を高速化するための補助データ構造（B木構造）です。本の索引と同じ仕組みで、特定の列に作成します。</p>
+<ul>
+  <li><strong>メリット</strong>: SELECT・JOINが高速になる</li>
+  <li><strong>デメリット</strong>: INSERT・UPDATE・DELETEが遅くなる（インデックスも更新が必要）。ストレージ消費が増える。</li>
+  <li><strong>適切な列</strong>: WHERE句・JOINの結合条件によく使う列、カーディナリティ（値の種類）が多い列</li>
+</ul>
 
 <h3>ビュー</h3>
-<p>SELECT文の結果を仮想テーブルとして保存したものです。複雑なクエリを簡単に再利用でき、アクセス制御にも使えます。</p>
+<p>SELECT文の結果を<strong>仮想テーブル</strong>として保存したものです。複雑なクエリの再利用・アクセス制御に使います。実データを持たないため、元テーブルの変更は即座にビューに反映されます。</p>
+<pre>
+CREATE VIEW 東京社員 AS
+SELECT 氏名, 年齢 FROM 社員
+WHERE 勤務地 = '東京';
+
+-- テーブルと同じように使える
+SELECT * FROM 東京社員 WHERE 年齢 >= 30;
+</pre>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+正規化の目的=冗長性の排除・更新異常の防止（検索速度向上が目的ではない）。<br/>
+2NF=部分関数従属排除（複合キーの一部だけで決まる列を分離）、3NF=推移関数従属排除（非キー属性間の依存を分離）。<br/>
+インデックス=検索は速くなるが更新（INSERT/UPDATE/DELETE）は遅くなる。ビュー=実データなしの仮想テーブル。
+</div>
         `,
         diagram: 'er-diagram',
         questions: [
@@ -2698,6 +4532,30 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             answer: 1,
             explanation: '第2正規形は第1正規形を満たした上で、部分関数従属（主キーの一部への従属）を排除した状態です。',
           },
+          {
+            id: 609,
+            question: 'データベースのインデックスに関する説明として正しいものはどれか。',
+            choices: [
+              'インデックスを作成すると、INSERT・UPDATE・DELETEが高速になる',
+              'インデックスを作成すると、SELECT・JOINは高速になるが更新処理は遅くなる',
+              'インデックスはすべての列に作成するとパフォーマンスが最大化する',
+              'インデックスはビューと同じ役割を持つ',
+            ],
+            answer: 1,
+            explanation: 'インデックスは検索・JOIN を高速化しますが、データ変更（INSERT・UPDATE・DELETE）時にインデックスも更新する必要があるため更新処理は遅くなります。また余分なストレージも消費します。',
+          },
+          {
+            id: 610,
+            question: '第1正規形（1NF）を満たすための条件として正しいものはどれか。',
+            choices: [
+              '推移関数従属をすべて排除する',
+              '主キーの一部への従属を排除する',
+              '各セルに1つの値のみを持ち、繰り返しグループを排除する',
+              'テーブルを複数のテーブルに分割する',
+            ],
+            answer: 2,
+            explanation: '第1正規形は各属性（セル）が原子値（分割不可能な単一の値）を持ち、1行に複数の電話番号を持つような繰り返しグループがない状態です。',
+          },
         ],
       },
       {
@@ -2724,11 +4582,28 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
 
 <h3>ロック（排他制御）</h3>
 <p>複数のトランザクションが同時に同じデータを操作するときの整合性を守る仕組みです。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 10px;border:1px solid var(--color-border)">ロック種類</th><th style="padding:6px 10px;border:1px solid var(--color-border)">用途</th><th style="padding:6px 10px;border:1px solid var(--color-border)">他の共有ロックと共存</th><th style="padding:6px 10px;border:1px solid var(--color-border)">他の排他ロックと共存</th></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)"><strong>共有ロック（Sロック）</strong></td><td style="padding:5px 10px;border:1px solid var(--color-border)">読み取り</td><td style="padding:5px 10px;border:1px solid var(--color-border)">○ 可能</td><td style="padding:5px 10px;border:1px solid var(--color-border)">× 不可</td></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)"><strong>排他ロック（Xロック）</strong></td><td style="padding:5px 10px;border:1px solid var(--color-border)">書き込み</td><td style="padding:5px 10px;border:1px solid var(--color-border)">× 不可</td><td style="padding:5px 10px;border:1px solid var(--color-border)">× 不可</td></tr>
+</table>
+<p><strong>デッドロック</strong>: 互いに相手のロック解放を待ち合って永久に停止する状態。対策: ロックの取得順序を統一する、タイムアウトで強制解除する。</p>
+
+<h3>トランザクション分離レベル</h3>
+<p>同時実行時の問題（ダーティリード・ノンリピータブルリード・ファントムリード）をどこまで防ぐかの設定です。</p>
 <ul>
-  <li><strong>共有ロック（Sロック）</strong>: 読み取り用。他の共有ロックと共存可能。</li>
-  <li><strong>排他ロック（Xロック）</strong>: 書き込み用。他のロックと共存不可。</li>
-  <li><strong>デッドロック</strong>: 互いに相手のロック解放を待ち合って停止する状態。</li>
+  <li><strong>READ UNCOMMITTED</strong>: 最も低い分離。ダーティリードが発生する可能性あり。</li>
+  <li><strong>READ COMMITTED</strong>: コミット済みデータのみ読む。多くのDBのデフォルト。</li>
+  <li><strong>REPEATABLE READ</strong>: 同じ行を2回読んでも同じ値が保証される。</li>
+  <li><strong>SERIALIZABLE</strong>: 最も高い分離。完全に直列実行と同等。性能は最低。</li>
 </ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+ACID: 原子性=全成功か全失敗、一貫性=整合性保持、独立性=干渉なし、耐久性=コミット後は永続。<br/>
+共有ロック=読み取り用・共存可、排他ロック=書き込み用・共存不可。<br/>
+ダーティリード=未コミットデータを読む現象（READ COMMITTEDで防止可能）。
+</div>
         `,
         diagram: 'transaction',
         questions: [
@@ -2756,6 +4631,30 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             answer: 1,
             explanation: '排他ロック（Xロック）は書き込み操作のために取得され、他のすべてのロック（共有・排他）と共存できません。',
           },
+          {
+            id: 611,
+            question: 'ACID特性のうち「独立性（Isolation）」の説明として正しいものはどれか。',
+            choices: [
+              'コミット後のデータは障害があっても消えない',
+              'トランザクション前後でデータの整合性が保たれる',
+              '複数のトランザクションが並行実行されても互いに干渉しない',
+              'トランザクションは全て成功か全て失敗かのどちらかである',
+            ],
+            answer: 2,
+            explanation: '独立性（Isolation）は複数のトランザクションが同時実行されても、互いに影響を与えないことを保証します。分離レベルで干渉の度合いを調整できます。',
+          },
+          {
+            id: 612,
+            question: 'ダーティリードの説明として正しいものはどれか。',
+            choices: [
+              '同じ行を2回読むと異なる値になる現象',
+              '未コミットのデータを別のトランザクションが読み取ってしまう現象',
+              '同じ条件で検索すると行数が変わる現象',
+              'ロックの取得順序が逆になりデッドロックが発生する現象',
+            ],
+            answer: 1,
+            explanation: 'ダーティリードはトランザクションAがコミットしていない変更をトランザクションBが読み取る現象です。Aがロールバックするとそのデータは無効になり、Bは誤ったデータを処理したことになります。',
+          },
         ],
       },
       {
@@ -2780,12 +4679,27 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
 </ul>
 
 <h3>CAP定理</h3>
-<p>分散システムは以下の3つの性質を同時にすべて満たすことはできません。</p>
+<p>分散システムは以下の3つの性質を同時にすべて満たすことはできません（トレードオフ）。</p>
 <ul>
-  <li><strong>一貫性（Consistency）</strong>: 全ノードが同じデータを返す</li>
-  <li><strong>可用性（Availability）</strong>: 常にレスポンスを返せる</li>
+  <li><strong>一貫性（Consistency）</strong>: 全ノードが同じ（最新の）データを返す</li>
+  <li><strong>可用性（Availability）</strong>: 常にレスポンスを返せる（エラーにならない）</li>
   <li><strong>分断耐性（Partition tolerance）</strong>: ネットワーク分断が起きても動作する</li>
 </ul>
+<p>例: ネットワーク分断が起きたとき「一貫性を保つ」か「可用性を保つ」かどちらかを選ぶ必要がある。</p>
+
+<h3>BASE特性（NoSQLの考え方）</h3>
+<p>RDBのACIDに対し、NoSQLはBASEを採用することが多いです。</p>
+<ul>
+  <li><strong>BA（Basically Available）</strong>: 基本的に常に利用可能</li>
+  <li><strong>S（Soft state）</strong>: 状態は時間とともに変化しうる（常に最新とは限らない）</li>
+  <li><strong>E（Eventually consistent）</strong>: 最終的には一貫した状態になる（結果整合性）</li>
+</ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+NoSQL4種類: キーバリュー型（Redis・高速・キャッシュ向け）、ドキュメント型（MongoDB・JSON形式）、カラム型（Cassandra・大量データ分析）、グラフ型（Neo4j・関係性探索）。<br/>
+CAP定理: 一貫性・可用性・分断耐性の3つを同時に満たすことは不可能。
+</div>
         `,
         diagram: 'nosql',
         questions: [
@@ -2795,6 +4709,37 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             choices: ['ドキュメント型', 'グラフ型', 'キーバリュー型', 'カラム型'],
             answer: 2,
             explanation: 'キーバリュー型はキーと値のシンプルな構造で超高速なアクセスが可能なため、セッション管理やキャッシュに適しています。',
+          },
+          {
+            id: 613,
+            question: 'CAP定理の説明として正しいものはどれか。',
+            choices: [
+              '分散システムは一貫性・可用性・分断耐性の3つをすべて同時に満たせる',
+              '分散システムは一貫性・可用性・分断耐性の3つを同時にすべて満たすことはできない',
+              'NoSQLはRDBより必ず高速である',
+              'ACID特性を満たすデータベースはスケールアウトできない',
+            ],
+            answer: 1,
+            explanation: 'CAP定理は分散システムの3特性（一貫性・可用性・分断耐性）を同時にすべて満たすことは不可能であり、最大2つしか選べないことを示した定理です。',
+          },
+          {
+            id: 614,
+            question: 'MongoDBに代表される、JSONのような文書形式でデータを管理するNoSQLのデータモデルはどれか。',
+            choices: ['キーバリュー型', 'ドキュメント型', 'カラム型', 'グラフ型'],
+            answer: 1,
+            explanation: 'ドキュメント型はJSON/BSONなどの文書形式でデータを管理します。MongoDBやFirestoreが代表例で、スキーマが柔軟なためWebアプリのデータ管理に広く使われます。',
+          },
+          {
+            id: 615,
+            question: 'RDBよりNoSQLが適しているユースケースはどれか。',
+            choices: [
+              '複雑なSQL結合クエリが必要な場合',
+              'ACIDトランザクションが最重要の場合',
+              '大量データを高速に読み書きし、スキーマ変更が頻繁な場合',
+              '外部キー制約で整合性を厳密に管理する場合',
+            ],
+            answer: 2,
+            explanation: 'NoSQLは大量データの高速読み書き・水平スケール・スキーマ柔軟性に優れます。複雑なJOINやトランザクションが必要な場合はRDBが適しています。',
           },
         ],
       },
@@ -2837,6 +4782,23 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
 <p><strong>XP（エクストリームプログラミング）</strong></p>
 <p>技術的なプラクティスを重視。テスト駆動開発（TDD）・ペアプログラミング・継続的インテグレーションが特徴。</p>
 
+<h3>プロトタイプモデル</h3>
+<p>開発初期に<strong>試作品（プロトタイプ）</strong>を作り、ユーザーに評価してもらいながら要件を確定していく手法です。</p>
+<ul>
+  <li>要件が不明確なプロジェクトで有効</li>
+  <li>ユーザーの「思ってたのと違う」を早期に発見できる</li>
+  <li>デメリット：プロトタイプを本番コードと誤解されるリスクがある</li>
+</ul>
+
+<h3>開発モデルの比較</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)">モデル</th><th style="padding:6px 8px;border:1px solid var(--color-border)">特徴</th><th style="padding:6px 8px;border:1px solid var(--color-border)">向いているプロジェクト</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>ウォーターフォール</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">一方向・順次進行</td><td style="padding:5px 8px;border:1px solid var(--color-border)">要件固定・大規模・品質重視</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>プロトタイプ</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">試作→評価を繰り返す</td><td style="padding:5px 8px;border:1px solid var(--color-border)">要件不明確・UI重視</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>スパイラル</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">リスク分析しながら反復</td><td style="padding:5px 8px;border:1px solid var(--color-border)">大規模・リスクの高いシステム</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>アジャイル（スクラム）</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">短サイクルで反復・変化対応</td><td style="padding:5px 8px;border:1px solid var(--color-border)">要件変化が多い・Webサービス</td></tr>
+</table>
+
 <h3>DevOps</h3>
 <p>開発（Dev）と運用（Ops）のサイロを壊し、<strong>継続的にソフトウェアをリリース</strong>する文化と技術の組み合わせです。</p>
 <ul>
@@ -2847,7 +4809,7 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
 
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-ウォーターフォール=一方向・計画重視、アジャイル=反復・変化対応、スクラムのスプリント=1〜4週間の短い開発サイクルという対比を押さえましょう。
+ウォーターフォール=一方向・計画重視、アジャイル=反復・変化対応、スクラムのスプリント=1〜4週間の短い開発サイクルという対比を押さえましょう。プロトタイプ=試作品で要件確認。スパイラル=リスク分析しながら反復。
 </div>
 
 <div class="caution-box">
@@ -2881,6 +4843,30 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             answer: 1,
             explanation: 'スクラムのスプリントは1〜4週間の短い開発サイクルで、この単位で計画・実装・レビューを繰り返します。',
           },
+          {
+            id: 704,
+            question: 'プロトタイプモデルを採用する主な目的として正しいものはどれか。',
+            choices: [
+              '開発コストを最小化するため',
+              '要件が不明確なときに試作品でユーザーの要件を確定するため',
+              'リスクを最小化しながら段階的に開発するため',
+              '短サイクルで反復して要件変更に対応するため',
+            ],
+            answer: 1,
+            explanation: 'プロトタイプモデルは要件が曖昧な場合に試作品（プロトタイプ）を作り、ユーザーに確認してもらいながら要件を固めていく開発手法です。',
+          },
+          {
+            id: 705,
+            question: 'XP（エクストリームプログラミング）の特徴的なプラクティスとして正しいものはどれか。',
+            choices: [
+              'スプリントレビューで顧客にデモを行う',
+              'テスト駆動開発（TDD）・ペアプログラミング・継続的インテグレーション',
+              'リスク分析を中心に置いた反復開発',
+              'WBSによる作業分解と進捗管理',
+            ],
+            answer: 1,
+            explanation: 'XP（エクストリームプログラミング）は技術的プラクティスを重視し、テスト駆動開発（TDD）・ペアプログラミング・継続的インテグレーションなどが特徴的な実践手法です。',
+          },
         ],
       },
       {
@@ -2888,29 +4874,73 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
         title: 'システム設計技法',
         content: `
 <h3>要件定義</h3>
-<p>システムが「何をすべきか」を明確にする工程です。</p>
+<p>システムが「何をすべきか」を明確にする工程です。あいまいな要件が後工程のバグや手戻りの原因になるため、最も重要な工程の一つです。</p>
 <ul>
-  <li><strong>機能要件</strong>: システムが行うべき機能（何ができるか）</li>
-  <li><strong>非機能要件</strong>: 性能・信頼性・セキュリティ・保守性など品質に関する要件</li>
+  <li><strong>機能要件</strong>: システムが行うべき機能（何ができるか）<br/>
+    例: 「ユーザーはメールアドレスとパスワードでログインできる」「注文履歴を一覧で確認できる」</li>
+  <li><strong>非機能要件</strong>: 品質・制約に関する要件（どのくらいの性能・信頼性で動くか）<br/>
+    例: 「応答時間は2秒以内」「稼働率99.9%以上」「1000人同時アクセスに耐えられる」「個人情報は暗号化して保存」</li>
 </ul>
 
-<h3>UML（統一モデリング言語）</h3>
-<p>システムの設計を視覚化するための標準的な図法です。</p>
-<ul>
-  <li><strong>ユースケース図</strong>: ユーザーとシステムの対話を表現</li>
-  <li><strong>クラス図</strong>: クラスの構造と関係を表現</li>
-  <li><strong>シーケンス図</strong>: オブジェクト間のメッセージのやり取りを時系列で表現</li>
-  <li><strong>アクティビティ図</strong>: 処理の流れ（フローチャート的）を表現</li>
-</ul>
+<h3>UML（統一モデリング言語）の主要図</h3>
+<p>システムの設計を視覚化するための標準的な図法です。目的によって使い分けます。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">図の種類</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">何を表すか</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">使いどころ</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>ユースケース図</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">ユーザー（アクター）とシステムの対話</td><td style="padding:5px 8px;border:1px solid var(--color-border)">要件定義。「誰が何をできるか」を俯瞰する</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>クラス図</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">クラスの属性・メソッド・クラス間の関係</td><td style="padding:5px 8px;border:1px solid var(--color-border)">設計。静的な構造を表す</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>シーケンス図</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">オブジェクト間のメッセージのやり取りを時系列で</td><td style="padding:5px 8px;border:1px solid var(--color-border)">詳細設計。ログイン・API呼び出しの流れを追う</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>アクティビティ図</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">処理の流れ・分岐・並行処理</td><td style="padding:5px 8px;border:1px solid var(--color-border)">業務フロー・アルゴリズムの可視化</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>状態遷移図</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">オブジェクトの状態変化とトリガー</td><td style="padding:5px 8px;border:1px solid var(--color-border)">注文状態・認証状態など状態を持つシステム</td></tr>
+</table>
+
+<h3>シーケンス図の例（ログイン処理）</h3>
+<pre>
+ユーザー      Webブラウザ      Webサーバ      DB
+  │               │               │            │
+  │─ ログイン入力→│               │            │
+  │               │─ POST /login→│            │
+  │               │               │─ SELECT→  │
+  │               │               │  ←結果─── │
+  │               │←─ 200 OK ────│            │
+  │←─ ログイン成功│               │            │
+</pre>
+<p>縦軸が時間の流れで、左から右へメッセージが渡ります。誰がどの順番で何をするかが一目でわかります。</p>
+
+<h3>状態遷移図の例（注文状態）</h3>
+<pre>
+[注文確定] ──支払い完了──→ [支払済] ──発送──→ [発送済] ──到着──→ [完了]
+    │                          │
+    └──────キャンセル──────→ [キャンセル済]
+</pre>
+<p>「注文確定」「支払済」「発送済」「完了」「キャンセル済」が状態で、矢印がトリガー（イベント）です。</p>
 
 <h3>DFD（データフロー図）</h3>
-<p>データがシステム内をどのように流れるかを表す図です。プロセス・データフロー・データストア・外部エンティティで構成されます。</p>
+<p>データがシステム内をどのように流れるかを表す図です。UMLとは別の表記法で、特に構造化分析で使われます。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)">要素</th><th style="padding:6px 8px;border:1px solid var(--color-border)">記号</th><th style="padding:6px 8px;border:1px solid var(--color-border)">意味</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>外部エンティティ</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">四角</td><td style="padding:5px 8px;border:1px solid var(--color-border)">システム外部の人・組織（顧客・他システム）</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>プロセス</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">円・角丸</td><td style="padding:5px 8px;border:1px solid var(--color-border)">データを変換・処理する機能</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>データストア</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">二重線</td><td style="padding:5px 8px;border:1px solid var(--color-border)">データの保存場所（DB・ファイル）</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>データフロー</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">矢印</td><td style="padding:5px 8px;border:1px solid var(--color-border)">データの流れ・方向</td></tr>
+</table>
 
 <h3>モジュール設計の原則</h3>
 <ul>
-  <li><strong>高凝集度</strong>: 1つのモジュールは1つの責務に集中する</li>
-  <li><strong>低結合度</strong>: モジュール間の依存を最小にする</li>
+  <li><strong>高凝集（高凝集度）</strong>: 1モジュールは1責務に集中する。「関連するものはまとめる」。修正箇所が局所化されて保守しやすい。</li>
+  <li><strong>低結合（疎結合）</strong>: モジュール間の依存を最小にする。「変更が他に波及しない」。一方を変えても他方を変えなくて済む。</li>
 </ul>
+<p>アンチパターン: 「低凝集・高結合」→ 1つの変更が多くのモジュールに影響し、テスト・修正が困難になる。</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+UML: ユースケース図=アクターとシステムの対話（要件定義）、クラス図=静的構造、シーケンス図=時系列メッセージ、アクティビティ図=処理フロー、状態遷移図=状態変化。<br/>
+DFD=外部エンティティ・プロセス・データストア・データフローの4要素（UMLとは別）。<br/>
+高凝集・低結合=良い設計の原則。凝集度↑・結合度↓が保守性向上につながる。
+</div>
         `,
         diagram: 'uml',
         questions: [
@@ -2920,6 +4950,30 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             choices: ['クラス図', 'シーケンス図', 'ユースケース図', 'アクティビティ図'],
             answer: 2,
             explanation: 'ユースケース図はアクター（ユーザーや外部システム）とシステムの機能的な対話を俯瞰的に表現します。',
+          },
+          {
+            id: 706,
+            question: 'DFD（データフロー図）の構成要素として正しい組み合わせはどれか。',
+            choices: [
+              'クラス・属性・メソッド・継承',
+              'アクター・ユースケース・システム境界',
+              'プロセス・データフロー・データストア・外部エンティティ',
+              'ノード・エッジ・ガード条件・アクション',
+            ],
+            answer: 2,
+            explanation: 'DFDはプロセス（処理）・データフロー（データの流れ）・データストア（データの保管場所）・外部エンティティ（外部のシステムや人）の4要素でシステム内のデータの流れを表現します。',
+          },
+          {
+            id: 707,
+            question: 'モジュール設計における「低結合度」の説明として正しいものはどれか。',
+            choices: [
+              '1つのモジュールが1つの責務に集中している状態',
+              'モジュール間の依存関係が少なく変更の影響が局所化された状態',
+              'モジュールが互いに密接に連携し協調動作する状態',
+              'モジュールのコード行数が少ない状態',
+            ],
+            answer: 1,
+            explanation: '低結合度（疎結合）はモジュール間の依存を最小化した状態で、あるモジュールの変更が他に波及しにくく、保守性・テストしやすさが向上します。高凝集（1責務集中）とセットで理解しましょう。',
           },
         ],
       },
@@ -2951,12 +5005,32 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
   <li><strong>条件網羅（C2）</strong>: 全ての条件の真偽組み合わせを実行</li>
 </ul>
 
+<h3>V字モデル（テストレベルと開発工程の対応）</h3>
+<p>開発工程とテストレベルを対応させたモデルです。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)">開発工程</th><th style="padding:6px 8px;border:1px solid var(--color-border)">対応するテスト</th><th style="padding:6px 8px;border:1px solid var(--color-border)">確認内容</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">要件定義</td><td style="padding:5px 8px;border:1px solid var(--color-border)">受入テスト（UAT）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ユーザーが業務要件を満たすか確認</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">基本設計</td><td style="padding:5px 8px;border:1px solid var(--color-border)">システムテスト</td><td style="padding:5px 8px;border:1px solid var(--color-border)">システム全体が設計通り動くか確認</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">詳細設計</td><td style="padding:5px 8px;border:1px solid var(--color-border)">結合テスト</td><td style="padding:5px 8px;border:1px solid var(--color-border)">モジュール間のインタフェースを確認</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">実装</td><td style="padding:5px 8px;border:1px solid var(--color-border)">単体テスト</td><td style="padding:5px 8px;border:1px solid var(--color-border)">個々のモジュールの動作を確認</td></tr>
+</table>
+
 <h3>その他のテスト種別</h3>
 <ul>
   <li><strong>回帰テスト（リグレッションテスト）</strong>: 修正後に既存機能が壊れていないか確認</li>
-  <li><strong>負荷テスト</strong>: 大量アクセス時の性能を確認</li>
+  <li><strong>負荷テスト</strong>: 大量アクセス時の性能・応答時間を確認</li>
   <li><strong>ペネトレーションテスト</strong>: セキュリティ上の脆弱性を実際に攻撃して確認</li>
+  <li><strong>α（アルファ）テスト</strong>: 開発者組織内でのユーザーテスト</li>
+  <li><strong>β（ベータ）テスト</strong>: 一般ユーザーへの公開前試験運用</li>
 </ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+ブラックボックス=入出力のみ確認（仕様ベース）、ホワイトボックス=内部構造を確認（コードベース）。<br/>
+カバレッジ: C0=命令網羅（全命令を実行）、C1=分岐網羅（全分岐の真偽を実行）、C1 &gt; C0の順に厳しくなる。<br/>
+境界値分析: バグが多い境界の値とその±1をテスト。同値分割: 同じ結果になる入力グループから代表値1つを選ぶ。<br/>
+回帰テスト=修正後に既存機能が壊れていないか確認（リグレッションテスト）。
+</div>
         `,
         diagram: 'testing',
         questions: [
@@ -2973,6 +5047,30 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             choices: ['50のみ', '1, 100のみ', '0, 1, 100, 101', '1〜100の全て'],
             answer: 2,
             explanation: '境界値分析では境界の値（1, 100）と境界外の値（0, 101）をテストします。バグは境界付近に多く発生します。',
+          },
+          {
+            id: 708,
+            question: 'ホワイトボックステストにおける「分岐網羅（C1）」の説明として正しいものはどれか。',
+            choices: [
+              '全ての命令文を最低1回実行するテスト',
+              '全ての分岐の真・偽の両方を最低1回実行するテスト',
+              '全ての条件の真偽の組み合わせをすべて実行するテスト',
+              '全てのパス（経路）を実行するテスト',
+            ],
+            answer: 1,
+            explanation: '分岐網羅（C1）はif文などの分岐において、真になる場合と偽になる場合の両方を最低1回ずつ実行するテストです。命令網羅（C0）より厳しく、条件網羅（C2）より緩い基準です。',
+          },
+          {
+            id: 709,
+            question: '回帰テスト（リグレッションテスト）の目的として正しいものはどれか。',
+            choices: [
+              'システムに対して大量のアクセスをかけて性能を確認する',
+              'バグ修正や機能追加後に既存機能が壊れていないことを確認する',
+              'セキュリティ脆弱性を実際に攻撃して確認する',
+              'ユーザーが実際に操作して業務要件を満たすか確認する',
+            ],
+            answer: 1,
+            explanation: '回帰テスト（リグレッションテスト）はバグ修正・機能追加・変更後に、既存の機能が意図せず壊れていないことを確認するテストです。継続的インテグレーション（CI）と組み合わせて自動実行するのが一般的です。',
           },
         ],
       },
@@ -3013,6 +5111,16 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
 </pre>
 <p>つまり、作業Aや作業Cは1日遅れても問題ありません。しかし作業B・Dは1日でも遅れると全体が遅延します。</p>
 
+<h3>リスクマネジメント</h3>
+<p>プロジェクトを脅かすリスクを特定・分析・対応する活動です。</p>
+<p><strong>リスクマトリクス</strong>: リスクの「発生確率」×「影響度」で優先度を評価します。</p>
+<ul>
+  <li><strong>リスク回避</strong>: リスクの原因自体を取り除く（高リスクな機能を削除など）</li>
+  <li><strong>リスク軽減</strong>: 発生確率や影響度を下げる（早期テスト・冗長化など）</li>
+  <li><strong>リスク転嫁</strong>: 保険・外注などで損失を他者に移す</li>
+  <li><strong>リスク受容</strong>: 対策コストより損失が小さい場合、そのまま受け入れる</li>
+</ul>
+
 <h3>PMBOK（知識体系）</h3>
 <p>PMI（米国PMI協会）が整理したプロジェクト管理のベストプラクティス集です。</p>
 <p><strong>5プロセス群</strong>: 立上げ → 計画 → 実行 → 監視・コントロール → 終結</p>
@@ -3020,7 +5128,9 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
 
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-クリティカルパス=プロジェクト完了までの最長経路、という定義を確実に覚えましょう。「最短経路」「最もコストのかかる経路」と間違える問題が頻出です。フロート=余裕時間もセットで覚えること。
+クリティカルパス=プロジェクト完了までの最長経路（最短でも最小コストでもない）。フロート=余裕時間。<br/>
+ガントチャート=横棒でスケジュール表示、アローダイアグラム=依存関係・クリティカルパスの計算。<br/>
+WBS=作業を階層分解、ワークパッケージ=最小単位。リスクの4対応: 回避・軽減・転嫁・受容。
 </div>
         `,
         diagram: 'gantt',
@@ -3056,6 +5166,30 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             answer: 1,
             explanation: 'ガントチャートは各作業の期間を横棒で表した進捗管理ツールです。アローダイアグラムは依存関係と順序を表します。',
           },
+          {
+            id: 804,
+            question: 'アローダイアグラムでフロート（余裕時間）が0の作業の説明として正しいものはどれか。',
+            choices: [
+              '最も短時間で完了できる作業',
+              'クリティカルパス上にあり、遅延するとプロジェクト全体が遅延する作業',
+              '最も多くのコストがかかる作業',
+              '並行して実行できる作業',
+            ],
+            answer: 1,
+            explanation: 'フロート（余裕時間）が0の作業はクリティカルパス上に位置します。1日でも遅延するとプロジェクト全体の完了が遅れるため、最優先で管理します。',
+          },
+          {
+            id: 805,
+            question: 'プロジェクトリスクへの対応策のうち「リスク転嫁」の例として正しいものはどれか。',
+            choices: [
+              'リスクの発生確率を下げるために早期テストを実施する',
+              'リスクの原因となる機能を削除してリスク自体をなくす',
+              '保険に加入してリスクによる損失を保険会社に移す',
+              '対策コストが損失より高いためリスクをそのまま受け入れる',
+            ],
+            answer: 2,
+            explanation: 'リスク転嫁は保険加入・外注・契約など他者に損失を移す対応です。リスク回避=原因除去、リスク軽減=確率や影響度を下げる、リスク受容=受け入れる、の違いも整理しましょう。',
+          },
         ],
       },
       {
@@ -3064,11 +5198,13 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
         content: `
 <h3>品質管理ツール（QC7つ道具）</h3>
 <ul>
-  <li><strong>ヒストグラム</strong>: データの分布を棒グラフで表示</li>
-  <li><strong>パレート図</strong>: 問題の原因を頻度順に並べた棒グラフ。80:20の法則。重要な原因の特定に使う。</li>
-  <li><strong>特性要因図（フィッシュボーン図）</strong>: 問題の原因を骨組み状に整理</li>
-  <li><strong>管理図</strong>: 工程の安定性を時系列で監視</li>
-  <li><strong>散布図</strong>: 2変量の相関関係を表示</li>
+  <li><strong>チェックシート</strong>: 不良や欠陥の発生状況を記録・集計するための表。「どこで・何が・何回発生したか」をその場で記入して収集する。</li>
+  <li><strong>ヒストグラム</strong>: データの分布（ばらつき）を棒グラフで表示。製品寸法のばらつきが規格内か確認するなどに使う。</li>
+  <li><strong>パレート図</strong>: 問題の原因を頻度順に並べた棒グラフ。上位2〜3件で全体の約80%を占める（80:20の法則）。重要な原因の特定に使う。</li>
+  <li><strong>特性要因図（フィッシュボーン図・石川ダイアグラム）</strong>: 問題（特性）の原因を骨組み状に整理。「なぜ？」を繰り返して根本原因を探る。</li>
+  <li><strong>管理図</strong>: 工程の安定性を時系列で監視。上方・下方管理限界線を設けて異常を検知する。</li>
+  <li><strong>散布図</strong>: 2変量の関係を点で表示。相関関係（正・負・無）の有無を確認する。</li>
+  <li><strong>層別</strong>: データを属性（機械・作業者・時間帯など）ごとにグループ分けして比較・分析する。他の6つの道具と組み合わせて使う。</li>
 </ul>
 
 <h3>品質特性（ISO/IEC 25010）</h3>
@@ -3087,8 +5223,30 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
 <p><strong>MTTR</strong>（平均修復時間）: 故障から復旧までの平均時間</p>
 
 <h3>システム構成と信頼性</h3>
-<p><strong>直列接続</strong>: 全コンポーネントが動作する必要がある。稼働率 = R₁ × R₂（掛け算で下がる）</p>
-<p><strong>並列接続（冗長構成）</strong>: どれか1つ動けば良い。稼働率 = 1 - (1-R₁) × (1-R₂)（掛け算より高い）</p>
+<p><strong>直列接続</strong>: 全コンポーネントが動作する必要がある。稼働率 = R₁ × R₂（全部正常でないと動かない分、低下する）</p>
+<p><strong>並列接続（冗長構成）</strong>: どれか1つ動けば良い。稼働率 = 1 - (1-R₁) × (1-R₂)（どれか動けばいい分、向上する）</p>
+<pre>
+【例】稼働率0.9の装置A・B
+直列: 0.9 × 0.9 = 0.81（下がる）
+並列: 1 - (1-0.9) × (1-0.9) = 1 - 0.01 = 0.99（上がる）
+</pre>
+
+<h3>PDCAサイクル</h3>
+<p>品質改善を継続的に行うための管理サイクルです。</p>
+<ul>
+  <li><strong>Plan（計画）</strong>: 目標設定・改善計画を立案</li>
+  <li><strong>Do（実行）</strong>: 計画に基づいて実施</li>
+  <li><strong>Check（評価）</strong>: 結果を測定・分析</li>
+  <li><strong>Act（改善）</strong>: 問題点を改善し次のPlanへ反映</li>
+</ul>
+<p>PDCAを回し続けることで継続的な品質向上を実現します。情報セキュリティ管理（ISMS）でも同様のサイクルを用います。</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+稼働率 = MTBF ÷ (MTBF + MTTR)。MTBF=故障間隔（長いほど良い）、MTTR=修復時間（短いほど良い）。<br/>
+直列=稼働率の積（下がる）、並列=1−故障率の積（上がる）。<br/>
+パレート図=原因を頻度順に並べ重要な原因（80:20の法則）を特定。PDCA=継続的改善サイクル。
+</div>
         `,
         diagram: 'reliability',
         questions: [
@@ -3105,6 +5263,25 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             choices: ['0.81', '0.9', '0.99', '1.0'],
             answer: 2,
             explanation: '並列の稼働率 = 1 - (1-0.9) × (1-0.9) = 1 - 0.1 × 0.1 = 1 - 0.01 = 0.99 です。',
+          },
+          {
+            id: 806,
+            question: 'QC7つ道具のうち「パレート図」の説明として正しいものはどれか。',
+            choices: [
+              'データの分布（ばらつき）を棒グラフで表示する図',
+              '問題の原因を頻度順に並べ重要な原因を特定する図',
+              '2変量の相関関係を点で表示する図',
+              '工程の安定性を時系列で監視する図',
+            ],
+            answer: 1,
+            explanation: 'パレート図は問題の原因・欠陥などを頻度の多い順に並べた棒グラフです。上位2〜3件で全体の約80%を占めることが多く（80:20の法則）、重要な原因の特定に使います。',
+          },
+          {
+            id: 807,
+            question: '稼働率0.8の装置2台を直列接続した場合のシステム稼働率はどれか。',
+            choices: ['0.96', '0.8', '0.64', '0.36'],
+            answer: 2,
+            explanation: '直列接続の稼働率 = 0.8 × 0.8 = 0.64 です。直列では全装置が動作しないとシステムが動かないため、稼働率は各装置の積となり低下します。',
           },
         ],
       },
@@ -3126,14 +5303,32 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
 <p>サービス提供者とユーザー間で品質水準を合意した文書です。</p>
 <p>例: 「稼働率99.9%以上」「障害応答時間1時間以内」「月次報告書を10日以内に提出」</p>
 
+<h3>ITILのサービス管理プロセス</h3>
+<p>ITILではインシデント・問題・変更を明確に区別して管理します。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)">プロセス</th><th style="padding:6px 8px;border:1px solid var(--color-border)">目的</th><th style="padding:6px 8px;border:1px solid var(--color-border)">例</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>インシデント管理</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">サービスを早期に回復する</td><td style="padding:5px 8px;border:1px solid var(--color-border)">サーバ再起動で一時復旧</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>問題管理</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">根本原因を特定し再発を防ぐ</td><td style="padding:5px 8px;border:1px solid var(--color-border)">障害の根本原因を解析・修正</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>変更管理</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">変更リスクを管理して安全に実施</td><td style="padding:5px 8px;border:1px solid var(--color-border)">パッチ適用・設定変更の承認</td></tr>
+</table>
+
 <h3>情報システム監査</h3>
 <p>情報システムが適切に管理・運用されているかを独立した立場で検証する活動です。</p>
 <ul>
   <li><strong>システム監査</strong>: ITシステム全般の有効性・効率性・安全性を評価</li>
   <li><strong>セキュリティ監査</strong>: セキュリティ対策の有効性を評価</li>
-  <li><strong>内部監査</strong>: 組織内部の人員が実施</li>
-  <li><strong>外部監査</strong>: 独立した第三者機関が実施</li>
+  <li><strong>内部監査</strong>: 組織内部の人員が実施。独立性はやや低いが、業務知識が深い。</li>
+  <li><strong>外部監査</strong>: 独立した第三者機関が実施。客観性・独立性が高い。</li>
 </ul>
+<p>監査の独立性を保つため、監査担当者は被監査部門の業務に関わってはいけません。</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+SLA=サービスレベル合意書（稼働率・応答時間などを合意した文書）。<br/>
+インシデント管理=早期回復が目的、問題管理=根本原因特定・再発防止が目的（違いは必出）。<br/>
+変更管理=変更リスクを評価・承認して安全に実施。構成管理=IT資産をCMDBで一元管理。<br/>
+監査の独立性: 外部監査 &gt; 内部監査。監査人は被監査業務に携わってはならない。
+</div>
         `,
         diagram: 'itsm',
         questions: [
@@ -3149,6 +5344,30 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             answer: 1,
             explanation: 'SLA（サービスレベル合意書）はサービス提供者とユーザーがサービスの品質・可用性・応答時間などの水準を合意した契約的な文書です。',
           },
+          {
+            id: 808,
+            question: 'ITILにおけるインシデント管理の目的として正しいものはどれか。',
+            choices: [
+              'インシデントの根本原因を特定して再発を防止する',
+              'サービスへの影響を最小化して早期にサービスを回復する',
+              'IT資産の構成情報をデータベースで一元管理する',
+              'サービス変更のリスクを評価して安全に実施する',
+            ],
+            answer: 1,
+            explanation: 'インシデント管理の目的はサービスを早期に回復することです。根本原因の特定は問題管理が担います。インシデントでは一時対応（ワークアラウンド）でも早期回復を優先します。',
+          },
+          {
+            id: 809,
+            question: '情報システム監査における「監査の独立性」に関して正しいものはどれか。',
+            choices: [
+              '内部監査のほうが外部監査より客観性が高い',
+              '監査担当者は被監査部門の業務に携わっていてはならない',
+              '監査はシステム開発チームのメンバーが実施するのが最も効果的',
+              '監査の独立性は重要ではなく、専門知識があれば誰でもよい',
+            ],
+            answer: 1,
+            explanation: '監査の独立性を確保するため、監査担当者は被監査部門の業務に関わってはなりません。被監査業務に携わった人が自身の仕事を監査しても客観性が保てないためです。',
+          },
         ],
       },
     ],
@@ -3157,7 +5376,7 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
     id: 'a9',
     title: 'ストラテジ',
     subject: 'A',
-    description: '経営戦略・情報システム戦略・法務・著作権・情報倫理など、ITと社会の関わりを体系的に学びます。',
+    description: '経営戦略・マーケティング・財務会計・OR手法・情報システム戦略・法務など、ストラテジ系の全範囲を体系的に学びます。',
     sections: [
       {
         id: 'a9-1',
@@ -3171,19 +5390,69 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
 <h3>コア・コンピタンス</h3>
 <p>競合他社が真似しにくい<strong>自社独自の強み・能力</strong>のことです。競争優位の源泉となります。</p>
 
+<h3>ファイブフォース分析（ポーターの5つの競争要因）</h3>
+<p>業界の競争環境を5つの力で分析するフレームワークです。</p>
+<ul>
+  <li>① <strong>既存競合他社との競争</strong>: 競合の数・強さ</li>
+  <li>② <strong>新規参入の脅威</strong>: 参入障壁の高さ</li>
+  <li>③ <strong>代替品・代替サービスの脅威</strong>: 他の手段に乗り換えられるリスク</li>
+  <li>④ <strong>買い手（顧客）の交渉力</strong>: 顧客がどれだけ価格交渉できるか</li>
+  <li>⑤ <strong>売り手（供給業者）の交渉力</strong>: 部材・素材の供給者がどれだけ価格を上げられるか</li>
+</ul>
+
+<h3>ポーターの3つの競争戦略</h3>
+<p>ファイブフォース分析で把握した競争環境に対して、<strong>どのように競争優位を築くか</strong>を示す戦略です。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">戦略</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">内容</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">代表例</th>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>コストリーダーシップ戦略</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">業界最低コストを実現して価格競争力を持つ。大量生産・効率化が鍵。</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">ディスカウントスーパー、格安航空会社</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>差別化戦略</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">品質・ブランド・機能・サービスなどで独自性を発揮し、価格競争から距離を置く。</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">高級ブランド品、Appleのプレミアム製品</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>集中戦略</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">特定の顧客層・地域・製品に経営資源を集中する（コスト集中 or 差別化集中）。</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">高級時計の特定ブランド、特定地域専門の運送会社</td>
+  </tr>
+</table>
+<p>コストリーダーシップと差別化は「全体市場」を対象、集中は「特定セグメント」を対象とする点が違いです。</p>
+
+<h3>BSC（バランスト・スコアカード）</h3>
+<p>財務の視点だけでなく、4つの視点から組織の戦略達成状況を評価する経営管理ツールです。</p>
+<ul>
+  <li><strong>財務の視点</strong>: 売上・利益・ROIなど</li>
+  <li><strong>顧客の視点</strong>: 顧客満足度・市場シェアなど</li>
+  <li><strong>業務プロセスの視点</strong>: 業務効率・品質・リードタイムなど</li>
+  <li><strong>学習と成長の視点</strong>: 従業員スキル・イノベーション能力など</li>
+</ul>
+
 <h3>BPR・BPM・ERP</h3>
 <ul>
-  <li><strong>BPR（業務プロセス再設計）</strong>: ITを活用して業務プロセスを抜本的に見直す</li>
+  <li><strong>BPR（業務プロセス再設計）</strong>: ITを活用して業務プロセスを<strong>抜本的・根本的</strong>に見直す。現状の延長線上ではなく「白紙から再設計」するのが特徴。</li>
   <li><strong>BPM（業務プロセス管理）</strong>: 業務プロセスを継続的に改善・管理する</li>
   <li><strong>ERP（統合基幹業務システム）</strong>: 会計・人事・生産・販売などを一元管理するシステム。SAP・Oracle ERPが代表例。</li>
 </ul>
 
-<h3>ITガバナンス</h3>
-<p>経営目標の達成に向けてITの利用を組織的に管理・統制する仕組みです。</p>
-<p>CIO（最高情報責任者）が中心的役割を担います。</p>
+<h3>ITガバナンスとDX</h3>
+<p><strong>ITガバナンス</strong>: 経営目標の達成に向けてITの利用を組織的に管理・統制する仕組み。CIO（最高情報責任者）が中心的役割を担います。</p>
+<p><strong>DX（デジタルトランスフォーメーション）</strong>: デジタル技術を活用してビジネスモデル・業務プロセス・企業文化を変革し、競争優位を確立する取り組みです。単なるIT化・効率化とは異なり、事業モデル自体の変革を目指します。</p>
 
-<h3>デジタルトランスフォーメーション（DX）</h3>
-<p>デジタル技術を活用してビジネスモデル・業務プロセス・企業文化を変革し、競争優位を確立する取り組みです。</p>
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+SWOT: S=強み、W=弱み、O=機会、T=脅威。PPM: 花形=成長率高・占有率高、金のなる木=成長率低・占有率高。<br/>
+ファイブフォース=業界の競争を5つの力で分析（ポーター）。ポーターの3競争戦略: コストリーダーシップ・差別化・集中。<br/>
+BSC=4視点（財務・顧客・業務プロセス・学習と成長）で戦略評価。<br/>
+BPR=業務プロセスを抜本的に再設計（既存の改善ではなく白紙から）。ERP=基幹業務を一元管理するシステム。
+</div>
         `,
         diagram: 'strategy',
         questions: [
@@ -3201,6 +5470,30 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             answer: 3,
             explanation: 'PPMでは市場成長率（高/低）×市場占有率（高/低）の4象限に分類します。両方高い事業が「花形（スター）」です。',
           },
+          {
+            id: 904,
+            question: 'BPR（業務プロセス再設計）の説明として正しいものはどれか。',
+            choices: [
+              '現状の業務プロセスを少しずつ継続的に改善する活動',
+              '業務プロセスを白紙に戻して抜本的・根本的に再設計する活動',
+              '会計・人事・生産などの基幹業務を統合するシステムの導入',
+              'IT資産を一元管理するデータベースの構築',
+            ],
+            answer: 1,
+            explanation: 'BPRは既存の業務プロセスの延長線上で改善するのではなく、「白紙から再設計」するのが特徴です。小改善を積み重ねるBPMや継続的改善（カイゼン）とは区別して覚えましょう。',
+          },
+          {
+            id: 905,
+            question: 'BSC（バランスト・スコアカード）の4つの視点として正しいものはどれか。',
+            choices: [
+              '強み・弱み・機会・脅威',
+              '財務・顧客・業務プロセス・学習と成長',
+              '計画・実行・評価・改善',
+              '政治・経済・社会・技術',
+            ],
+            answer: 1,
+            explanation: 'BSCは財務・顧客・業務プロセス・学習と成長の4視点から経営戦略の達成状況を評価します。財務指標だけでなく非財務指標も含めることで、短期・長期両面の経営管理ができます。',
+          },
         ],
       },
       {
@@ -3208,30 +5501,62 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
         title: '情報システム戦略',
         content: `
 <h3>情報システム戦略の立案</h3>
-<p>経営戦略と整合した形でITをどう活用するかを決める活動です。</p>
+<p>経営戦略と整合した形でITをどう活用するかを決める活動です。CIO（最高情報責任者）が中心となり、全社的なIT戦略を策定・推進します。</p>
+
+<h3>主要な業務システム（頻出！）</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">略称</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">正式名称</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">目的・概要</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>ERP</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">統合基幹業務システム</td><td style="padding:5px 8px;border:1px solid var(--color-border)">会計・人事・在庫・生産・販売を1つのDBで一元管理。SAP・Oracle ERP が代表。</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>CRM</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">顧客関係管理</td><td style="padding:5px 8px;border:1px solid var(--color-border)">顧客情報・購買履歴・問い合わせ履歴を管理し、顧客満足度向上・リピート促進に使う。Salesforce が代表。</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>SFA</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">営業支援システム</td><td style="padding:5px 8px;border:1px solid var(--color-border)">営業活動（訪問記録・商談進捗・見積もり）を管理して営業効率を上げる。CRMと組み合わせて使うことが多い。</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>SCM</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">サプライチェーン管理</td><td style="padding:5px 8px;border:1px solid var(--color-border)">調達→生産→在庫→配送の一連の流れを最適化。リードタイム短縮・在庫削減が目的。</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>KMS</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">ナレッジマネジメント</td><td style="padding:5px 8px;border:1px solid var(--color-border)">社員の知識・ノウハウを組織全体で共有・蓄積・活用する仕組み。</td></tr>
+</table>
 
 <h3>エンタープライズアーキテクチャ（EA）</h3>
-<p>組織全体のIT・業務を4つの層で整理するフレームワークです。</p>
+<p>組織全体のIT・業務を4つの層で整理するフレームワークです。「理想の姿（To-Be）」と「現状（As-Is）」を4層で比較し、移行計画を立てます。</p>
 <ul>
-  <li><strong>ビジネスアーキテクチャ</strong>: 業務プロセス・組織の在り方</li>
-  <li><strong>データアーキテクチャ</strong>: 利用するデータの構造・関係</li>
-  <li><strong>アプリケーションアーキテクチャ</strong>: 業務を支えるシステムの全体像</li>
-  <li><strong>テクノロジアーキテクチャ</strong>: インフラ・プラットフォームの技術構成</li>
+  <li><strong>ビジネスアーキテクチャ（BA）</strong>: 業務プロセス・組織の在り方・役割分担</li>
+  <li><strong>データアーキテクチャ（DA）</strong>: 利用するデータの構造・流れ・管理方法</li>
+  <li><strong>アプリケーションアーキテクチャ（AA）</strong>: 業務を支えるシステム・アプリの全体像</li>
+  <li><strong>テクノロジアーキテクチャ（TA）</strong>: インフラ・ネットワーク・プラットフォームの技術構成</li>
 </ul>
 
-<h3>情報化投資の評価</h3>
+<h3>システム調達の流れ</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)">文書</th><th style="padding:6px 8px;border:1px solid var(--color-border)">正式名称</th><th style="padding:6px 8px;border:1px solid var(--color-border)">目的</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>RFI</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">情報提供依頼書</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ベンダーに技術・製品情報の提供を求める（情報収集段階）</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>RFP</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">提案依頼書</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ベンダーに具体的な提案・見積もりを求める（発注段階）</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>SLA</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">サービスレベル合意書</td><td style="padding:5px 8px;border:1px solid var(--color-border)">調達サービスの品質水準（稼働率・応答時間等）を合意した文書</td></tr>
+</table>
+<p>調達の流れ: <strong>RFI（情報収集）→ RFP（提案依頼）→ 選定・契約 → SLA締結 → サービス開始</strong></p>
+
+<h3>IT投資評価指標</h3>
 <ul>
-  <li><strong>ROI（投資対効果）</strong>: (利益 ÷ 投資額) × 100%。投資の見返りを数値化。</li>
-  <li><strong>TCO（総所有コスト）</strong>: 購入費・運用費・保守費・廃棄費を含めた総コスト。</li>
-  <li><strong>NPV（正味現在価値）</strong>: 将来のキャッシュフローを現在価値に割り引いた投資評価指標。</li>
+  <li><strong>ROI（Return on Investment）</strong>: (利益 ÷ 投資額) × 100%。高いほど投資効率が良い。</li>
+  <li><strong>TCO（Total Cost of Ownership）</strong>: 購入費だけでなく<strong>運用・保守・廃棄費も含めた総コスト</strong>。見た目のコストより実際は高くなりがち。</li>
+  <li><strong>NPV（正味現在価値）</strong>: 将来の収益を現在価値に割り引いた指標。NPV &gt; 0 なら投資価値あり。</li>
+  <li><strong>回収期間法（Payback Period）</strong>: 投資額を何年で回収できるかで評価。計算が簡単だが時間価値を考慮しない欠点がある。</li>
 </ul>
 
-<h3>システム調達</h3>
+<h3>新技術の活用（IoT・AI・ビッグデータ）</h3>
 <ul>
-  <li><strong>RFI（情報提供依頼書）</strong>: ベンダーに技術・製品情報の提供を求める</li>
-  <li><strong>RFP（提案依頼書）</strong>: ベンダーに具体的な提案・見積もりを求める</li>
-  <li><strong>SLA</strong>: 調達したサービスの品質水準を明記した合意書</li>
+  <li><strong>IoT（Internet of Things）</strong>: センサー・機器をネットに接続してデータを収集・制御する。工場の設備管理・スマートホームなどに活用。</li>
+  <li><strong>AI（人工知能）</strong>: 機械学習・深層学習で画像認識・自然言語処理・需要予測などを実現。</li>
+  <li><strong>ビッグデータ</strong>: 大量・多様・高速に生成されるデータを分析して意思決定に活用。特徴は「3V」（Volume=量、Variety=多様性、Velocity=速度）。</li>
+  <li><strong>RPA（Robotic Process Automation）</strong>: 定型的な業務（データ入力・転記・ファイル操作）をソフトウェアロボットで自動化。人の作業を代替。</li>
 </ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+業務システム4つ: ERP=全業務一元管理、CRM=顧客管理、SFA=営業支援、SCM=サプライチェーン最適化。<br/>
+RFI=情報収集、RFP=提案依頼（順序に注意。RFIが先）。TCO=購入費＋運用・保守・廃棄の総コスト。<br/>
+ビッグデータの3V: Volume（量）・Variety（多様性）・Velocity（速度）。RPAは定型業務の自動化。
+</div>
         `,
         diagram: 'ea',
         questions: [
@@ -3246,6 +5571,30 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             ],
             answer: 1,
             explanation: 'RFP（提案依頼書）はシステム調達の際にベンダーに提案・見積もり提出を求める文書です。RFIは情報収集目的で使います。',
+          },
+          {
+            id: 906,
+            question: 'TCO（総所有コスト）の説明として正しいものはどれか。',
+            choices: [
+              '投資額に対する利益の割合を示す指標',
+              'システムの購入費・導入費・運用費・保守費・廃棄費を含めた総コスト',
+              '将来のキャッシュフローを現在価値に割り引いた投資評価指標',
+              '投資を何年で回収できるかを示す指標',
+            ],
+            answer: 1,
+            explanation: 'TCO（Total Cost of Ownership）は購入費だけでなく、導入・運用・保守・廃棄まですべてのライフサイクルコストを含みます。表面上安い製品でも運用コストが高ければTCOが大きくなります。',
+          },
+          {
+            id: 907,
+            question: 'エンタープライズアーキテクチャ（EA）の4つの層として正しいものはどれか。',
+            choices: [
+              '計画・設計・実装・運用',
+              'ビジネス・データ・アプリケーション・テクノロジ',
+              '財務・顧客・業務プロセス・学習と成長',
+              'IaaS・PaaS・SaaS・ユーザー',
+            ],
+            answer: 1,
+            explanation: 'EAは組織全体のIT・業務をビジネスアーキテクチャ（業務プロセス）・データアーキテクチャ（データ構造）・アプリケーションアーキテクチャ（システム全体像）・テクノロジアーキテクチャ（インフラ）の4層で整理します。',
           },
         ],
       },
@@ -3289,13 +5638,32 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
   <li><strong>開示・訂正・削除</strong>: 本人から要求があれば対応する義務がある</li>
 </ul>
 
+<h3>不正競争防止法</h3>
+<p>営業秘密（技術情報・顧客データなど）の不正取得・使用・漏洩を禁止する法律です。</p>
+<ul>
+  <li><strong>営業秘密の3条件</strong>: ①秘密管理性（秘密として管理されている）②有用性（事業に有用）③非公知性（公に知られていない）</li>
+  <li>退職者が営業秘密を持ち出して競合他社に提供した場合も違反となる</li>
+</ul>
+
 <h3>不正アクセス禁止法</h3>
 <p>許可なく他人のIDでログインしたり、セキュリティホールを突いてシステムに侵入することを禁止する法律です。IT業界で働く人全員が知っておくべき法律です。</p>
 <p>違反すると<strong>3年以下の懲役または100万円以下の罰金</strong>（未遂も罰則あり）。</p>
 
+<h3>知的財産権まとめ</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)">権利</th><th style="padding:6px 8px;border:1px solid var(--color-border)">対象</th><th style="padding:6px 8px;border:1px solid var(--color-border)">登録</th><th style="padding:6px 8px;border:1px solid var(--color-border)">保護期間</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>著作権</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">文章・プログラム・音楽等</td><td style="padding:5px 8px;border:1px solid var(--color-border)">不要（自動発生）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">死後70年</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>特許権</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">発明（技術的アイデア）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">必要（先願主義）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">出願から20年</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>実用新案権</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">物の形状・構造の工夫</td><td style="padding:5px 8px;border:1px solid var(--color-border)">必要（無審査）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">出願から10年</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>意匠権</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">製品の外観デザイン</td><td style="padding:5px 8px;border:1px solid var(--color-border)">必要</td><td style="padding:5px 8px;border:1px solid var(--color-border)">登録から25年</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>商標権</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">ブランド名・ロゴ</td><td style="padding:5px 8px;border:1px solid var(--color-border)">必要</td><td style="padding:5px 8px;border:1px solid var(--color-border)">10年（更新可）</td></tr>
+</table>
+
 <div class="point-box">
 <strong>🎯 試験のポイント</strong><br/>
-知的財産権の保護期間の表は必ず覚えましょう。特に「著作権=死後70年・登録不要」「特許権=出願から20年・登録必要」「商標権=10年・更新可」の3つは頻出。
+著作権=登録不要・自動発生・死後70年。特許権=登録必要・先願主義・出願から20年。商標権=10年・何度でも更新可能。<br/>
+職務著作: 会社の業務で作成したプログラムは原則「会社」が著作者。プログラムも著作物で保護される。<br/>
+不正アクセス禁止法: 他人のIDでのログイン・セキュリティホールを突いた侵入は違法（未遂も罰則）。
 </div>
 
 <div class="caution-box">
@@ -3335,6 +5703,382 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             ],
             answer: 1,
             explanation: '個人情報を第三者に提供する際は原則として本人の事前同意が必要です（オプトイン方式）。',
+          },
+          {
+            id: 908,
+            question: '製品の外観デザインを保護する知的財産権はどれか。',
+            choices: ['特許権', '実用新案権', '意匠権', '商標権'],
+            answer: 2,
+            explanation: '意匠権は製品の外観デザイン（形状・模様・色彩の組み合わせ）を保護する権利です。スマートフォンのUIデザインなども意匠権の対象になりえます。登録から25年間保護されます。',
+          },
+          {
+            id: 909,
+            question: '不正アクセス禁止法に違反する行為はどれか。',
+            choices: [
+              '自分のアカウントでシステムにログインする',
+              '他人のIDとパスワードを使って無断でシステムにログインする',
+              '公開されているWebページを閲覧する',
+              '会社のシステムに割り当てられた自分のアカウントを使用する',
+            ],
+            answer: 1,
+            explanation: '不正アクセス禁止法は他人のIDやパスワードを使った無断ログイン、セキュリティホールを突いたシステムへの侵入などを禁止しています。違反すると3年以下の懲役または100万円以下の罰金（未遂も罰則あり）です。',
+          },
+        ],
+      },
+      {
+        id: 'a9-4',
+        title: 'マーケティング基礎',
+        content: `
+<h3>マーケティングとは</h3>
+<p>「売れる仕組みをつくる」ための活動全般です。製品開発・価格設定・販売チャネル・広告宣伝など、顧客に価値を届けるプロセスを体系的に管理します。</p>
+
+<h3>STP分析（戦略の3ステップ）</h3>
+<p>誰に何を売るかを決める、マーケティング戦略の基本フレームワークです。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">ステップ</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">内容</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">例</th>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>S: セグメンテーション</strong><br/>（市場細分化）</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">市場を年齢・地域・ニーズ・行動などで細分化する</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">「20代女性」「法人中小企業」</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>T: ターゲティング</strong><br/>（標的市場選定）</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">どのセグメントを狙うか絞り込む</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">「都市部の20代女性に特化」</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>P: ポジショニング</strong><br/>（位置付け）</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">競合他社との差別化ポイントを決める</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">「高品質・プレミアム価格帯」</td>
+  </tr>
+</table>
+
+<h3>マーケティングミックス — 4P と 4C</h3>
+<p>4P は企業視点、4C は顧客視点で同じ要素を捉え直したものです。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">4P（企業視点）</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">内容</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">4C（顧客視点）</th>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Product（製品）</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">何を売るか。品質・機能・デザイン</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">Customer Value（顧客価値）</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Price（価格）</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">いくらで売るか。値引き・支払い方法</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">Cost（顧客コスト）</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Place（流通）</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">どこで売るか。店舗・EC・代理店</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">Convenience（利便性）</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Promotion（プロモーション）</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">どう知らせるか。広告・PR・SNS</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">Communication（コミュニケーション）</td>
+  </tr>
+</table>
+
+<h3>プロダクトライフサイクル</h3>
+<p>製品は市場投入から撤退までの間、4つのフェーズを経るとされます。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">フェーズ</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">特徴</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">戦略の方向</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>導入期</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">売上低・費用大・利益赤字。認知拡大が優先</td><td style="padding:5px 8px;border:1px solid var(--color-border)">広告投資・市場開拓</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>成長期</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">売上急増・競合参入・利益増加</td><td style="padding:5px 8px;border:1px solid var(--color-border)">シェア拡大・差別化</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>成熟期</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">売上ピーク・競争激化・利益率低下</td><td style="padding:5px 8px;border:1px solid var(--color-border)">コスト削減・ブランド維持</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>衰退期</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">売上低下・需要縮小</td><td style="padding:5px 8px;border:1px solid var(--color-border)">撤退・新製品へ移行</td></tr>
+</table>
+<p>PPM（a9-1）の「花形→金のなる木→負け犬」はプロダクトライフサイクルの「成長期→成熟期→衰退期」に対応します。</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+STP: セグメンテーション（細分化）→ターゲティング（選択）→ポジショニング（差別化）の順番を覚える。<br/>
+4P: Product・Price・Place・Promotion。4C は顧客視点の対応概念（Customer Value・Cost・Convenience・Communication）。<br/>
+プロダクトライフサイクル: 導入期→成長期→成熟期→衰退期。各フェーズで利益・競合・戦略が変化する。
+</div>
+        `,
+        diagram: 'strategy',
+        questions: [
+          {
+            id: 910,
+            question: 'STP分析の「T」が表すステップはどれか。',
+            choices: [
+              '市場を属性・ニーズで細分化する',
+              '狙うセグメントを選択する',
+              '競合との差別化ポイントを決める',
+              '製品の売り方を決める',
+            ],
+            answer: 1,
+            explanation: 'STPのTはTargeting（ターゲティング）で、セグメンテーションで細分化した市場の中から自社が狙うセグメントを選択するステップです。',
+          },
+          {
+            id: 911,
+            question: 'マーケティングの4Pのうち「Place」が表すものはどれか。',
+            choices: [
+              '製品の品質・機能・デザイン',
+              '価格設定・値引き・支払い条件',
+              '販売チャネル・流通経路・店舗展開',
+              '広告・宣伝・PR活動',
+            ],
+            answer: 2,
+            explanation: 'PlaceはProducts（製品）をどこで販売するかの流通チャネルを指します。実店舗・EC・代理店・直販などの選択がPlace戦略です。',
+          },
+          {
+            id: 912,
+            question: 'プロダクトライフサイクルの「成長期」の特徴として正しいものはどれか。',
+            choices: [
+              '売上が低く費用が大きいため赤字になりやすい',
+              '売上が急増し競合他社が参入してくる時期',
+              '売上がピークに達し競争が最も激しくなる時期',
+              '需要が縮小し売上が低下していく時期',
+            ],
+            answer: 1,
+            explanation: '成長期は市場が急拡大して売上が急増する一方、市場の魅力に気づいた競合他社が参入してきます。シェア拡大と差別化が戦略の重点となります。',
+          },
+        ],
+      },
+      {
+        id: 'a9-5',
+        title: '財務・会計基礎',
+        content: `
+<h3>なぜ財務知識が必要か</h3>
+<p>ITプロジェクトの投資判断、システム導入効果の測定、予算管理には財務の基礎知識が欠かせません。FE試験でも ROI・損益分岐点・TCO などの計算問題が出題されます。</p>
+
+<h3>ROI（投資対効果）</h3>
+<p>投資した資金に対してどれだけの利益が得られたかを示す指標です。</p>
+<pre>
+ROI（%） = 利益 ÷ 投資額 × 100
+
+【例】 1,000万円のシステムを導入し、年間200万円のコスト削減
+ROI = 200 ÷ 1,000 × 100 = 20%
+
+投資回収期間 = 投資額 ÷ 年間利益（削減額）
+            = 1,000 ÷ 200 = 5年
+</pre>
+<p>ROIが高いほど投資効率が良い。複数の投資案件を比較するときに使います。</p>
+
+<h3>TCO（Total Cost of Ownership：総所有コスト）</h3>
+<p>システムの<strong>初期費用だけでなく、導入から廃棄までの総コスト</strong>を考える概念です。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">費用の種類</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">具体例</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>初期費用</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">ハードウェア購入費・ソフトウェアライセンス・導入工事費・初期教育費</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>運用費用</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">保守・サポート契約費・電気代・人件費・アップグレード費・トレーニング費</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>廃棄費用</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">データ消去費・廃棄処分費・移行費用</td></tr>
+</table>
+<p>TCO = 初期費用 + 運用費用の合計 + 廃棄費用</p>
+<p>「安いクラウドサービス」でも、移行コストや教育費を含めると高くなることがあります。意思決定には必ずTCOで比較します。</p>
+
+<h3>損益計算書（P/L）の基本構造</h3>
+<pre>
+売上高
+　- 売上原価（仕入れ・製造コスト）
+= 売上総利益（粗利）
+
+売上総利益
+　- 販売費及び一般管理費（人件費・広告費等）
+= 営業利益
+
+営業利益
+　+ 営業外収益（受取利息等）
+　- 営業外費用（支払利息等）
+= 経常利益
+</pre>
+
+<h3>損益分岐点（BEP: Break Even Point）</h3>
+<p>利益も損失も出ない「収支ゼロ」の売上高のことです。これを超えると利益が出始めます。</p>
+<pre>
+損益分岐点売上高 = 固定費 ÷ (1 − 変動費率)
+
+変動費率 = 変動費 ÷ 売上高
+
+【例】 固定費300万、変動費率60%（売上の60%がコスト）
+損益分岐点 = 300 ÷ (1 − 0.6) = 300 ÷ 0.4 = 750万円
+→ 750万以上売れれば黒字、未満は赤字
+</pre>
+<ul>
+  <li><strong>固定費</strong>: 売上に関係なく発生するコスト（家賃・人件費・減価償却費）</li>
+  <li><strong>変動費</strong>: 売上に比例して増減するコスト（材料費・仕入れ費）</li>
+</ul>
+
+<h3>財務指標まとめ</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">指標</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">計算式</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">意味</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>ROI</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">利益 ÷ 投資額 × 100</td><td style="padding:5px 8px;border:1px solid var(--color-border)">投資効率（高いほど良い）</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>TCO</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">初期費用 + 運用費用 + 廃棄費用</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ライフサイクル全体のコスト</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>損益分岐点</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">固定費 ÷ (1 − 変動費率)</td><td style="padding:5px 8px;border:1px solid var(--color-border)">黒字になる最低売上高</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>粗利率</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">売上総利益 ÷ 売上高 × 100</td><td style="padding:5px 8px;border:1px solid var(--color-border)">製品の利益率</td></tr>
+</table>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+ROI = 利益 ÷ 投資額 × 100（投資効率の指標）。投資回収期間 = 投資額 ÷ 年間利益。<br/>
+TCO = 初期費用だけでなく運用・廃棄費用も含めたライフサイクル全体のコスト。<br/>
+損益分岐点 = 固定費 ÷ (1 − 変動費率)。固定費÷変動費率ではないことに注意。
+</div>
+        `,
+        diagram: 'strategy',
+        questions: [
+          {
+            id: 913,
+            question: '500万円の投資で年間100万円のコスト削減が得られる場合、ROIはいくつか。',
+            choices: ['5%', '10%', '20%', '50%'],
+            answer: 2,
+            explanation: 'ROI = 利益 ÷ 投資額 × 100 = 100 ÷ 500 × 100 = 20% です。投資回収期間は 500 ÷ 100 = 5年となります。',
+          },
+          {
+            id: 914,
+            question: 'TCO（総所有コスト）の説明として正しいものはどれか。',
+            choices: [
+              'システムの初期購入費用のみを指す',
+              '初期費用に年間保守費用を加えた2年分のコスト',
+              '初期費用から廃棄費用まで、ライフサイクル全体を通じた総コスト',
+              'クラウドサービスの利用料金の合計',
+            ],
+            answer: 2,
+            explanation: 'TCOは初期費用（購入・導入）＋運用費用（保守・電力・人件費）＋廃棄費用の合計です。初期費用が安くても運用コストが高ければTCOは大きくなります。',
+          },
+          {
+            id: 915,
+            question: '固定費が400万円、変動費率が50%のとき、損益分岐点売上高はいくつか。',
+            choices: ['400万円', '600万円', '800万円', '1,200万円'],
+            answer: 2,
+            explanation: '損益分岐点 = 固定費 ÷ (1 − 変動費率) = 400 ÷ (1 − 0.5) = 400 ÷ 0.5 = 800万円です。',
+          },
+        ],
+      },
+      {
+        id: 'a9-6',
+        title: 'OR・IE手法（経営工学）',
+        content: `
+<h3>OR（Operations Research）とは</h3>
+<p>数学的・統計的手法を用いて、経営上の意思決定を<strong>科学的に最適化</strong>する学問分野です。「最小のコストで最大の効果」を追求します。</p>
+
+<h3>ABC分析（頻出！）</h3>
+<p>商品・顧客・在庫などを<strong>重要度順に A・B・C の3ランクに分類</strong>する手法です。パレートの法則（80:20の法則）に基づいています。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">ランク</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">対象</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">売上構成比（目安）</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">管理方針</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>A（重点品目）</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">上位 約20% の品目</td><td style="padding:5px 8px;border:1px solid var(--color-border)">全体の約80%</td><td style="padding:5px 8px;border:1px solid var(--color-border)">重点管理・在庫を多く確保</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>B（準重点品目）</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">中位 約30% の品目</td><td style="padding:5px 8px;border:1px solid var(--color-border)">全体の約15%</td><td style="padding:5px 8px;border:1px solid var(--color-border)">通常管理</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>C（一般品目）</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">下位 約50% の品目</td><td style="padding:5px 8px;border:1px solid var(--color-border)">全体の約5%</td><td style="padding:5px 8px;border:1px solid var(--color-border)">簡易管理・在庫を絞る</td></tr>
+</table>
+<p>パレート図（a8-2 QC7つ道具）と組み合わせて使われます。「全体の20%の品目が80%の売上を生む」という法則を活用した優先度管理です。</p>
+
+<h3>線形計画法</h3>
+<p>製品の生産量・資源の配分など、<strong>制約条件の下で目的関数（利益・コスト）を最大化/最小化</strong>する数学的手法です。</p>
+<pre>
+【例題】 製品AとBを生産する。
+  ・製品A: 利益3万円、材料2kg、工数3時間 が必要
+  ・製品B: 利益5万円、材料4kg、工数2時間 が必要
+  ・材料の上限: 20kg
+  ・工数の上限: 18時間
+  ・A=x個、B=y個 生産するとき利益を最大化せよ
+
+目的関数: 最大化 Z = 3x + 5y
+制約条件: 2x + 4y ≤ 20（材料）
+          3x + 2y ≤ 18（工数）
+          x ≥ 0, y ≥ 0
+
+グラフ法: 実行可能領域の頂点 (0,5), (4,3), (6,0) で Z を計算
+  (0,5): Z = 0+25 = 25
+  (4,3): Z = 12+15 = 27 ← 最大！
+  (6,0): Z = 18+0 = 18
+→ A=4個、B=3個 生産するとき最大利益27万円
+</pre>
+
+<h3>在庫管理（発注点・安全在庫）</h3>
+<p>在庫管理では「いつ・いくつ発注するか」が重要です。</p>
+<ul>
+  <li><strong>発注点（ROP: Reorder Point）</strong>: この在庫量になったら発注する水準。<br/>発注点 = リードタイム中の需要量 + 安全在庫</li>
+  <li><strong>安全在庫</strong>: 需要の変動や配送遅延に備えた緩衝在庫</li>
+  <li><strong>リードタイム</strong>: 発注してから入荷するまでの期間</li>
+</ul>
+<pre>
+【例】 1日平均10個売れる商品、リードタイム3日、安全在庫20個の場合
+発注点 = 10 × 3 + 20 = 50個
+→ 在庫が50個になったら発注する
+</pre>
+
+<h3>モンテカルロ法</h3>
+<p>乱数を大量に使って確率的なシミュレーションを行う手法です。</p>
+<p>例: 円の面積計算（円周率πの近似）</p>
+<pre>
+1辺=1の正方形にランダムに点を打つ
+円内に入った点 ÷ 全点数 ≈ 円の面積 ÷ 正方形の面積 = π/4
+→ 試行回数が多いほど π/4 に近づく
+</pre>
+<p>金融リスク評価・物流シミュレーション・工程計画に活用されます。</p>
+
+<h3>IE（Industrial Engineering）手法</h3>
+<p>作業の効率化・改善を目的とした手法群です。</p>
+<ul>
+  <li><strong>動作研究</strong>: 作業動作を分析して無駄な動きを排除する</li>
+  <li><strong>時間研究</strong>: 各作業にかかる時間を計測・標準化する</li>
+  <li><strong>稼働分析（ワークサンプリング）</strong>: 無作為な時点に観測して作業比率を推定する</li>
+</ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+ABC分析: Aが品目数の上位20%で売上の80%を占める（パレートの法則）。重点管理はA品目に集中。<br/>
+線形計画法: 目的関数を制約条件の下で最大/最小化。グラフ法では実行可能領域の頂点が最適解。<br/>
+発注点 = リードタイム中の需要量 + 安全在庫。モンテカルロ法 = 乱数を使ったシミュレーション。
+</div>
+        `,
+        diagram: 'strategy',
+        questions: [
+          {
+            id: 916,
+            question: 'ABC分析で「Aランク」に分類される品目の説明として正しいものはどれか。',
+            choices: [
+              '品目数は多いが売上全体への貢献度が低い品目',
+              '品目数は少ないが売上全体の大部分を占める重要品目',
+              '在庫管理コストが最も高い品目',
+              '販売数量が最も少ない品目',
+            ],
+            answer: 1,
+            explanation: 'ABC分析のAランクは品目数の上位約20%でありながら売上全体の約80%を占める重要品目です。パレートの法則（80:20の法則）に基づいており、重点的に在庫管理・販売促進を行います。',
+          },
+          {
+            id: 917,
+            question: '線形計画法の説明として正しいものはどれか。',
+            choices: [
+              '過去のデータから将来の売上を統計的に予測する手法',
+              '制約条件の下で目的関数（利益・コストなど）を最大化または最小化する数学的手法',
+              '在庫の発注タイミングを自動的に決定するアルゴリズム',
+              '乱数を用いて確率的事象をシミュレーションする手法',
+            ],
+            answer: 1,
+            explanation: '線形計画法は、材料・人員・時間などの制約条件の下で、利益最大化やコスト最小化などの目的関数を最適化する数学的手法です。製造・物流・資源配分などに活用されます。',
+          },
+          {
+            id: 918,
+            question: '1日平均20個売れる商品のリードタイムが5日、安全在庫が30個のとき、発注点はいくつか。',
+            choices: ['70個', '100個', '130個', '150個'],
+            answer: 2,
+            explanation: '発注点 = リードタイム中の需要量 + 安全在庫 = 20×5 + 30 = 100 + 30 = 130個です。在庫が130個になった時点で発注します。',
           },
         ],
       },
@@ -3398,6 +6142,24 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
     右 ← マージソート(配列の後半)
     マージ(左, 右) を返す   // 計算量: O(n log n)
 </pre>
+
+<h3>メモ化（Memoization）</h3>
+<p>計算済みの結果をキャッシュしておき、同じ入力に対する再計算を省略する最適化技法です。再帰とよく組み合わせます。</p>
+<pre>
+// フィボナッチのメモ化（重複計算を排除）
+メモ ← 空の辞書
+
+関数 フィボナッチ(n):
+    もし n <= 1 なら:
+        n を返す
+    もし メモ[n] が存在するなら:
+        メモ[n] を返す      // キャッシュヒット
+    メモ[n] ← フィボナッチ(n-1) + フィボナッチ(n-2)
+    メモ[n] を返す
+
+// メモ化なし: F(5) で約15回呼び出し
+// メモ化あり: F(5) で9回まで削減
+</pre>
         `,
         diagram: 'recursion',
         questions: [
@@ -3422,6 +6184,25 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             answer: 1,
             explanation: 'マージソートは分割統治法を使い、分割にO(log n)回、各段階でO(n)の結合処理を行うためO(n log n)です。',
           },
+          {
+            id: 1034,
+            question: 'フィボナッチ数列 F(0)=0, F(1)=1, F(n)=F(n-1)+F(n-2) で F(5) の値はどれか。',
+            choices: ['3', '4', '5', '8'],
+            answer: 2,
+            explanation: 'F(2)=1, F(3)=2, F(4)=3, F(5)=5。F(5)=F(4)+F(3)=3+2=5 です。',
+          },
+          {
+            id: 1035,
+            question: 'メモ化（Memoization）の目的として正しいものはどれか。',
+            choices: [
+              '再帰を繰り返し（ループ）に変換する',
+              '計算済みの結果をキャッシュして重複計算を省く',
+              '基底条件を不要にする',
+              'スタックオーバーフローを解消する',
+            ],
+            answer: 1,
+            explanation: 'メモ化は同じ入力に対する計算結果を辞書に保存し、次に同じ入力が来たらキャッシュから返すことで重複計算を省く最適化技法です。',
+          },
         ],
       },
       {
@@ -3434,11 +6215,52 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
   <li><strong>葉（リーフ）</strong>: 子を持たないノード。末端。</li>
   <li><strong>高さ</strong>: ルートから最遠リーフまでの距離</li>
   <li><strong>深さ</strong>: ルートから各ノードまでの距離</li>
-  <li><strong>次数</strong>: ノードの子の数</li>
+  <li><strong>次数</strong>: ノードの子の数（二分木は最大2）</li>
+  <li><strong>完全二分木</strong>: 最下層以外すべて埋まっており、最下層は左詰めの二分木</li>
 </ul>
 
 <h3>二分探索木（BST）</h3>
 <p>各ノードで <code>左の子 &lt; 親 &lt; 右の子</code> を保つ木です。探索・挿入・削除がO(log n)（平衡時）。</p>
+<pre>
+// 挿入の例：3, 1, 5 をBSTに挿入
+// 最初に3を挿入 → ルート
+//       3
+// 1を挿入（3より小さい → 左）
+//       3
+//      /
+//     1
+// 5を挿入（3より大きい → 右）
+//       3
+//      / \\
+//     1   5
+</pre>
+<p>※ 挿入順によっては木が一直線になり（偏り）、最悪でO(n)になることがあります。</p>
+
+<h3>平衡木（バランス木）</h3>
+<p>BSTが偏ると探索がO(n)に劣化します。これを防ぐために自動的にバランスを取り直す木構造が平衡木です。</p>
+<ul>
+  <li><strong>AVL木</strong>: 各ノードの左右の高さの差を±1以内に保つ。回転操作で再バランスする。</li>
+  <li><strong>赤黒木</strong>: ノードに色（赤・黒）を付けてバランスを保つ。JavaのTreeMap等に使われる。</li>
+  <li><strong>B木</strong>: 1ノードに複数のキーを持てる木。ディスクI/O最適化のためDBのインデックスに使われる。</li>
+</ul>
+<p>いずれも探索・挿入・削除を<strong>O(log n)に保証</strong>します。</p>
+
+<h3>ヒープ（Heap）</h3>
+<p><strong>完全二分木</strong>で、親ノードが常に子ノードより小さい（最小ヒープ）または大きい（最大ヒープ）性質を持つデータ構造です。</p>
+<ul>
+  <li><strong>最小ヒープ</strong>: 根が最小値。取り出し・挿入ともにO(log n)。</li>
+  <li><strong>最大ヒープ</strong>: 根が最大値。</li>
+  <li><strong>用途</strong>: 優先度付きキュー（最小/最大を高速に取り出したい場面）・ヒープソート</li>
+</ul>
+<pre>
+// 最小ヒープの例（親 <= 子を常に保つ）
+//         1        ← 最小値が常にルートにある
+//        / \\
+//       3   2
+//      / \\
+//     5   4
+// 取り出し: 根(1)を取り出す → O(log n)で再ヒープ化
+</pre>
 
 <h3>木の3種の走査（トラバーサル）</h3>
 <pre>
@@ -3461,6 +6283,19 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
     ノードの値を表示    // ← 葉から処理（ファイル削除などに向く）
 </pre>
 <p>BST <code>8-3-10-1-6-14-4-7</code> の中順: <strong>1, 3, 4, 6, 7, 8, 10, 14</strong>（昇順）</p>
+
+<h3>前順（プレオーダー）トラバーサルの例</h3>
+<pre>
+//          5
+//         / \\
+//        3   7
+//       / \\   \\
+//      1   4   9
+
+前順（親→左→右）の訪問順: 5 → 3 → 1 → 4 → 7 → 9
+中順（左→親→右）の訪問順: 1 → 3 → 4 → 5 → 7 → 9（昇順！）
+後順（左→右→親）の訪問順: 1 → 4 → 3 → 9 → 7 → 5
+</pre>
         `,
         diagram: 'tree',
         questions: [
@@ -3478,6 +6313,20 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             answer: 2,
             explanation: '二分探索木を中順（左→親→右）でトラバーサルすると必ず昇順にノードの値が並びます。',
           },
+          {
+            id: 1036,
+            question: '次の二分木を前順（プレオーダー）でトラバーサルしたとき、最初に訪問されるノードはどれか。\n\n     5\n    / \\\n   3   7\n  / \\\n 1   4',
+            choices: ['1', '3', '5', '7'],
+            answer: 2,
+            explanation: '前順は「親→左→右」の順に訪問します。最初に訪問するのはルートノード（5）です。',
+          },
+          {
+            id: 1037,
+            question: '二分探索木に値 6, 3, 8, 1, 5 の順に挿入したとき、中順トラバーサルの結果はどれか。',
+            choices: ['6, 3, 8, 1, 5', '1, 3, 5, 6, 8', '6, 8, 3, 5, 1', '1, 5, 3, 8, 6'],
+            answer: 1,
+            explanation: '二分探索木を中順トラバーサルすると昇順になります。1, 3, 5, 6, 8 が正解です。挿入順に関わらず中順は常に昇順になります。',
+          },
         ],
       },
       {
@@ -3487,10 +6336,52 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
 <h3>グラフとは</h3>
 <p>ノード（頂点）とエッジ（辺）で構成されるデータ構造です。SNSの人間関係・地図の道路・ネットワーク経路など様々な問題をモデル化できます。</p>
 <ul>
-  <li><strong>有向グラフ</strong>: エッジに向きがある（一方通行）</li>
-  <li><strong>無向グラフ</strong>: エッジに向きがない（双方向）</li>
-  <li><strong>重み付きグラフ</strong>: エッジに距離やコストが付いている</li>
+  <li><strong>有向グラフ</strong>: エッジに向きがある（一方通行。Twitterのフォロー関係など）</li>
+  <li><strong>無向グラフ</strong>: エッジに向きがない（双方向。友人関係など）</li>
+  <li><strong>重み付きグラフ</strong>: エッジに距離やコストが付いている（地図の道路距離など）</li>
 </ul>
+
+<h3>グラフの表現方法</h3>
+<p>グラフをプログラムで表現する方法は主に2つあります。</p>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">方法</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">仕組み</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">エッジ確認</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">メモリ</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">向き</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>隣接行列</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">N×Nの2次元配列。A[i][j]=1ならエッジあり</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(1)</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(N²)</td><td style="padding:5px 8px;border:1px solid var(--color-border)">密なグラフ向き</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>隣接リスト</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">各ノードの隣接ノードリストを保持</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(次数)</td><td style="padding:5px 8px;border:1px solid var(--color-border)">O(N+E)</td><td style="padding:5px 8px;border:1px solid var(--color-border)">疎なグラフ向き</td></tr>
+</table>
+<pre>
+// グラフ例: 1—2—3、1—3
+//
+// 隣接行列（3×3）:        隣接リスト:
+//   1 2 3                  1: [2, 3]
+// 1[0,1,1]                 2: [1, 3]
+// 2[1,0,1]                 3: [2, 1]
+// 3[1,1,0]
+</pre>
+
+<h3>BFS（幅優先探索）の具体例</h3>
+<p>グラフ: 1—2—4、1—3—4（1から4への最短ルート探索）</p>
+<pre>
+// BFS の探索順（キューを使う）
+開始: キュー=[1], 訪問済み={1}
+
+ステップ1: 1を取り出す → 隣接: 2, 3 をキューに追加
+  キュー=[2, 3], 訪問済み={1,2,3}
+
+ステップ2: 2を取り出す → 隣接: 4 をキューに追加
+  キュー=[3, 4], 訪問済み={1,2,3,4}
+
+ステップ3: 3を取り出す → 隣接: 4 は訪問済みのためスキップ
+ステップ4: 4を取り出す → ゴール到達！
+
+訪問順: 1 → 2 → 3 → 4（幅=レベル順に訪問）
+最短ルート: 1→2→4（2ステップ）
+</pre>
 
 <h3>BFS（幅優先探索）</h3>
 <p><strong>キュー</strong>を使い、近いノードから順に探索します。最短経路の発見に使います。</p>
@@ -3522,10 +6413,12 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
 </pre>
 
 <h3>BFS vs DFS の使い分け</h3>
-<ul>
-  <li><strong>BFS</strong>: 最短経路・レベル順処理・近傍優先</li>
-  <li><strong>DFS</strong>: 経路探索・迷路・連結成分・トポロジカルソート</li>
-</ul>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff"><th style="padding:6px 8px;border:1px solid var(--color-border)">項目</th><th style="padding:6px 8px;border:1px solid var(--color-border)">BFS（幅優先）</th><th style="padding:6px 8px;border:1px solid var(--color-border)">DFS（深さ優先）</th></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">使うデータ構造</td><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>キュー</strong>（FIFO）</td><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>スタック</strong>（または再帰）</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">探索の向き</td><td style="padding:5px 8px;border:1px solid var(--color-border)">近い順（横方向）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">深い方向（縦方向）</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">主な用途</td><td style="padding:5px 8px;border:1px solid var(--color-border)">最短経路・レベル順処理</td><td style="padding:5px 8px;border:1px solid var(--color-border)">迷路・連結成分・トポロジカルソート</td></tr>
+</table>
         `,
         diagram: 'graph',
         questions: [
@@ -3543,6 +6436,20 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             answer: 1,
             explanation: 'BFSはキュー（FIFO）を使って近いノードから順番に処理します。DFSはスタック（または再帰）を使います。',
           },
+          {
+            id: 1038,
+            question: 'DFS（深さ優先探索）を反復（ループ）で実装する場合に使うデータ構造はどれか。',
+            choices: ['キュー', 'スタック', '優先度キュー', '配列'],
+            answer: 1,
+            explanation: 'DFSを反復で実装する場合はスタック（LIFO）を使います。再帰実装では関数呼び出しスタックが暗黙的に使われます。BFSはキューを使う点と対比して覚えましょう。',
+          },
+          {
+            id: 1039,
+            question: 'グラフを隣接行列で表現したとき、頂点iから頂点jへのエッジが存在するかどうかの確認に必要な時間計算量はどれか。',
+            choices: ['O(n)', 'O(log n)', 'O(1)', 'O(n²)'],
+            answer: 2,
+            explanation: '隣接行列は2次元配列 A[i][j] でエッジの有無を表します。A[i][j]を参照するだけなのでO(1)です。隣接リストはO(次数)かかる点と対比して覚えましょう。',
+          },
         ],
       },
     ],
@@ -3559,45 +6466,83 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
         content: `
 <h3>オブジェクト指向の4大原則</h3>
 <ol>
-  <li><strong>カプセル化</strong>: データとメソッドをまとめ、内部を隠蔽する</li>
-  <li><strong>継承</strong>: 既存クラスの機能を引き継いで拡張する</li>
-  <li><strong>ポリモーフィズム</strong>: 同じ操作を異なる型で統一的に扱う</li>
+  <li><strong>カプセル化</strong>: データとメソッドをひとまとめにし、内部を外部から隠蔽する</li>
+  <li><strong>継承（インヘリタンス）</strong>: 既存クラスの機能を引き継いで拡張する</li>
+  <li><strong>ポリモーフィズム（多態性）</strong>: 同じ操作を異なる型で統一的に扱う</li>
   <li><strong>抽象化</strong>: 共通の特徴を抽出して汎用的に定義する</li>
 </ol>
 
 <h3>クラスとインスタンス</h3>
-<p><strong>クラス</strong>: 属性（フィールド）とメソッドを定義した設計図。</p>
-<p><strong>インスタンス</strong>: クラスから生成した実体。<code>new</code>で作成。</p>
+<p><strong>クラス</strong>は属性（データ）とメソッド（操作）を定義した<strong>設計図</strong>です。<strong>インスタンス</strong>はその設計図から実際に作られた<strong>実体</strong>です。</p>
+<p>例: 「犬」クラスという設計図から「ポチ（柴犬・3歳）」「タロウ（ゴールデン・5歳）」という個別のインスタンスを生成する。</p>
 <pre>
 クラス 銀行口座:
     属性:
-        残高（プライベート）: 整数
-        口座番号: 文字列
+        残高（プライベート）: 整数    // 外部から直接変更不可
+        口座番号（パブリック）: 文字列
 
+    // コンストラクタ: インスタンス生成時に自動的に呼ばれる初期化メソッド
     コンストラクタ(口座番号, 初期残高):
         自身.口座番号 ← 口座番号
         自身.残高 ← 初期残高
 
+    // メソッド: 残高を安全に操作する（バリデーション付き）
     メソッド 入金(金額):
         もし 金額 <= 0 なら:
-            エラーを発生させる
+            エラー("金額は正の数にしてください")
         自身.残高 ← 自身.残高 + 金額
 
-    メソッド 残高を取得():
-        自身.残高 を返す   // getter
+    メソッド 出金(金額):
+        もし 金額 > 自身.残高 なら:
+            エラー("残高不足")
+        自身.残高 ← 自身.残高 - 金額
 
-// 使い方
-口座 ← 銀行口座.新規作成("12345", 10000)
-口座.入金(5000)
-表示する(口座.残高を取得())  // → 15000
+    // getter: privateな残高を安全に読み取るためのメソッド
+    メソッド 残高を取得():
+        自身.残高 を返す
+
+// 使い方: インスタンスを生成して操作
+口座A ← 銀行口座.新規作成("12345", 10000)
+口座A.入金(5000)
+口座A.出金(3000)
+表示する(口座A.残高を取得())   // → 12000
+
+// 残高に直接アクセスしようとするとエラー（カプセル化）
+// 口座A.残高 ← -999999  ← privateなのでできない！
 </pre>
 
-<h3>アクセス修飾子</h3>
+<h3>カプセル化のメリット</h3>
+<p>「残高」を private にすることで、不正な操作（マイナス値の代入など）を防げます。外部からは必ずメソッドを通じてのみアクセスさせることで、データの<strong>整合性を保証</strong>できます。</p>
 <ul>
-  <li><strong>public</strong>: どこからでもアクセス可能</li>
-  <li><strong>private</strong>: クラス内部からのみアクセス可能（カプセル化の核心）</li>
-  <li><strong>protected</strong>: クラス内部と子クラスからアクセス可能</li>
+  <li><strong>データ保護</strong>: 外部から直接変更されることで不正な値が入るのを防ぐ</li>
+  <li><strong>変更の局所化</strong>: 内部実装を変えても外部インタフェースが同じなら呼び出し側を変える必要がない</li>
+  <li><strong>バリデーション</strong>: setter/メソッド内で値の検証ができる</li>
 </ul>
+
+<h3>アクセス修飾子</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 10px;border:1px solid var(--color-border)">修飾子</th>
+    <th style="padding:6px 10px;border:1px solid var(--color-border)">アクセス可能な範囲</th>
+    <th style="padding:6px 10px;border:1px solid var(--color-border)">用途</th>
+  </tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)"><strong>public</strong></td><td style="padding:5px 10px;border:1px solid var(--color-border)">どこからでも可</td><td style="padding:5px 10px;border:1px solid var(--color-border)">外部に公開するメソッド</td></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)"><strong>private</strong></td><td style="padding:5px 10px;border:1px solid var(--color-border)">クラス内部のみ</td><td style="padding:5px 10px;border:1px solid var(--color-border)">内部データ・内部処理（カプセル化の核心）</td></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)"><strong>protected</strong></td><td style="padding:5px 10px;border:1px solid var(--color-border)">クラス内部＋子クラス</td><td style="padding:5px 10px;border:1px solid var(--color-border)">継承先で使いたいが外部には隠したい処理</td></tr>
+</table>
+
+<h3>コンストラクタとデストラクタ</h3>
+<ul>
+  <li><strong>コンストラクタ</strong>: インスタンス生成時に<strong>自動的に呼ばれる</strong>初期化メソッド。属性に初期値を設定する。</li>
+  <li><strong>デストラクタ</strong>: インスタンスが不要になって破棄される際に自動的に呼ばれる後処理メソッド。リソースの解放などに使う（Javaなど言語によっては明示的なデストラクタを持たない）。</li>
+</ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+カプセル化=データ（属性）とメソッドをひとまとめにし、privateで外部から隠蔽する。直接変更不可にすることでデータ整合性を保証。<br/>
+コンストラクタ=インスタンス生成時に自動呼び出しされる初期化メソッド。<br/>
+アクセス修飾子: public=全体公開、private=クラス内のみ、protected=クラス内+子クラス。
+</div>
         `,
         diagram: 'oop',
         questions: [
@@ -3620,50 +6565,130 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             answer: 1,
             explanation: 'カプセル化はデータ（属性）をprivateにして隠蔽し、publicなメソッド（getter/setter）を通じてのみアクセスを許可する設計原則です。',
           },
+          {
+            id: 1040,
+            question: 'コンストラクタの役割として正しいものはどれか。',
+            choices: [
+              'クラスを削除するときに呼ばれるメソッド',
+              'インスタンス生成時に自動的に呼ばれ初期化を行うメソッド',
+              '静的メソッドを定義するための特殊なメソッド',
+              '親クラスのメソッドを上書きするメソッド',
+            ],
+            answer: 1,
+            explanation: 'コンストラクタはオブジェクト（インスタンス）が生成されたときに自動的に呼ばれ、属性の初期化などを行います。',
+          },
+          {
+            id: 1041,
+            question: 'アクセス修飾子 private の説明として正しいものはどれか。',
+            choices: [
+              'どこからでもアクセスできる',
+              'クラス内部と子クラスからのみアクセスできる',
+              'クラス内部からのみアクセスできる',
+              'パッケージ内からのみアクセスできる',
+            ],
+            answer: 2,
+            explanation: 'privateはクラス内部からのみアクセスできる最も制限の強い修飾子です。子クラスからもアクセスできないため、データの隠蔽に使われます。',
+          },
         ],
       },
       {
         id: 'b4-2',
         title: '継承とポリモーフィズム',
         content: `
-<h3>継承（インヘリタンス）</h3>
-<p>既存クラス（親クラス・スーパークラス）の属性・メソッドを引き継いで新しいクラス（子クラス・サブクラス）を作ります。<code>is-a</code>関係を表します。</p>
+<h3>継承（インヘリタンス）とは</h3>
+<p>既存クラス（親クラス・スーパークラス）の属性・メソッドを引き継いで新しいクラス（子クラス・サブクラス）を作る仕組みです。<code>is-a</code>関係（「犬は動物である」）を表し、共通の処理を親クラスにまとめることでコードの重複を排除できます。</p>
 <pre>
-クラス 図形:
+クラス 図形:                              // 親クラス
     属性: 色
-    メソッド 面積を返す(): 抽象メソッド   // サブクラスで必ず実装
+    メソッド 面積を返す(): 抽象メソッド   // 子クラスで必ず実装する
 
-クラス 円 は 図形 を継承:
+クラス 円 は 図形 を継承:                 // 子クラス①
     属性: 半径
-    メソッド 面積を返す():
+    メソッド 面積を返す():                // オーバーライド（再定義）
         3.14 × 半径 × 半径 を返す
 
-クラス 長方形 は 図形 を継承:
+クラス 長方形 は 図形 を継承:             // 子クラス②
     属性: 幅, 高さ
     メソッド 面積を返す():
         幅 × 高さ を返す
 </pre>
+<p>「色」属性は両方の子クラスが親から自動的に引き継ぐため、定義を繰り返す必要がありません。</p>
 
 <h3>ポリモーフィズム（多態性）</h3>
-<p>親クラス型の変数に子クラスのインスタンスを代入し、<strong>同じメソッド呼び出しで異なる動作</strong>をさせられます。</p>
+<p>親クラス型の変数に子クラスのインスタンスを代入し、<strong>同じメソッド呼び出しで異なる動作</strong>をさせられる性質です。新しい図形クラスを追加しても、呼び出し側のコードを変える必要がないため拡張性が高まります。</p>
 <pre>
-図形リスト ← [円(半径=5), 長方形(幅=4, 高さ=6)]
+// 親クラス型のリストに異なる子クラスを混在させられる
+図形リスト ← [円(半径=5), 長方形(幅=4, 高さ=6), 三角形(底辺=3, 高さ=4)]
 
 図形リスト の 各図形 に対して:
-    表示する(図形.面積を返す())
-// → 78.5
-// → 24
+    表示する(図形.面積を返す())   // 同じ呼び方でも結果は異なる
+// 出力:
+// 78.5  （円の面積）
+// 24    （長方形の面積）
+// 6     （三角形の面積）
 </pre>
 
-<h3>抽象クラスとインタフェース</h3>
-<p><strong>抽象クラス</strong>: 抽象メソッドを持つ。直接インスタンス化不可。子クラスで全抽象メソッドを実装必須。</p>
-<p><strong>インタフェース</strong>: メソッドの定義のみ（実装なし）。クラスは複数のインタフェースを実装できる（多重実装）。</p>
+<h3>抽象クラス vs インタフェース</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 10px;border:1px solid var(--color-border)">項目</th>
+    <th style="padding:6px 10px;border:1px solid var(--color-border)">抽象クラス</th>
+    <th style="padding:6px 10px;border:1px solid var(--color-border)">インタフェース</th>
+  </tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)">実装の有無</td><td style="padding:5px 10px;border:1px solid var(--color-border)">共通処理を持てる</td><td style="padding:5px 10px;border:1px solid var(--color-border)">定義のみ（実装なし）</td></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)">多重継承</td><td style="padding:5px 10px;border:1px solid var(--color-border)">1つのみ継承可能</td><td style="padding:5px 10px;border:1px solid var(--color-border)">複数同時に実装可能</td></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)">直接生成</td><td style="padding:5px 10px;border:1px solid var(--color-border)">不可（抽象メソッドがあるため）</td><td style="padding:5px 10px;border:1px solid var(--color-border)">不可</td></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)">用途</td><td style="padding:5px 10px;border:1px solid var(--color-border)">共通処理を持つ基底クラス</td><td style="padding:5px 10px;border:1px solid var(--color-border)">「できること」の規約定義</td></tr>
+  <tr><td style="padding:5px 10px;border:1px solid var(--color-border)">関係</td><td style="padding:5px 10px;border:1px solid var(--color-border)">is-a（〜は〜の一種）</td><td style="padding:5px 10px;border:1px solid var(--color-border)">can-do（〜を行える）</td></tr>
+</table>
+<pre>
+// インタフェース: 「飛べる」という能力の規約
+インタフェース 飛べる:
+    メソッド 飛ぶ()       // 実装なし
+
+// 鳥は動物を継承しつつ「飛べる」インタフェースも実装
+クラス 鳥 は 動物 を継承, 飛べる を実装:
+    メソッド 飛ぶ():
+        "羽ばたいて飛ぶ" を表示
+
+// 飛行機は動物ではないが「飛べる」は実装できる
+クラス 飛行機 は 飛べる を実装:
+    メソッド 飛ぶ():
+        "エンジンで飛ぶ" を表示
+</pre>
 
 <h3>オーバーライドとオーバーロード</h3>
 <ul>
-  <li><strong>オーバーライド</strong>: 子クラスが親クラスのメソッドを<strong>再定義</strong>する（同名・同引数）</li>
-  <li><strong>オーバーロード</strong>: 同名のメソッドを<strong>引数の型・数が異なる</strong>形で複数定義する</li>
+  <li><strong>オーバーライド（Override）</strong>: 子クラスが親クラスのメソッドを<strong>同名・同引数で再定義</strong>する。ポリモーフィズムの実現手段。</li>
+  <li><strong>オーバーロード（Overload）</strong>: 同名のメソッドを<strong>引数の型・数を変えて</strong>複数定義する。呼び出し時の引数で自動的に選ばれる。</li>
 </ul>
+<pre>
+クラス 計算機:
+    // オーバーロード: 同名だが引数が異なる（引数の数で使い分け）
+    メソッド 合計(a, b):
+        a + b を返す
+
+    メソッド 合計(a, b, c):    // 引数3つ版
+        a + b + c を返す
+
+計算機.合計(3, 4)      // → 7  （2引数版が呼ばれる）
+計算機.合計(1, 2, 3)   // → 6  （3引数版が呼ばれる）
+</pre>
+
+<h3>継承の「is-a」と委譲の「has-a」</h3>
+<p>オブジェクト指向では継承（is-a）と委譲（has-a）を使い分けます。</p>
+<ul>
+  <li><strong>is-a（継承）</strong>: 「犬は動物である」→ クラス 犬 は 動物 を継承</li>
+  <li><strong>has-a（委譲/コンポジション）</strong>: 「車はエンジンを持つ」→ クラス 車 は エンジン を属性として持つ</li>
+</ul>
+<p>継承は「本当に同種か」を慎重に判断する必要があります。単に機能を使いたいだけなら委譲のほうが変更に強くなります。</p>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+is-a=継承（犬は動物）、has-a=委譲（車はエンジンを持つ）。<br/>
+抽象クラス=共通処理を持てる・1つだけ継承、インタフェース=実装なし・複数実装可能・can-do関係。<br/>
+オーバーライド=同名同引数で再定義（ポリモーフィズムの基礎）、オーバーロード=同名で引数が違う複数定義。
+</div>
         `,
         diagram: 'inheritance',
         questions: [
@@ -3681,6 +6706,30 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             answer: 1,
             explanation: 'オーバーライドは親クラスのメソッドを子クラスで上書きして再定義することです。オーバーロードは同名で引数が異なるメソッドを複数定義することです。',
           },
+          {
+            id: 1042,
+            question: '抽象クラスとインタフェースの違いとして正しいものはどれか。',
+            choices: [
+              '抽象クラスは複数継承できるがインタフェースは1つしか実装できない',
+              'インタフェースは実装を持てるが抽象クラスは持てない',
+              '抽象クラスは実装を持てるがインタフェースは原則メソッド定義のみ',
+              'どちらも直接インスタンス化できる',
+            ],
+            answer: 2,
+            explanation: '抽象クラスは実装（具体的なメソッド）を持てます。インタフェースは原則メソッドの定義のみ（シグネチャのみ）を持ちます。クラスは複数のインタフェースを実装できますが、継承できる親クラスは1つだけです。',
+          },
+          {
+            id: 1043,
+            question: 'オブジェクト指向における「is-a 関係」を正しく表しているものはどれか。',
+            choices: [
+              '車は「エンジン」を持つ',
+              '犬は「動物」の一種である',
+              '社員は「会社」に所属する',
+              'ファイルは「フォルダ」の中にある',
+            ],
+            answer: 1,
+            explanation: 'is-a 関係は継承の関係を表します。「犬 is-a 動物」は Dog extends Animal のように親子クラスで表現します。has-a 関係（「車はエンジンを持つ」）は組み合わせ（コンポジション）で表現します。',
+          },
         ],
       },
       {
@@ -3688,10 +6737,10 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
         title: 'デザインパターン',
         content: `
 <h3>デザインパターンとは</h3>
-<p>オブジェクト指向設計でよく使われる<strong>再利用可能な設計の定石</strong>です。GoF（Gang of Four）が23パターンを分類しました。</p>
+<p>オブジェクト指向設計でよく使われる<strong>再利用可能な設計の定石</strong>です。GoF（Gang of Four）が23パターンを「生成」「構造」「振る舞い」の3カテゴリに分類しました。パターンを知ることで設計の意図を素早く共有できます。</p>
 
-<h3>生成パターン</h3>
-<p><strong>Singleton（シングルトン）</strong>: クラスのインスタンスが1つだけ存在することを保証する。</p>
+<h3>生成パターン（オブジェクトの作り方を管理）</h3>
+<p><strong>Singleton（シングルトン）</strong>: クラスのインスタンスが<strong>1つだけ</strong>存在することを保証する。設定管理・ログ管理・DBコネクションプールに使用。</p>
 <pre>
 クラス 設定管理:
     静的属性 インスタンス ← null
@@ -3699,18 +6748,92 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
     静的メソッド 取得():
         もし インスタンス が null なら:
             インスタンス ← 設定管理.新規作成()
-        インスタンス を返す
+        インスタンス を返す   // 常に同じ1つのインスタンスを返す
 </pre>
 
-<p><strong>Factory Method（ファクトリメソッド）</strong>: オブジェクトの生成をサブクラスに委ねる。</p>
+<p><strong>Factory Method（ファクトリメソッド）</strong>: オブジェクトの生成をサブクラスに委ねる。どのクラスを生成するかを呼び出し側ではなくサブクラスが決める。</p>
+<pre>
+抽象クラス 通知送信者:
+    抽象メソッド 通知作成()     // サブクラスで実装
+    メソッド 送信():
+        通知 ← 自身.通知作成()  // サブクラスが決めた種類を生成
+        通知.送る()
 
-<h3>構造パターン</h3>
-<p><strong>Adapter（アダプタ）</strong>: 互換性のないインタフェースを変換して使えるようにする。コンセントの変換アダプタと同じ概念。</p>
-<p><strong>Decorator（デコレータ）</strong>: 既存オブジェクトに動的に機能を追加する。継承を使わずに拡張できる。</p>
+クラス メール送信者 extends 通知送信者:
+    メソッド 通知作成():
+        メール を返す           // メール固有の生成ロジック
+</pre>
 
-<h3>振る舞いパターン</h3>
-<p><strong>Observer（オブザーバー）</strong>: オブジェクトの状態変化を複数の観察者に通知する。イベント駆動プログラミングの基礎。</p>
-<p><strong>Strategy（ストラテジー）</strong>: アルゴリズムを交換可能にする。ソート方法や課金方法の切り替えに使用。</p>
+<h3>構造パターン（クラスの組み合わせ方を整理）</h3>
+<p><strong>Adapter（アダプタ）</strong>: 互換性のないインタフェースを変換して使えるようにする。コンセントの変換アダプタと同じ概念。既存クラスをそのまま再利用しつつ新しいインタフェースに対応できる。</p>
+<pre>
+// 既存の古いクラス（インタフェースが合わない）
+クラス 旧印刷機:
+    メソッド 印字する(テキスト): ...
+
+// アダプタ：新インタフェース「print()」で旧クラスを使えるようにする
+クラス 印刷アダプタ:
+    属性: 旧印刷機
+
+    メソッド print(テキスト):
+        自身.旧印刷機.印字する(テキスト)  // 内部で変換して委譲
+</pre>
+
+<p><strong>Decorator（デコレータ）</strong>: 既存オブジェクトを包んで動的に機能を追加する。継承を使わず、実行時に組み合わせを変えられる。</p>
+<pre>
+// コーヒーの例: 基本 → ミルク追加 → シロップ追加 と後から機能を付け足す
+クラス ミルクデコレータ:
+    属性: コーヒー
+
+    メソッド 金額():
+        自身.コーヒー.金額() + 50 を返す  // 元の金額に追加
+
+    メソッド 説明():
+        自身.コーヒー.説明() + "＋ミルク" を返す
+</pre>
+
+<p><strong>Facade（ファサード）</strong>: 複雑なサブシステムに対して<strong>シンプルな窓口（窓口クラス）</strong>を提供する。利用者は内部の複雑さを意識しなくて済む。</p>
+<pre>
+// 内部は複雑（CPU起動・メモリ確認・ディスク読込など）でも
+// 利用者はこれだけ呼べばよい
+クラス コンピュータFacade:
+    メソッド 電源ON():
+        CPU.初期化()
+        メモリ.確認()
+        ディスク.読込()
+        OS.起動()
+</pre>
+
+<h3>振る舞いパターン（オブジェクト間の責任の分担）</h3>
+<p><strong>Template Method（テンプレートメソッド）</strong>: 処理の<strong>骨格（アルゴリズムの流れ）をスーパークラスで定義</strong>し、具体的な実装はサブクラスに委ねる。</p>
+<pre>
+抽象クラス データ処理:
+    // テンプレートメソッド: 処理の流れを固定
+    メソッド 実行():
+        自身.読み込む()   // ←サブクラスで実装
+        自身.変換する()   // ←サブクラスで実装
+        自身.保存する()   // ←サブクラスで実装
+
+クラス CSV処理 extends データ処理:
+    メソッド 読み込む(): CSVファイルを開く
+    メソッド 変換する(): カンマ区切りを解析する
+    メソッド 保存する(): DBに挿入する
+</pre>
+
+<p><strong>Observer（オブザーバー）</strong>: オブジェクトの状態変化を、登録された<strong>複数の観察者（Observer）に自動通知</strong>する。イベント駆動・MVCのモデル変更通知に使用。</p>
+<pre>
+クラス ニュース配信（Subject）:
+    属性: 購読者リスト ← []
+
+    メソッド 購読登録(購読者):
+        購読者リスト.追加(購読者)
+
+    メソッド ニュース発行(内容):
+        購読者リスト の各 購読者 に対して:
+            購読者.更新通知(内容)   // 全員に自動通知
+</pre>
+
+<p><strong>Strategy（ストラテジー）</strong>: アルゴリズムを交換可能なオブジェクトとして切り出す。実行時にアルゴリズムを差し替えられる。</p>
 <pre>
 クラス ソーター:
     属性: ストラテジー
@@ -3718,10 +6841,55 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
     メソッド ソート(配列):
         自身.ストラテジー.実行(配列) を返す
 
-// 使い方: ストラテジーを差し替えて動作を変える
+// 実行時に差し替えるだけで動作が変わる
 ソーター.ストラテジー ← バブルソート
 ソーター.ストラテジー ← クイックソート
 </pre>
+
+<p><strong>Iterator（イテレータ）</strong>: コレクション（配列・リストなど）の内部構造を隠蔽しながら、要素を順番に走査する方法を提供する。</p>
+<pre>
+クラス 数列イテレータ:
+    属性: データ, 現在位置 ← 0
+
+    メソッド 次がある():
+        現在位置 &lt; データ.長さ を返す
+
+    メソッド 次を取得():
+        要素 ← データ[現在位置]
+        現在位置 ← 現在位置 + 1
+        要素 を返す
+
+// 使い方（内部構造を知らなくても走査できる）
+イテレータ ← 数列イテレータ([1,3,5,7,9])
+繰り返し イテレータ.次がある() の間:
+    表示(イテレータ.次を取得())
+</pre>
+
+<h3>パターン早見表</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.88em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">パターン</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">カテゴリ</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">一言で言うと</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">典型的な使いどころ</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Singleton</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">生成</td><td style="padding:5px 8px;border:1px solid var(--color-border)">インスタンスを1つだけ</td><td style="padding:5px 8px;border:1px solid var(--color-border)">設定管理・ログ</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Factory Method</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">生成</td><td style="padding:5px 8px;border:1px solid var(--color-border)">生成をサブクラスに委ねる</td><td style="padding:5px 8px;border:1px solid var(--color-border)">プラグイン・通知種別</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Adapter</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">構造</td><td style="padding:5px 8px;border:1px solid var(--color-border)">インタフェースを変換</td><td style="padding:5px 8px;border:1px solid var(--color-border)">既存クラスの再利用</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Decorator</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">構造</td><td style="padding:5px 8px;border:1px solid var(--color-border)">機能を動的に追加</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ロギング・権限チェック</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Facade</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">構造</td><td style="padding:5px 8px;border:1px solid var(--color-border)">複雑なシステムに窓口</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ライブラリのラッパー</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Template Method</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">振る舞い</td><td style="padding:5px 8px;border:1px solid var(--color-border)">骨格を親が定義</td><td style="padding:5px 8px;border:1px solid var(--color-border)">データ処理・ゲームのターン進行</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Observer</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">振る舞い</td><td style="padding:5px 8px;border:1px solid var(--color-border)">変化を複数に通知</td><td style="padding:5px 8px;border:1px solid var(--color-border)">イベント・MVC</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Strategy</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">振る舞い</td><td style="padding:5px 8px;border:1px solid var(--color-border)">アルゴリズムを差し替え</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ソート・課金方式</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>Iterator</strong></td><td style="padding:5px 8px;border:1px solid var(--color-border)">振る舞い</td><td style="padding:5px 8px;border:1px solid var(--color-border)">コレクションを順に走査</td><td style="padding:5px 8px;border:1px solid var(--color-border)">for-each構文の内部</td></tr>
+</table>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+生成: Singleton=インスタンス1つ保証、Factory Method=生成をサブクラスに委ねる。<br/>
+構造: Adapter=インタフェース変換（既存クラス再利用）、Facade=複雑な内部への窓口。<br/>
+振る舞い: Template Method=処理の骨格を親が固定、Observer=状態変化を複数に通知、Strategy=アルゴリズムを実行時に差し替え、Iterator=内部構造を隠してコレクション走査。
+</div>
         `,
         diagram: 'design-pattern',
         questions: [
@@ -3748,6 +6916,295 @@ WHEREとHAVINGの違いは必出。WHERE=グループ化前の行に条件、HAV
             ],
             answer: 1,
             explanation: 'Strategyパターンはアルゴリズム（戦略）をクラスとして定義し、実行時に差し替えられるようにするパターンです。',
+          },
+          {
+            id: 1044,
+            question: 'Observerパターンの説明として正しいものはどれか。',
+            choices: [
+              '互換性のないインタフェースを変換して使えるようにする',
+              'あるオブジェクトの状態変化を複数の観察者オブジェクトに自動通知する',
+              'クラスのインスタンスが1つだけ存在することを保証する',
+              'オブジェクトの生成をサブクラスに委ねる',
+            ],
+            answer: 1,
+            explanation: 'Observerパターンは「出版者（Subject）」と「購読者（Observer）」の関係を定義します。出版者の状態が変わると全購読者に自動通知されます。GUIのイベントリスナーがその代表例です。',
+          },
+          {
+            id: 1045,
+            question: 'Adapterパターンが解決する問題はどれか。',
+            choices: [
+              'クラスに機能を動的に追加したい',
+              '既存の互換性のないインタフェースを変換して再利用したい',
+              'インスタンスの生成方法を抽象化したい',
+              'アルゴリズムを切り替え可能にしたい',
+            ],
+            answer: 1,
+            explanation: 'Adapterパターンは既存クラスのインタフェースを、クライアントが期待する別のインタフェースに変換します。電源コンセントのアダプタと同じ概念で、互換性のない既存コードを変更せずに再利用できます。',
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 'a10',
+    title: 'AI・機械学習基礎',
+    subject: 'A',
+    description: '機械学習の種類・ディープラーニング・自然言語処理・AI倫理など、試験頻出のAI分野を学びます。',
+    sections: [
+      {
+        id: 'a10-1',
+        title: '機械学習の基礎概念',
+        content: `
+<h3>AIと機械学習の関係</h3>
+<p>AI（人工知能）は「人間の知的活動をコンピュータで実現する」技術の総称です。機械学習はAIを実現する手法の一つで、<strong>データから自動的にパターンを学習</strong>します。ディープラーニングはさらにその中の手法です。</p>
+<pre>
+AI（人工知能）
+ └─ 機械学習（Machine Learning）
+      └─ ディープラーニング（Deep Learning）
+</pre>
+
+<h3>機械学習の3種類</h3>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">種類</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">概要</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">用途例</th>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>教師あり学習</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">正解ラベル付きデータで学習。入力→正解の関係を学ぶ。</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">スパムメール判定・価格予測・画像分類</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>教師なし学習</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">正解ラベルなしでデータの構造・パターンを発見する。</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">顧客セグメンテーション・異常検知・次元削減</td>
+  </tr>
+  <tr>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)"><strong>強化学習</strong></td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">エージェントが試行錯誤しながら報酬最大化を学ぶ。</td>
+    <td style="padding:5px 8px;border:1px solid var(--color-border)">ゲームAI・ロボット制御・自動運転</td>
+  </tr>
+</table>
+
+<h3>主なアルゴリズム</h3>
+<ul>
+  <li><strong>決定木</strong>: 条件分岐を木構造で表現。解釈しやすい。</li>
+  <li><strong>ランダムフォレスト</strong>: 多数の決定木の多数決。過学習に強い。</li>
+  <li><strong>サポートベクターマシン（SVM）</strong>: データを最も広い余白で分類する境界を見つける手法。</li>
+  <li><strong>k-近傍法（kNN）</strong>: 新しいデータに最も近いk個の既存データの多数決で分類。</li>
+  <li><strong>k-means クラスタリング</strong>: データをk個のグループ（クラスタ）に分類する教師なし学習。</li>
+</ul>
+
+<h3>過学習（オーバーフィッティング）と汎化</h3>
+<p><strong>過学習</strong>とは、訓練データに特化しすぎて未知のデータに対する精度が落ちる現象です。</p>
+<ul>
+  <li><strong>訓練データ</strong>: モデルの学習に使うデータ</li>
+  <li><strong>検証データ</strong>: ハイパーパラメータ調整に使うデータ</li>
+  <li><strong>テストデータ</strong>: 最終的な精度評価に使うデータ（学習に使ってはいけない）</li>
+  <li>対策: 正則化・ドロップアウト・データ拡張・交差検証</li>
+</ul>
+
+<h3>モデルの評価指標</h3>
+<ul>
+  <li><strong>正解率（Accuracy）</strong>: 全予測のうち正解の割合。データ不均衡時は不適切。</li>
+  <li><strong>適合率（Precision）</strong>: 陽性と予測したうち実際に陽性の割合。「誤検知を減らしたい」時に重視。</li>
+  <li><strong>再現率（Recall）</strong>: 実際の陽性のうち正しく陽性と予測した割合。「見逃しを減らしたい」時に重視。</li>
+  <li><strong>F値（F1スコア）</strong>: 適合率と再現率の調和平均。</li>
+</ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+教師あり＝正解ラベルあり、教師なし＝パターン発見、強化学習＝報酬最大化。<br/>
+過学習＝訓練データに過度に適合し汎化性能が低下すること。<br/>
+精度指標：正解率・適合率・再現率・F値の違いを区別できること。
+</div>
+        `,
+        questions: [
+          {
+            id: 1060,
+            question: '機械学習の「教師あり学習」の説明として正しいものはどれか。',
+            choices: [
+              '正解ラベルのないデータからパターンや構造を自動的に発見する手法',
+              '正解ラベル付きのデータを使って入力と出力の関係を学習する手法',
+              'エージェントが試行錯誤しながら報酬を最大化するように学習する手法',
+              'ルールベースでプログラマが明示的に条件を記述して分類する手法',
+            ],
+            answer: 1,
+            explanation: '教師あり学習は「入力と正解ラベル（出力）のペア」を大量に用意し、入力から正解を予測するモデルを学習します。スパムフィルタ（スパム/非スパム）や画像分類（犬/猫）が代表例です。',
+          },
+          {
+            id: 1061,
+            question: '機械学習における過学習（オーバーフィッティング）の説明として正しいものはどれか。',
+            choices: [
+              'モデルが単純すぎて訓練データでも精度が出ない状態',
+              '訓練データには高精度だが未知のテストデータに対して精度が低い状態',
+              'データ量が少なすぎてモデルが学習できない状態',
+              '計算量が多すぎて学習が完了しない状態',
+            ],
+            answer: 1,
+            explanation: '過学習は訓練データを「暗記」してしまい、未知データへの汎化能力が失われた状態です。訓練精度は高いのにテスト精度が低い場合に疑います。正則化・データ拡張・交差検証が主な対策です。',
+          },
+        ],
+      },
+      {
+        id: 'a10-2',
+        title: 'ディープラーニングと応用',
+        content: `
+<h3>ニューラルネットワーク</h3>
+<p>人間の脳の神経回路を模した機械学習モデルです。<strong>入力層・隠れ層・出力層</strong>の3種類の層で構成されます。各ノード（ニューロン）は前の層の出力を受け取り、重み付き合計を計算して次の層へ渡します。</p>
+<pre>
+入力層    隠れ層    出力層
+  ○ ─────── ○
+  ○    ×   ○ ─── ○（予測値）
+  ○ ─────── ○
+（特徴量）  （中間表現）
+</pre>
+
+<h3>ディープラーニング（深層学習）</h3>
+<p>隠れ層を多数重ねたニューラルネットワークです。大量データとGPU計算により、従来手法を大幅に超える精度を実現しました。</p>
+<ul>
+  <li><strong>CNN（畳み込みニューラルネットワーク）</strong>: 画像認識に特化。畳み込み層でローカルな特徴（エッジ・形状）を抽出する。顔認識・自動車の自動運転・医療画像診断。</li>
+  <li><strong>RNN（再帰型ニューラルネットワーク）</strong>: 時系列データ・言語に特化。前の出力を次の入力に使う。LSTM・GRUが改良版。翻訳・音声認識に使われていた。</li>
+  <li><strong>Transformer</strong>: 現在の主流。Attention機構で文中の単語間の関係を効率的に学習。GPT・BERTのベースアーキテクチャ。</li>
+</ul>
+
+<h3>自然言語処理（NLP）</h3>
+<p>コンピュータが人間の言語（テキスト）を理解・生成する技術です。</p>
+<ul>
+  <li><strong>形態素解析</strong>: 文章を意味を持つ最小単位（形態素）に分割する。MeCab・Janomeが代表ツール。</li>
+  <li><strong>Word2Vec</strong>: 単語を数値ベクトルで表現。意味が近い単語はベクトルが近い。</li>
+  <li><strong>BERT</strong>: 双方向Transformerで文脈を理解する事前学習モデル。</li>
+  <li><strong>GPT（生成AIの代表）</strong>: 大規模言語モデル（LLM）。文章生成・質問応答・コード生成を行う。</li>
+</ul>
+
+<h3>生成AI（Generative AI）</h3>
+<p>新しいコンテンツ（テキスト・画像・音声・動画）を生成できるAIです。</p>
+<ul>
+  <li><strong>LLM（大規模言語モデル）</strong>: GPT-4・Claude・Geminiなど。テキスト生成・翻訳・コーディング支援。</li>
+  <li><strong>GAN（敵対的生成ネットワーク）</strong>: 生成器と識別器が競い合いながらリアルな画像・動画を生成する。ディープフェイクも同手法。</li>
+  <li><strong>拡散モデル（Diffusion Model）</strong>: 現在の画像生成AIの主流。Stable Diffusion・DALL-E・Midjourneyが代表。</li>
+  <li><strong>ハルシネーション</strong>: LLMが事実と異なる情報を自信を持って生成する問題。出力の検証が必要。</li>
+</ul>
+
+<h3>転移学習とファインチューニング</h3>
+<ul>
+  <li><strong>転移学習</strong>: 大量データで学習済みのモデル（事前学習モデル）の知識を別のタスクに流用する手法。学習データが少なくても高精度を実現。</li>
+  <li><strong>ファインチューニング</strong>: 事前学習モデルを特定タスク向けのデータで追加学習して最適化すること。</li>
+</ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+CNN＝画像認識、RNN＝時系列・言語、Transformer＝現在のNLPの主流。<br/>
+LLM（大規模言語モデル）はTransformerベース。ハルシネーション（誤情報生成）に注意。<br/>
+転移学習＝学習済みモデルの知識を流用、ファインチューニング＝追加学習で特化。
+</div>
+        `,
+        questions: [
+          {
+            id: 1062,
+            question: 'CNN（畳み込みニューラルネットワーク）が特に得意とする分野はどれか。',
+            choices: [
+              '時系列データの予測（株価・気温の推移）',
+              '強化学習によるゲームの最適戦略の学習',
+              '画像の特徴抽出と画像認識',
+              '数値データのクラスタリング',
+            ],
+            answer: 2,
+            explanation: 'CNNは畳み込み層でエッジ・テクスチャ・形状などの局所的な視覚的特徴を階層的に抽出するため、画像認識・物体検出・医療画像診断に特に優れています。',
+          },
+          {
+            id: 1063,
+            question: 'LLM（大規模言語モデル）における「ハルシネーション」とはどれか。',
+            choices: [
+              'モデルの学習が途中で停止してしまう現象',
+              'モデルが事実と異なる情報を自信をもって生成してしまう問題',
+              'モデルへの不正なプロンプト入力による誤動作',
+              'モデルの推論速度が遅くなる問題',
+            ],
+            answer: 1,
+            explanation: 'ハルシネーションはLLMが存在しない事実・引用・人物などを確信を持って生成してしまう現象です。LLMは「次のトークンを予測する確率モデル」なので、知識が不足している場合でも尤もらしい文章を生成しようとします。出力の事実検証が重要です。',
+          },
+        ],
+      },
+      {
+        id: 'a10-3',
+        title: 'AI倫理とデータ活用',
+        content: `
+<h3>AI倫理の重要性</h3>
+<p>AIが社会に深く浸透する中、技術面だけでなく<strong>倫理・公平性・透明性</strong>が重要な課題になっています。基本情報技術者試験でも近年この分野からの出題が増えています。</p>
+
+<h3>AIバイアス（偏り）</h3>
+<p>訓練データに含まれる偏りがモデルの判断に影響する問題です。</p>
+<ul>
+  <li><strong>データバイアス</strong>: 訓練データに特定グループが過少/過多に含まれることで不公平な判断が生まれる。採用AIが特定性別・人種を不利に扱った事例がある。</li>
+  <li><strong>フィードバックバイアス</strong>: モデルの出力が次の訓練データに影響し、偏りが増幅するループ。</li>
+  <li>対策: 多様なデータの収集・アルゴリズムの公平性監査・人間によるレビュー</li>
+</ul>
+
+<h3>説明可能なAI（XAI: Explainable AI）</h3>
+<p>なぜそのような判断をしたかを人間が理解できる形で説明できるAIです。</p>
+<ul>
+  <li>ブラックボックス問題：ディープラーニングは高精度だが判断根拠が不透明。</li>
+  <li>医療診断・融資審査・採用などの高リスク場面では説明責任が求められる。</li>
+  <li>LIME・SHAPなどの解釈ツールが開発されている。</li>
+</ul>
+
+<h3>個人情報とプライバシー</h3>
+<ul>
+  <li><strong>個人情報保護法</strong>: 個人が識別できる情報の取り扱いを規制。2022年改正で強化。</li>
+  <li><strong>GDPR（EU一般データ保護規則）</strong>: EUの厳格な個人データ保護規則。忘れられる権利・データポータビリティ権を規定。違反時は高額制裁金。</li>
+  <li><strong>匿名加工情報</strong>: 個人を特定できないよう加工した情報。第三者提供が可能になる。</li>
+  <li><strong>差分プライバシー</strong>: データに意図的なノイズを加えて個人が特定されないようにしながら統計的な有用性を保つ技術。</li>
+</ul>
+
+<h3>データの前処理</h3>
+<p>機械学習の精度はデータ品質に大きく依存します（Garbage In, Garbage Out）。</p>
+<ul>
+  <li><strong>欠損値処理</strong>: 平均値・中央値での補完、または欠損行の削除。</li>
+  <li><strong>正規化・標準化</strong>: 特徴量の値域をそろえる。勾配降下法の収束を改善。</li>
+  <li><strong>外れ値処理</strong>: 測定誤差・異常値を除去またはキャップ処理。</li>
+  <li><strong>特徴量エンジニアリング</strong>: ドメイン知識を活用して有用な新しい特徴量を生成する。</li>
+</ul>
+
+<h3>AIに関するガイドライン</h3>
+<ul>
+  <li><strong>AI原則（経産省・総務省）</strong>: 人間中心・安全性・公平性・透明性・アカウンタビリティなどの原則。</li>
+  <li><strong>EU AI法</strong>: リスクレベルに応じたAI規制（高リスクAIは事前審査が必要）。</li>
+  <li><strong>プロンプトインジェクション</strong>: LLMへの悪意ある入力でシステムを誤動作させる攻撃。セキュリティ上の新たな脅威。</li>
+</ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+AIバイアス＝訓練データの偏りがモデルの不公平な判断につながる問題。<br/>
+XAI（説明可能なAI）＝ブラックボックス問題を解決し判断根拠を提示する取り組み。<br/>
+GDPR＝EUの個人データ保護規則。忘れられる権利・データポータビリティが特徴。
+</div>
+        `,
+        questions: [
+          {
+            id: 1064,
+            question: 'AIシステムにおける「バイアス」の説明として最も適切なものはどれか。',
+            choices: [
+              'モデルの計算速度を低下させるハードウェアの問題',
+              '訓練データに含まれる偏りがモデルの判断に影響し、特定グループへの不公平な結果を生む問題',
+              'モデルのパラメータ数が多すぎて過学習が発生する問題',
+              'AIが人間の監督なく自律的に判断を行う問題',
+            ],
+            answer: 1,
+            explanation: 'AIバイアスは訓練データの偏りに起因します。例えば、採用実績データが特定の属性に偏っていると、採用AIもその偏りを学習し不公平な判断を下します。多様なデータ収集と公平性監査が対策です。',
+          },
+          {
+            id: 1065,
+            question: 'GDPRの説明として正しいものはどれか。',
+            choices: [
+              '日本の個人情報保護法の正式名称',
+              'EUで施行された個人データ保護に関する規則で、忘れられる権利などを規定している',
+              'AI開発における倫理基準を定めた国際的な条約',
+              '機械学習モデルの精度基準を定めた規格',
+            ],
+            answer: 1,
+            explanation: 'GDPR（General Data Protection Regulation）はEUの一般データ保護規則です。個人データの収集・処理・利用を厳格に規制し、違反には最大2,000万ユーロまたは全世界売上高の4%の制裁金が課されます。EU在住者のデータを扱う全世界の企業が対象です。',
           },
         ],
       },

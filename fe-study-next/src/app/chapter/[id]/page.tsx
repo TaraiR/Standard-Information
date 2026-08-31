@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { Suspense } from 'react';
 import { curriculum, getChapterById } from '@/data/curriculum';
 import ChapterContent from '@/components/ChapterContent';
 
@@ -60,11 +61,13 @@ export default async function ChapterPage(
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <ChapterContent
-        chapter={chapter}
-        prevChapter={prevChapter}
-        nextChapter={nextChapter}
-      />
+      <Suspense>
+        <ChapterContent
+          chapter={chapter}
+          prevChapter={prevChapter}
+          nextChapter={nextChapter}
+        />
+      </Suspense>
     </>
   );
 }

@@ -4,9 +4,11 @@ import { Question } from '@/data/curriculum';
 
 interface QuizProps {
   questions: Question[];
+  onComplete?: (score: number, total: number, wrongIds: number[]) => void;
+  isReview?: boolean;
 }
 
-const Quiz: React.FC<QuizProps> = ({ questions }) => {
+const Quiz: React.FC<QuizProps> = ({ questions, onComplete, isReview }) => {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
 
@@ -27,9 +29,7 @@ const Quiz: React.FC<QuizProps> = ({ questions }) => {
   };
 
   return (
-    <div className="quiz-section">
-      <h3 className="quiz-title">章末確認問題</h3>
-
+    <div className={`quiz-section${isReview ? ' quiz-review-mode' : ''}`}>
       {questions.map((q, qi) => {
         const selected = answers[q.id];
         const isCorrect = submitted && selected === q.answer;
@@ -72,7 +72,12 @@ const Quiz: React.FC<QuizProps> = ({ questions }) => {
           <button
             className="btn-submit"
             disabled={!allAnswered}
-            onClick={() => setSubmitted(true)}
+            onClick={() => {
+              const finalScore = questions.filter(q => answers[q.id] === q.answer).length;
+              const wrongIds = questions.filter(q => answers[q.id] !== q.answer).map(q => q.id);
+              setSubmitted(true);
+              onComplete?.(finalScore, questions.length, wrongIds);
+            }}
           >
             {allAnswered ? '回答を確認する' : `残り ${questions.length - Object.keys(answers).length} 問未回答`}
           </button>
@@ -85,7 +90,7 @@ const Quiz: React.FC<QuizProps> = ({ questions }) => {
               <span className="score-label">正解</span>
             </div>
             {score === questions.length && (
-              <p className="perfect-msg">完璧です！次の章へ進みましょう。</p>
+              <p className="perfect-msg">{isReview ? '全問正解！苦手問題を克服しました🎉' : '完璧です！次の章へ進みましょう。'}</p>
             )}
             <button className="btn-reset" onClick={reset}>もう一度挑戦する</button>
           </div>

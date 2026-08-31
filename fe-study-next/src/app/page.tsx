@@ -1,6 +1,9 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { curriculum } from '@/data/curriculum';
+import ProgressBanner from '@/components/ProgressBanner';
+import ChapterGrid from '@/components/ChapterGrid';
+
 
 const SITE_URL = 'https://standard-information.vercel.app';
 
@@ -47,9 +50,9 @@ export default function Home() {
         </div>
         <div className="hero-illustration">
           <svg viewBox="0 0 200 200" width="200" height="200">
-            <circle cx="100" cy="100" r="90" fill="#667eea" opacity="0.1"/>
-            <rect x="50" y="60" width="100" height="80" rx="8" fill="white" stroke="#667eea" strokeWidth="2"/>
-            <line x1="65" y1="85" x2="135" y2="85" stroke="#667eea" strokeWidth="2"/>
+            <circle cx="100" cy="100" r="90" fill="#2da3d9" opacity="0.1"/>
+            <rect x="50" y="60" width="100" height="80" rx="8" fill="white" stroke="#2da3d9" strokeWidth="2"/>
+            <line x1="65" y1="85" x2="135" y2="85" stroke="#2da3d9" strokeWidth="2"/>
             <line x1="65" y1="100" x2="120" y2="100" stroke="#e2e8f0" strokeWidth="2"/>
             <line x1="65" y1="115" x2="130" y2="115" stroke="#e2e8f0" strokeWidth="2"/>
             <circle cx="140" cy="145" r="20" fill="#48bb78"/>
@@ -58,25 +61,15 @@ export default function Home() {
         </div>
       </section>
 
+      <ProgressBanner />
+
       <section className="subject-section">
         <h2 className="section-heading">
           <span className="subject-tag subject-a">科目A</span>
           テクノロジ・マネジメント・ストラテジ
         </h2>
         <p className="section-desc">コンピュータ基礎・ネットワーク・セキュリティ・経営など幅広い知識を問われます。</p>
-        <div className="chapter-grid">
-          {subjectA.map((ch, i) => (
-            <Link key={ch.id} href={`/chapter/${ch.id}`} className="chapter-card chapter-card-a">
-              <div className="chapter-num">第{i + 1}章</div>
-              <h3 className="chapter-card-title">{ch.title}</h3>
-              <p className="chapter-card-desc">{ch.description}</p>
-              <div className="chapter-card-footer">
-                <span>{ch.sections.length} セクション</span>
-                <span className="arrow">→</span>
-              </div>
-            </Link>
-          ))}
-        </div>
+        <ChapterGrid chapters={subjectA} subject="A" />
       </section>
 
       <section className="subject-section">
@@ -85,18 +78,16 @@ export default function Home() {
           アルゴリズムとプログラミング
         </h2>
         <p className="section-desc">擬似コードを読み解き、アルゴリズムやデータ構造の問題を解く力を養います。</p>
-        <div className="chapter-grid">
-          {subjectB.map((ch, i) => (
-            <Link key={ch.id} href={`/chapter/${ch.id}`} className="chapter-card chapter-card-b">
-              <div className="chapter-num">第{i + 1}章</div>
-              <h3 className="chapter-card-title">{ch.title}</h3>
-              <p className="chapter-card-desc">{ch.description}</p>
-              <div className="chapter-card-footer">
-                <span>{ch.sections.length} セクション</span>
-                <span className="arrow">→</span>
-              </div>
-            </Link>
-          ))}
+        <ChapterGrid chapters={subjectB} subject="B" />
+      </section>
+
+      <section className="mock-quiz-banner">
+        <div className="mock-quiz-banner-inner">
+          <div className="mock-quiz-banner-text">
+            <h2 className="mock-quiz-banner-title">📝 総合模擬テスト</h2>
+            <p className="mock-quiz-banner-desc">全章からランダムに出題。10・20・30問から選んで本番形式で実力確認。</p>
+          </div>
+          <Link href="/quiz" className="mock-quiz-banner-btn">挑戦する →</Link>
         </div>
       </section>
 

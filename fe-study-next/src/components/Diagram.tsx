@@ -10,9 +10,9 @@ const BinaryDiagram = () => (
     <h4 className="diagram-title">基数変換チャート</h4>
     <svg viewBox="0 0 500 200" className="diagram-svg">
       {/* Boxes */}
-      <rect x="10" y="60" width="110" height="80" rx="8" fill="#667eea" opacity="0.15" stroke="#667eea" strokeWidth="2"/>
+      <rect x="10" y="60" width="110" height="80" rx="8" fill="#2da3d9" opacity="0.15" stroke="#2da3d9" strokeWidth="2"/>
       <text x="65" y="95" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="14">10進数</text>
-      <text x="65" y="115" textAnchor="middle" fill="#667eea" fontSize="20" fontWeight="bold">26</text>
+      <text x="65" y="115" textAnchor="middle" fill="#2da3d9" fontSize="20" fontWeight="bold">26</text>
 
       <rect x="195" y="60" width="110" height="80" rx="8" fill="#48bb78" opacity="0.15" stroke="#48bb78" strokeWidth="2"/>
       <text x="250" y="95" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="14">2進数</text>
@@ -67,16 +67,16 @@ const CpuDiagram = () => (
     <h4 className="diagram-title">コンピュータの5大装置</h4>
     <svg viewBox="0 0 520 240" className="diagram-svg">
       {/* CPU box */}
-      <rect x="170" y="10" width="180" height="130" rx="10" fill="#667eea" opacity="0.1" stroke="#667eea" strokeWidth="2.5"/>
-      <text x="260" y="32" textAnchor="middle" fill="#667eea" fontWeight="bold" fontSize="13">CPU</text>
+      <rect x="170" y="10" width="180" height="130" rx="10" fill="#2da3d9" opacity="0.1" stroke="#2da3d9" strokeWidth="2.5"/>
+      <text x="260" y="32" textAnchor="middle" fill="#2da3d9" fontWeight="bold" fontSize="13">CPU</text>
 
       {/* Control unit */}
-      <rect x="182" y="42" width="72" height="44" rx="6" fill="#667eea" opacity="0.2" stroke="#667eea" strokeWidth="1.5"/>
+      <rect x="182" y="42" width="72" height="44" rx="6" fill="#2da3d9" opacity="0.2" stroke="#2da3d9" strokeWidth="1.5"/>
       <text x="218" y="61" textAnchor="middle" fill="#4a5568" fontSize="11" fontWeight="bold">制御装置</text>
       <text x="218" y="77" textAnchor="middle" fill="#4a5568" fontSize="10">命令解読</text>
 
       {/* ALU */}
-      <rect x="264" y="42" width="72" height="44" rx="6" fill="#667eea" opacity="0.2" stroke="#667eea" strokeWidth="1.5"/>
+      <rect x="264" y="42" width="72" height="44" rx="6" fill="#2da3d9" opacity="0.2" stroke="#2da3d9" strokeWidth="1.5"/>
       <text x="300" y="61" textAnchor="middle" fill="#4a5568" fontSize="11" fontWeight="bold">演算装置</text>
       <text x="300" y="77" textAnchor="middle" fill="#4a5568" fontSize="10">ALU</text>
 
@@ -90,9 +90,9 @@ const CpuDiagram = () => (
       <text x="65" y="127" textAnchor="middle" fill="#744210" fontSize="10">キーボード等</text>
 
       {/* Output */}
-      <rect x="400" y="90" width="110" height="50" rx="8" fill="#9f7aea" opacity="0.15" stroke="#9f7aea" strokeWidth="2"/>
-      <text x="455" y="111" textAnchor="middle" fill="#553c9a" fontWeight="bold" fontSize="12">出力装置</text>
-      <text x="455" y="127" textAnchor="middle" fill="#44337a" fontSize="10">ディスプレイ等</text>
+      <rect x="400" y="90" width="110" height="50" rx="8" fill="#282867" opacity="0.15" stroke="#282867" strokeWidth="2"/>
+      <text x="455" y="111" textAnchor="middle" fill="#1a2060" fontWeight="bold" fontSize="12">出力装置</text>
+      <text x="455" y="127" textAnchor="middle" fill="#1a2060" fontSize="10">ディスプレイ等</text>
 
       {/* Storage */}
       <rect x="185" y="180" width="150" height="44" rx="8" fill="#fc8181" opacity="0.15" stroke="#fc8181" strokeWidth="2"/>
@@ -101,7 +101,7 @@ const CpuDiagram = () => (
 
       {/* Arrows */}
       <path d="M 120 115 L 168 115" stroke="#ed8936" strokeWidth="2" markerEnd="url(#arrow2)"/>
-      <path d="M 352 115 L 398 115" stroke="#9f7aea" strokeWidth="2" markerEnd="url(#arrow2)"/>
+      <path d="M 352 115 L 398 115" stroke="#282867" strokeWidth="2" markerEnd="url(#arrow2)"/>
       <path d="M 260 144 L 260 178" stroke="#fc8181" strokeWidth="2" markerEnd="url(#arrow2)"/>
 
       <defs>
@@ -118,9 +118,9 @@ const OsiDiagram = () => (
     <h4 className="diagram-title">OSI参照モデル</h4>
     <div className="osi-layers">
       {[
-        { num: 7, name: 'アプリケーション層', protocol: 'HTTP, FTP, DNS', color: '#667eea' },
-        { num: 6, name: 'プレゼンテーション層', protocol: '暗号化, 文字コード変換', color: '#764ba2' },
-        { num: 5, name: 'セッション層', protocol: 'セッション管理', color: '#9f7aea' },
+        { num: 7, name: 'アプリケーション層', protocol: 'HTTP, FTP, DNS', color: '#2da3d9' },
+        { num: 6, name: 'プレゼンテーション層', protocol: '暗号化, 文字コード変換', color: '#2090bc' },
+        { num: 5, name: 'セッション層', protocol: 'セッション管理', color: '#282867' },
         { num: 4, name: 'トランスポート層', protocol: 'TCP, UDP', color: '#48bb78' },
         { num: 3, name: 'ネットワーク層', protocol: 'IP, ICMP', color: '#38a169' },
         { num: 2, name: 'データリンク層', protocol: 'Ethernet, MACアドレス', color: '#ed8936' },
@@ -141,13 +141,13 @@ const StackQueueDiagram = () => (
     <h4 className="diagram-title">スタック vs キュー</h4>
     <div className="stack-queue-wrapper">
       <div className="ds-box">
-        <div className="ds-title" style={{ color: '#667eea' }}>スタック（LIFO）</div>
+        <div className="ds-title" style={{ color: '#2da3d9' }}>スタック（LIFO）</div>
         <svg viewBox="0 0 120 160" width="120" height="160">
-          <rect x="20" y="10" width="80" height="30" rx="4" fill="#667eea" opacity="0.8"/>
+          <rect x="20" y="10" width="80" height="30" rx="4" fill="#2da3d9" opacity="0.8"/>
           <text x="60" y="30" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">3</text>
-          <rect x="20" y="48" width="80" height="30" rx="4" fill="#667eea" opacity="0.6"/>
+          <rect x="20" y="48" width="80" height="30" rx="4" fill="#2da3d9" opacity="0.6"/>
           <text x="60" y="68" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">2</text>
-          <rect x="20" y="86" width="80" height="30" rx="4" fill="#667eea" opacity="0.4"/>
+          <rect x="20" y="86" width="80" height="30" rx="4" fill="#2da3d9" opacity="0.4"/>
           <text x="60" y="106" textAnchor="middle" fill="white" fontSize="14" fontWeight="bold">1</text>
           <line x1="20" y1="125" x2="100" y2="125" stroke="#4a5568" strokeWidth="3"/>
           <text x="60" y="145" textAnchor="middle" fill="#718096" fontSize="11">↑ 3から取り出す</text>
@@ -178,9 +178,9 @@ const SecurityDiagram = () => (
     <svg viewBox="0 0 400 220" className="diagram-svg">
       <circle cx="200" cy="100" r="90" fill="none" stroke="#e2e8f0" strokeWidth="2"/>
 
-      <circle cx="200" cy="50" r="55" fill="#667eea" opacity="0.2" stroke="#667eea" strokeWidth="2"/>
+      <circle cx="200" cy="50" r="55" fill="#2da3d9" opacity="0.2" stroke="#2da3d9" strokeWidth="2"/>
       <text x="200" y="42" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="13">機密性</text>
-      <text x="200" y="58" textAnchor="middle" fill="#667eea" fontSize="11">Confidentiality</text>
+      <text x="200" y="58" textAnchor="middle" fill="#2da3d9" fontSize="11">Confidentiality</text>
 
       <circle cx="140" cy="148" r="55" fill="#48bb78" opacity="0.2" stroke="#48bb78" strokeWidth="2"/>
       <text x="140" y="140" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="13">完全性</text>
@@ -216,7 +216,7 @@ const SortDiagram = () => (
                   className="sort-bar"
                   style={{
                     height: `${val * 14}px`,
-                    background: step.highlight.includes(i) ? '#48bb78' : '#667eea',
+                    background: step.highlight.includes(i) ? '#48bb78' : '#2da3d9',
                   }}
                 />
                 <span className="sort-val">{val}</span>
@@ -234,11 +234,11 @@ const FlowchartDiagram = () => (
     <h4 className="diagram-title">制御構造のフローチャート</h4>
     <svg viewBox="0 0 300 240" className="diagram-svg">
       {/* Start */}
-      <ellipse cx="150" cy="20" rx="50" ry="16" fill="#667eea" opacity="0.8"/>
+      <ellipse cx="150" cy="20" rx="50" ry="16" fill="#2da3d9" opacity="0.8"/>
       <text x="150" y="25" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">開始</text>
 
       {/* Process */}
-      <rect x="90" y="55" width="120" height="35" rx="4" fill="#667eea" opacity="0.2" stroke="#667eea" strokeWidth="1.5"/>
+      <rect x="90" y="55" width="120" height="35" rx="4" fill="#2da3d9" opacity="0.2" stroke="#2da3d9" strokeWidth="1.5"/>
       <text x="150" y="78" textAnchor="middle" fill="#4a5568" fontSize="11">x ← 0</text>
 
       {/* Diamond */}
@@ -302,13 +302,13 @@ const OsDiagram = () => (
   <div className="diagram-container">
     <h4 className="diagram-title">OSの主な機能</h4>
     <svg viewBox="0 0 480 200" className="diagram-svg">
-      <rect x="10" y="10" width="460" height="60" rx="8" fill="#667eea" opacity="0.15" stroke="#667eea" strokeWidth="2"/>
+      <rect x="10" y="10" width="460" height="60" rx="8" fill="#2da3d9" opacity="0.15" stroke="#2da3d9" strokeWidth="2"/>
       <text x="240" y="38" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="14">アプリケーション</text>
-      <text x="240" y="58" textAnchor="middle" fill="#667eea" fontSize="12">Word / Chrome / ゲームなど</text>
+      <text x="240" y="58" textAnchor="middle" fill="#2da3d9" fontSize="12">Word / Chrome / ゲームなど</text>
       {[
         { x: 10, label: 'プロセス管理', sub: 'マルチタスク', color: '#48bb78' },
         { x: 125, label: 'メモリ管理', sub: '仮想記憶', color: '#ed8936' },
-        { x: 240, label: 'ファイル管理', sub: 'ディスクI/O', color: '#9f7aea' },
+        { x: 240, label: 'ファイル管理', sub: 'ディスクI/O', color: '#282867' },
         { x: 355, label: 'デバイス管理', sub: 'ドライバ', color: '#fc8181' },
       ].map(item => (
         <g key={item.label}>
@@ -327,7 +327,7 @@ const FilesystemDiagram = () => (
   <div className="diagram-container">
     <h4 className="diagram-title">ディレクトリ構造（ツリー）</h4>
     <svg viewBox="0 0 380 200" className="diagram-svg">
-      <rect x="155" y="10" width="70" height="32" rx="6" fill="#667eea" opacity="0.8"/>
+      <rect x="155" y="10" width="70" height="32" rx="6" fill="#2da3d9" opacity="0.8"/>
       <text x="190" y="31" textAnchor="middle" fill="white" fontSize="13" fontWeight="bold">/ (ルート)</text>
       <line x1="190" y1="42" x2="100" y2="75" stroke="#718096" strokeWidth="1.5"/>
       <line x1="190" y1="42" x2="190" y2="75" stroke="#718096" strokeWidth="1.5"/>
@@ -363,7 +363,7 @@ const DatabaseDiagram = () => (
     <h4 className="diagram-title">テーブルの構造と結合</h4>
     <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
       <div>
-        <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 6, color: '#667eea' }}>社員テーブル</div>
+        <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 6, color: '#2da3d9' }}>社員テーブル</div>
         <table className="truth-table" style={{ fontSize: 13 }}>
           <thead><tr><th>社員ID</th><th>氏名</th><th>部署ID</th></tr></thead>
           <tbody>
@@ -396,7 +396,7 @@ const TransactionDiagram = () => (
     <h4 className="diagram-title">トランザクションの流れ（銀行振込の例）</h4>
     <svg viewBox="0 0 480 180" className="diagram-svg">
       {[
-        { x: 10, label: 'BEGIN', sub: 'トランザクション開始', color: '#667eea' },
+        { x: 10, label: 'BEGIN', sub: 'トランザクション開始', color: '#2da3d9' },
         { x: 130, label: '引き落とし', sub: 'A口座 -1万円', color: '#ed8936' },
         { x: 250, label: '入金', sub: 'B口座 +1万円', color: '#48bb78' },
         { x: 370, label: 'COMMIT', sub: '確定', color: '#38a169' },
@@ -424,9 +424,9 @@ const WaterfallDiagram = () => (
     <h4 className="diagram-title">ウォーターフォールモデル</h4>
     <svg viewBox="0 0 420 220" className="diagram-svg">
       {[
-        { y: 10, label: '要件定義', color: '#667eea' },
-        { y: 55, label: '外部設計', color: '#764ba2' },
-        { y: 100, label: '内部設計', color: '#9f7aea' },
+        { y: 10, label: '要件定義', color: '#2da3d9' },
+        { y: 55, label: '外部設計', color: '#2090bc' },
+        { y: 100, label: '内部設計', color: '#282867' },
         { y: 145, label: '実装・単体テスト', color: '#48bb78' },
         { y: 190, label: '結合・システムテスト', color: '#38a169' },
       ].map((step, i) => (
@@ -444,8 +444,8 @@ const TestingDiagram = () => (
     <h4 className="diagram-title">テストの種類（V字モデル）</h4>
     <svg viewBox="0 0 440 200" className="diagram-svg">
       {[
-        { lx: 10, ly: 20, label: '要件定義', rx: 340, ry: 20, rlabel: '受入テスト', color: '#667eea' },
-        { lx: 50, ly: 60, label: '外部設計', rx: 300, ry: 60, rlabel: 'システムテスト', color: '#9f7aea' },
+        { lx: 10, ly: 20, label: '要件定義', rx: 340, ry: 20, rlabel: '受入テスト', color: '#2da3d9' },
+        { lx: 50, ly: 60, label: '外部設計', rx: 300, ry: 60, rlabel: 'システムテスト', color: '#282867' },
         { lx: 90, ly: 100, label: '内部設計', rx: 260, ry: 100, rlabel: '結合テスト', color: '#ed8936' },
         { lx: 130, ly: 140, label: '実装', rx: 220, ry: 140, rlabel: '単体テスト', color: '#48bb78' },
       ].map(row => (
@@ -474,16 +474,16 @@ const GanttDiagram = () => (
       <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: 13 }}>
         <thead>
           <tr>
-            <th style={{ padding: '6px 10px', background: '#667eea', color: 'white', textAlign: 'left', width: 120 }}>作業</th>
+            <th style={{ padding: '6px 10px', background: '#2da3d9', color: 'white', textAlign: 'left', width: 120 }}>作業</th>
             {['1週', '2週', '3週', '4週', '5週', '6週'].map(w => (
-              <th key={w} style={{ padding: '6px 8px', background: '#667eea', color: 'white', textAlign: 'center', width: 60 }}>{w}</th>
+              <th key={w} style={{ padding: '6px 8px', background: '#2da3d9', color: 'white', textAlign: 'center', width: 60 }}>{w}</th>
             ))}
           </tr>
         </thead>
         <tbody>
           {[
-            { name: '要件定義', start: 0, len: 2, color: '#667eea' },
-            { name: '設計', start: 1, len: 2, color: '#9f7aea' },
+            { name: '要件定義', start: 0, len: 2, color: '#2da3d9' },
+            { name: '設計', start: 1, len: 2, color: '#282867' },
             { name: '実装', start: 2, len: 3, color: '#48bb78' },
             { name: 'テスト', start: 4, len: 2, color: '#ed8936' },
           ].map(task => (
@@ -516,7 +516,7 @@ const ReliabilityDiagram = () => (
       <text x="340" y="52" textAnchor="middle" fill="#c53030" fontWeight="bold" fontSize="13">MTTR（平均修復時間）</text>
       <text x="340" y="70" textAnchor="middle" fill="#c53030" fontSize="12">故障してから復旧までの時間</text>
 
-      <rect x="100" y="110" width="240" height="40" rx="8" fill="#667eea" opacity="0.15" stroke="#667eea" strokeWidth="2"/>
+      <rect x="100" y="110" width="240" height="40" rx="8" fill="#2da3d9" opacity="0.15" stroke="#2da3d9" strokeWidth="2"/>
       <text x="220" y="132" textAnchor="middle" fill="#4a5568" fontSize="13" fontWeight="bold">稼働率 = MTBF ÷ (MTBF + MTTR)</text>
     </svg>
   </div>
@@ -527,7 +527,7 @@ const StrategyDiagram = () => (
     <h4 className="diagram-title">SWOT分析</h4>
     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
       {[
-        { label: 'S 強み', sub: 'Strengths', desc: '自社の競合優位性', color: '#667eea', bg: 'rgba(102,126,234,0.1)' },
+        { label: 'S 強み', sub: 'Strengths', desc: '自社の競合優位性', color: '#2da3d9', bg: 'rgba(45,163,217,0.1)' },
         { label: 'W 弱み', sub: 'Weaknesses', desc: '自社の改善が必要な点', color: '#fc8181', bg: 'rgba(252,129,129,0.1)' },
         { label: 'O 機会', sub: 'Opportunities', desc: '外部環境の有利な変化', color: '#48bb78', bg: 'rgba(72,187,120,0.1)' },
         { label: 'T 脅威', sub: 'Threats', desc: '外部環境の不利な変化', color: '#ed8936', bg: 'rgba(237,137,54,0.1)' },
@@ -550,10 +550,10 @@ const LawDiagram = () => (
         <tr><th>権利の種類</th><th>保護対象</th><th>保護期間</th><th>登録</th></tr>
       </thead>
       <tbody>
-        <tr><td style={{ fontWeight: 700, color: '#667eea' }}>著作権</td><td>プログラム・文章・音楽</td><td>死後70年</td><td>不要</td></tr>
+        <tr><td style={{ fontWeight: 700, color: '#2da3d9' }}>著作権</td><td>プログラム・文章・音楽</td><td>死後70年</td><td>不要</td></tr>
         <tr><td style={{ fontWeight: 700, color: '#48bb78' }}>特許権</td><td>発明（技術的アイデア）</td><td>出願から20年</td><td>必要</td></tr>
         <tr><td style={{ fontWeight: 700, color: '#ed8936' }}>実用新案権</td><td>考案（形状・構造）</td><td>出願から10年</td><td>必要</td></tr>
-        <tr><td style={{ fontWeight: 700, color: '#9f7aea' }}>意匠権</td><td>デザイン（外観）</td><td>登録から25年</td><td>必要</td></tr>
+        <tr><td style={{ fontWeight: 700, color: '#282867' }}>意匠権</td><td>デザイン（外観）</td><td>登録から25年</td><td>必要</td></tr>
         <tr><td style={{ fontWeight: 700, color: '#fc8181' }}>商標権</td><td>ブランド名・ロゴ</td><td>登録から10年（更新可）</td><td>必要</td></tr>
       </tbody>
     </table>
@@ -565,8 +565,8 @@ const RecursionDiagram = () => (
     <h4 className="diagram-title">再帰呼び出しのスタック（階乗(3)の例）</h4>
     <svg viewBox="0 0 440 180" className="diagram-svg">
       {[
-        { x: 10, label: '階乗(3)', sub: '3 × 階乗(2)', color: '#667eea' },
-        { x: 120, label: '階乗(2)', sub: '2 × 階乗(1)', color: '#9f7aea' },
+        { x: 10, label: '階乗(3)', sub: '3 × 階乗(2)', color: '#2da3d9' },
+        { x: 120, label: '階乗(2)', sub: '2 × 階乗(1)', color: '#282867' },
         { x: 230, label: '階乗(1)', sub: '返り値: 1', color: '#48bb78' },
         { x: 340, label: '戻る', sub: '2×1=2, 3×2=6', color: '#ed8936' },
       ].map((step, i) => (
@@ -582,7 +582,7 @@ const RecursionDiagram = () => (
           <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
         </marker>
       </defs>
-      <text x="220" y="160" textAnchor="middle" fill="#667eea" fontSize="13" fontWeight="bold">最終結果: 6</text>
+      <text x="220" y="160" textAnchor="middle" fill="#2da3d9" fontSize="13" fontWeight="bold">最終結果: 6</text>
     </svg>
   </div>
 );
@@ -600,9 +600,9 @@ const TreeDiagram = () => (
       <line x1="130" y1="175" x2="150" y2="195" stroke="#718096" strokeWidth="1"/>
       {/* Nodes */}
       {[
-        { x: 170, y: 20, val: '8', color: '#667eea' },
-        { x: 90, y: 90, val: '3', color: '#9f7aea' },
-        { x: 250, y: 90, val: '10', color: '#9f7aea' },
+        { x: 170, y: 20, val: '8', color: '#2da3d9' },
+        { x: 90, y: 90, val: '3', color: '#282867' },
+        { x: 250, y: 90, val: '10', color: '#282867' },
         { x: 50, y: 155, val: '1', color: '#48bb78' },
         { x: 130, y: 155, val: '6', color: '#48bb78' },
         { x: 110, y: 190, val: '4', color: '#ed8936' },
@@ -622,8 +622,8 @@ const OopDiagram = () => (
   <div className="diagram-container">
     <h4 className="diagram-title">クラスとインスタンスの関係</h4>
     <svg viewBox="0 0 420 180" className="diagram-svg">
-      <rect x="10" y="20" width="130" height="130" rx="8" fill="#667eea" opacity="0.1" stroke="#667eea" strokeWidth="2"/>
-      <text x="75" y="45" textAnchor="middle" fill="#667eea" fontWeight="bold" fontSize="13">クラス（設計図）</text>
+      <rect x="10" y="20" width="130" height="130" rx="8" fill="#2da3d9" opacity="0.1" stroke="#2da3d9" strokeWidth="2"/>
+      <text x="75" y="45" textAnchor="middle" fill="#2da3d9" fontWeight="bold" fontSize="13">クラス（設計図）</text>
       <text x="75" y="65" textAnchor="middle" fill="#4a5568" fontSize="11">動物</text>
       <line x1="20" y1="73" x2="130" y2="73" stroke="#e2e8f0" strokeWidth="1"/>
       <text x="75" y="90" textAnchor="middle" fill="#4a5568" fontSize="11">属性: 名前, 年齢</text>
@@ -659,14 +659,14 @@ const InheritanceDiagram = () => (
   <div className="diagram-container">
     <h4 className="diagram-title">継承とポリモーフィズム</h4>
     <svg viewBox="0 0 380 200" className="diagram-svg">
-      <rect x="130" y="10" width="120" height="60" rx="8" fill="#667eea" opacity="0.2" stroke="#667eea" strokeWidth="2"/>
+      <rect x="130" y="10" width="120" height="60" rx="8" fill="#2da3d9" opacity="0.2" stroke="#2da3d9" strokeWidth="2"/>
       <text x="190" y="35" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="13">動物（親クラス）</text>
       <text x="190" y="55" textAnchor="middle" fill="#718096" fontSize="11">鳴く() → "..."</text>
 
-      <path d="M 120 80 L 80 120" stroke="#667eea" strokeWidth="2"/>
-      <path d="M 260 80 L 300 120" stroke="#667eea" strokeWidth="2"/>
-      <polygon points="120,80 108,80 114,92" fill="white" stroke="#667eea" strokeWidth="1.5"/>
-      <polygon points="260,80 272,80 266,92" fill="white" stroke="#667eea" strokeWidth="1.5"/>
+      <path d="M 120 80 L 80 120" stroke="#2da3d9" strokeWidth="2"/>
+      <path d="M 260 80 L 300 120" stroke="#2da3d9" strokeWidth="2"/>
+      <polygon points="120,80 108,80 114,92" fill="white" stroke="#2da3d9" strokeWidth="1.5"/>
+      <polygon points="260,80 272,80 266,92" fill="white" stroke="#2da3d9" strokeWidth="1.5"/>
 
       <rect x="20" y="120" width="120" height="60" rx="8" fill="#48bb78" opacity="0.2" stroke="#48bb78" strokeWidth="2"/>
       <text x="80" y="145" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="13">犬（子クラス）</text>
@@ -685,9 +685,9 @@ const ComplementDiagram = () => (
   <div className="diagram-container">
     <h4 className="diagram-title">2の補数の求め方（例: +5 → -5）</h4>
     <svg viewBox="0 0 480 160" className="diagram-svg">
-      <rect x="10" y="30" width="120" height="40" rx="6" fill="#667eea" opacity="0.2" stroke="#667eea" strokeWidth="2"/>
+      <rect x="10" y="30" width="120" height="40" rx="6" fill="#2da3d9" opacity="0.2" stroke="#2da3d9" strokeWidth="2"/>
       <text x="70" y="47" textAnchor="middle" fill="#4a5568" fontSize="12" fontWeight="bold">元の数 (+5)</text>
-      <text x="70" y="63" textAnchor="middle" fill="#667eea" fontSize="16" fontWeight="bold" fontFamily="monospace">0101</text>
+      <text x="70" y="63" textAnchor="middle" fill="#2da3d9" fontSize="16" fontWeight="bold" fontFamily="monospace">0101</text>
 
       <path d="M 135 50 L 175 50" stroke="#718096" strokeWidth="2" markerEnd="url(#ac1)"/>
       <text x="155" y="42" textAnchor="middle" fill="#718096" fontSize="11">①反転</text>
@@ -723,7 +723,7 @@ const FloatingPointDiagram = () => (
       <text x="30" y="52" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">符号</text>
       <text x="30" y="68" textAnchor="middle" fill="white" fontSize="11">1bit</text>
 
-      <rect x="55" y="30" width="120" height="50" rx="4" fill="#667eea" opacity="0.7"/>
+      <rect x="55" y="30" width="120" height="50" rx="4" fill="#2da3d9" opacity="0.7"/>
       <text x="115" y="52" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">指数部</text>
       <text x="115" y="68" textAnchor="middle" fill="white" fontSize="11">8bit</text>
 
@@ -748,7 +748,7 @@ const DataSizeDiagram = () => (
         { label: '1 bit', desc: '0か1の1桁', size: 4, color: '#e2e8f0' },
         { label: '1 Byte = 8 bit', desc: '英字1文字（ASCII）', size: 20, color: '#bee3f8' },
         { label: '1 KB = 1,024 B', desc: '短いテキスト程度', size: 40, color: '#90cdf4' },
-        { label: '1 MB = 1,024 KB', desc: '写真1枚〜音楽1曲', size: 65, color: '#667eea' },
+        { label: '1 MB = 1,024 KB', desc: '写真1枚〜音楽1曲', size: 65, color: '#2da3d9' },
         { label: '1 GB = 1,024 MB', desc: '動画10〜20分', size: 90, color: '#553c9a' },
         { label: '1 TB = 1,024 GB', desc: 'HDD/SSDの容量単位', size: 115, color: '#322659' },
       ].map(item => (
@@ -792,7 +792,7 @@ const diagrams: Record<string, React.FC> = {
       <svg viewBox="0 0 480 180" className="diagram-svg">
         {['フェッチ','デコード','実行','書戻し'].map((stage, si) => (
           <g key={stage}>
-            <rect x={10 + si*116} y={10} width={108} height={32} rx={6} fill="#667eea" opacity={0.6 + si*0.1}/>
+            <rect x={10 + si*116} y={10} width={108} height={32} rx={6} fill="#2da3d9" opacity={0.6 + si*0.1}/>
             <text x={10 + si*116 + 54} y={31} textAnchor="middle" fill="white" fontSize={12} fontWeight="bold">{stage}</text>
             {si < 3 && <path d={`M ${118+si*116} 26 L ${126+si*116} 26`} stroke="#718096" strokeWidth={2} markerEnd="url(#ap1)"/>}
           </g>
@@ -801,7 +801,7 @@ const diagrams: Record<string, React.FC> = {
           [0,1,2,3].map(stage => {
             const col = cmd + stage;
             if (col > 6) return null;
-            const colors = ['#667eea','#48bb78','#ed8936','#9f7aea'];
+            const colors = ['#2da3d9','#48bb78','#ed8936','#282867'];
             return (
               <rect key={`${cmd}-${stage}`} x={10 + col*60} y={60 + cmd*28} width={52} height={22} rx={4}
                 fill={colors[cmd]} opacity={0.7}/>
@@ -825,8 +825,8 @@ const diagrams: Record<string, React.FC> = {
       <h4 className="diagram-title">メモリ階層（速度 vs 容量）</h4>
       <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:6 }}>
         {[
-          { label:'レジスタ', speed:'〜1ns', cap:'数十B', w:80, color:'#667eea' },
-          { label:'キャッシュ (L1/L2/L3)', speed:'1〜10ns', cap:'KB〜MB', w:160, color:'#9f7aea' },
+          { label:'レジスタ', speed:'〜1ns', cap:'数十B', w:80, color:'#2da3d9' },
+          { label:'キャッシュ (L1/L2/L3)', speed:'1〜10ns', cap:'KB〜MB', w:160, color:'#282867' },
           { label:'主記憶（RAM）', speed:'〜100ns', cap:'GB', w:260, color:'#48bb78' },
           { label:'SSD', speed:'〜0.1ms', cap:'数百GB', w:340, color:'#ed8936' },
           { label:'HDD', speed:'〜10ms', cap:'TB', w:420, color:'#fc8181' },
@@ -844,7 +844,7 @@ const diagrams: Record<string, React.FC> = {
     <div className="diagram-container">
       <h4 className="diagram-title">バスとDMA転送</h4>
       <svg viewBox="0 0 480 180" className="diagram-svg">
-        <rect x="10" y="60" width="90" height="60" rx="8" fill="#667eea" opacity="0.7"/>
+        <rect x="10" y="60" width="90" height="60" rx="8" fill="#2da3d9" opacity="0.7"/>
         <text x="55" y="88" textAnchor="middle" fill="white" fontSize="13" fontWeight="bold">CPU</text>
         <text x="55" y="106" textAnchor="middle" fill="white" fontSize="10">制御・演算</text>
         <rect x="195" y="60" width="90" height="60" rx="8" fill="#48bb78" opacity="0.7"/>
@@ -853,7 +853,7 @@ const diagrams: Record<string, React.FC> = {
         <rect x="380" y="20" width="90" height="50" rx="8" fill="#ed8936" opacity="0.7"/>
         <text x="425" y="43" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">入出力</text>
         <text x="425" y="60" textAnchor="middle" fill="white" fontSize="10">装置</text>
-        <rect x="380" y="110" width="90" height="50" rx="8" fill="#9f7aea" opacity="0.7"/>
+        <rect x="380" y="110" width="90" height="50" rx="8" fill="#282867" opacity="0.7"/>
         <text x="425" y="133" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">DMA</text>
         <text x="425" y="150" textAnchor="middle" fill="white" fontSize="10">コントローラ</text>
         <line x1="100" y1="90" x2="193" y2="90" stroke="#4a5568" strokeWidth="3"/>
@@ -869,8 +869,8 @@ const diagrams: Record<string, React.FC> = {
       <h4 className="diagram-title">ネットワーク機器とOSI層の対応</h4>
       <svg viewBox="0 0 480 200" className="diagram-svg">
         {[
-          { layer: '第7〜5層', label: 'アプリケーション〜セッション', color: '#667eea', y: 10 },
-          { layer: '第4層', label: 'トランスポート層', color: '#9f7aea', y: 42 },
+          { layer: '第7〜5層', label: 'アプリケーション〜セッション', color: '#2da3d9', y: 10 },
+          { layer: '第4層', label: 'トランスポート層', color: '#282867', y: 42 },
           { layer: '第3層', label: 'ネットワーク層', color: '#48bb78', y: 74 },
           { layer: '第2層', label: 'データリンク層', color: '#ed8936', y: 106 },
           { layer: '第1層', label: '物理層', color: '#fc8181', y: 138 },
@@ -899,8 +899,8 @@ const diagrams: Record<string, React.FC> = {
     <div className="diagram-container">
       <h4 className="diagram-title">IPアドレスの構造（例: 192.168.1.10 /24）</h4>
       <svg viewBox="0 0 480 150" className="diagram-svg">
-        <rect x="10" y="20" width="340" height="44" rx="6" fill="#667eea" opacity="0.2" stroke="#667eea" strokeWidth="2"/>
-        <text x="180" y="38" textAnchor="middle" fill="#667eea" fontSize="12" fontWeight="bold">ネットワーク部（24ビット）</text>
+        <rect x="10" y="20" width="340" height="44" rx="6" fill="#2da3d9" opacity="0.2" stroke="#2da3d9" strokeWidth="2"/>
+        <text x="180" y="38" textAnchor="middle" fill="#2da3d9" fontSize="12" fontWeight="bold">ネットワーク部（24ビット）</text>
         <text x="180" y="54" textAnchor="middle" fill="#4a5568" fontSize="13" fontFamily="monospace">192 . 168 . 1</text>
 
         <rect x="355" y="20" width="115" height="44" rx="6" fill="#48bb78" opacity="0.2" stroke="#48bb78" strokeWidth="2"/>
@@ -919,8 +919,8 @@ const diagrams: Record<string, React.FC> = {
       <h4 className="diagram-title">DNS名前解決の流れ</h4>
       <svg viewBox="0 0 480 170" className="diagram-svg">
         {[
-          { x:10, y:60, label:'クライアント', sub:'PC/スマホ', color:'#667eea' },
-          { x:130, y:60, label:'DNSキャッシュ', sub:'サーバ', color:'#9f7aea' },
+          { x:10, y:60, label:'クライアント', sub:'PC/スマホ', color:'#2da3d9' },
+          { x:130, y:60, label:'DNSキャッシュ', sub:'サーバ', color:'#282867' },
           { x:260, y:10, label:'ルートDNS', sub:'サーバ', color:'#ed8936' },
           { x:260, y:110, label:'権威DNS', sub:'サーバ', color:'#48bb78' },
         ].map(n => (
@@ -962,7 +962,7 @@ const diagrams: Record<string, React.FC> = {
             ['DHCP', '67/68', 'IP自動割当', 'UDP'],
           ].map(([proto, port, use, type]) => (
             <tr key={proto}>
-              <td style={{ fontWeight: 700, color: '#667eea' }}>{proto}</td>
+              <td style={{ fontWeight: 700, color: '#2da3d9' }}>{proto}</td>
               <td style={{ fontFamily: 'monospace', fontWeight: 700 }}>{port}</td>
               <td>{use}</td>
               <td style={{ color: type.includes('TCP') ? '#48bb78' : '#ed8936' }}>{type}</td>
@@ -979,8 +979,8 @@ const diagrams: Record<string, React.FC> = {
         {[
           { cat: 'マルウェア系', items: ['ウイルス', 'ワーム', 'ランサムウェア', 'トロイの木馬'], color: '#fc8181' },
           { cat: 'Web攻撃系', items: ['SQLインジェクション', 'XSS', 'CSRF', 'DoS/DDoS'], color: '#ed8936' },
-          { cat: 'ソーシャル系', items: ['フィッシング', 'スピアフィッシング', 'ビッシング', 'ショルダーハック'], color: '#9f7aea' },
-          { cat: 'パスワード系', items: ['ブルートフォース', '辞書攻撃', 'リスト型攻撃', '中間者攻撃'], color: '#667eea' },
+          { cat: 'ソーシャル系', items: ['フィッシング', 'スピアフィッシング', 'ビッシング', 'ショルダーハック'], color: '#282867' },
+          { cat: 'パスワード系', items: ['ブルートフォース', '辞書攻撃', 'リスト型攻撃', '中間者攻撃'], color: '#2da3d9' },
         ].map(g => (
           <div key={g.cat} style={{ background: `${g.color}18`, border: `2px solid ${g.color}`, borderRadius: 8, padding: '10px 12px' }}>
             <div style={{ color: g.color, fontWeight: 800, fontSize: 13, marginBottom: 6 }}>{g.cat}</div>
@@ -997,14 +997,14 @@ const diagrams: Record<string, React.FC> = {
       <h4 className="diagram-title">共通鍵 vs 公開鍵暗号方式</h4>
       <svg viewBox="0 0 480 180" className="diagram-svg">
         {/* 共通鍵 */}
-        <rect x="10" y="10" width="220" height="150" rx="8" fill="#667eea" opacity="0.08" stroke="#667eea" strokeWidth="2"/>
-        <text x="120" y="32" textAnchor="middle" fill="#667eea" fontWeight="bold" fontSize="13">共通鍵暗号（AES等）</text>
-        <rect x="20" y="42" width="60" height="28" rx="5" fill="#667eea" opacity="0.7"/>
+        <rect x="10" y="10" width="220" height="150" rx="8" fill="#2da3d9" opacity="0.08" stroke="#2da3d9" strokeWidth="2"/>
+        <text x="120" y="32" textAnchor="middle" fill="#2da3d9" fontWeight="bold" fontSize="13">共通鍵暗号（AES等）</text>
+        <rect x="20" y="42" width="60" height="28" rx="5" fill="#2da3d9" opacity="0.7"/>
         <text x="50" y="61" textAnchor="middle" fill="white" fontSize="11">送信者</text>
-        <rect x="150" y="42" width="70" height="28" rx="5" fill="#667eea" opacity="0.7"/>
+        <rect x="150" y="42" width="70" height="28" rx="5" fill="#2da3d9" opacity="0.7"/>
         <text x="185" y="61" textAnchor="middle" fill="white" fontSize="11">受信者</text>
-        <path d="M 82 56 L 148 56" stroke="#667eea" strokeWidth="2" markerEnd="url(#akey)"/>
-        <text x="115" y="50" textAnchor="middle" fill="#667eea" fontSize="10">同じ鍵🔑</text>
+        <path d="M 82 56 L 148 56" stroke="#2da3d9" strokeWidth="2" markerEnd="url(#akey)"/>
+        <text x="115" y="50" textAnchor="middle" fill="#2da3d9" fontSize="10">同じ鍵🔑</text>
         <text x="120" y="100" textAnchor="middle" fill="#4a5568" fontSize="11">✓ 高速・大量データ向き</text>
         <text x="120" y="118" textAnchor="middle" fill="#c53030" fontSize="11">✗ 鍵の安全な配送が課題</text>
         <text x="120" y="148" textAnchor="middle" fill="#718096" fontSize="10">例: AES, DES</text>
@@ -1034,11 +1034,11 @@ const diagrams: Record<string, React.FC> = {
       <h4 className="diagram-title">デジタル署名の仕組み</h4>
       <svg viewBox="0 0 480 180" className="diagram-svg">
         {/* 署名作成 */}
-        <text x="10" y="20" fill="#667eea" fontWeight="bold" fontSize="12">【署名作成：送信者側】</text>
-        <rect x="10" y="28" width="80" height="28" rx="5" fill="#667eea" opacity="0.6"/>
+        <text x="10" y="20" fill="#2da3d9" fontWeight="bold" fontSize="12">【署名作成：送信者側】</text>
+        <rect x="10" y="28" width="80" height="28" rx="5" fill="#2da3d9" opacity="0.6"/>
         <text x="50" y="47" textAnchor="middle" fill="white" fontSize="11">元データ</text>
         <path d="M 92 42 L 112 42" stroke="#718096" strokeWidth="1.5" markerEnd="url(#asig)"/>
-        <rect x="114" y="28" width="80" height="28" rx="5" fill="#9f7aea" opacity="0.6"/>
+        <rect x="114" y="28" width="80" height="28" rx="5" fill="#282867" opacity="0.6"/>
         <text x="154" y="47" textAnchor="middle" fill="white" fontSize="11">ハッシュ化</text>
         <path d="M 196 42 L 216 42" stroke="#718096" strokeWidth="1.5" markerEnd="url(#asig)"/>
         <rect x="218" y="28" width="100" height="28" rx="5" fill="#ed8936" opacity="0.6"/>
@@ -1049,7 +1049,7 @@ const diagrams: Record<string, React.FC> = {
         <rect x="10" y="108" width="80" height="28" rx="5" fill="#48bb78" opacity="0.6"/>
         <text x="50" y="127" textAnchor="middle" fill="white" fontSize="11">受信データ</text>
         <path d="M 92 122 L 112 122" stroke="#718096" strokeWidth="1.5" markerEnd="url(#asig)"/>
-        <rect x="114" y="108" width="80" height="28" rx="5" fill="#9f7aea" opacity="0.6"/>
+        <rect x="114" y="108" width="80" height="28" rx="5" fill="#282867" opacity="0.6"/>
         <text x="154" y="127" textAnchor="middle" fill="white" fontSize="11">ハッシュ化</text>
         <rect x="330" y="108" width="100" height="28" rx="5" fill="#ed8936" opacity="0.6"/>
         <text x="380" y="122" textAnchor="middle" fill="white" fontSize="11">公開鍵で</text>
@@ -1068,7 +1068,7 @@ const diagrams: Record<string, React.FC> = {
     <div className="diagram-container">
       <h4 className="diagram-title">DMZとファイアウォールの構成</h4>
       <svg viewBox="0 0 480 180" className="diagram-svg">
-        <rect x="10" y="60" width="80" height="60" rx="8" fill="#667eea" opacity="0.7"/>
+        <rect x="10" y="60" width="80" height="60" rx="8" fill="#2da3d9" opacity="0.7"/>
         <text x="50" y="87" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">インター</text>
         <text x="50" y="103" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">ネット</text>
         <rect x="130" y="70" width="20" height="40" rx="4" fill="#fc8181" opacity="0.9"/>
@@ -1101,11 +1101,11 @@ const diagrams: Record<string, React.FC> = {
     <div className="diagram-container">
       <h4 className="diagram-title">仮想記憶とページング</h4>
       <svg viewBox="0 0 480 180" className="diagram-svg">
-        <rect x="10" y="10" width="130" height="160" rx="8" fill="#667eea" opacity="0.08" stroke="#667eea" strokeWidth="2"/>
-        <text x="75" y="30" textAnchor="middle" fill="#667eea" fontWeight="bold" fontSize="12">仮想アドレス空間</text>
+        <rect x="10" y="10" width="130" height="160" rx="8" fill="#2da3d9" opacity="0.08" stroke="#2da3d9" strokeWidth="2"/>
+        <text x="75" y="30" textAnchor="middle" fill="#2da3d9" fontWeight="bold" fontSize="12">仮想アドレス空間</text>
         {['ページ0','ページ1','ページ2','ページ3','ページ4'].map((p,i)=>(
           <g key={p}>
-            <rect x="20" y={40+i*26} width="110" height="22" rx="4" fill="#667eea" opacity={0.3+i*0.1}/>
+            <rect x="20" y={40+i*26} width="110" height="22" rx="4" fill="#2da3d9" opacity={0.3+i*0.1}/>
             <text x="75" y={56+i*26} textAnchor="middle" fill="white" fontSize="11">{p}</text>
           </g>
         ))}
@@ -1125,7 +1125,7 @@ const diagrams: Record<string, React.FC> = {
             <text x="425" y={56+i*26} textAnchor="middle" fill="white" fontSize="10">{p.label}</text>
           </g>
         ))}
-        <path d="M 142 80 L 198 80" stroke="#667eea" strokeWidth="1.5" markerEnd="url(#apg)"/>
+        <path d="M 142 80 L 198 80" stroke="#2da3d9" strokeWidth="1.5" markerEnd="url(#apg)"/>
         <path d="M 332 60 L 378 55" stroke="#ed8936" strokeWidth="1.5" strokeDasharray="4" markerEnd="url(#apg)"/>
         <text x="240" y="165" textAnchor="middle" fill="#718096" fontSize="11">使用頻度の低いページをディスクに退避してメモリを節約</text>
         <defs>
@@ -1144,7 +1144,7 @@ const diagrams: Record<string, React.FC> = {
           <thead>
             <tr>
               <th style={{ padding:'8px 12px', background:'#2d3748', color:'white', textAlign:'left' }}>レイヤー</th>
-              <th style={{ padding:'8px 12px', background:'#667eea', color:'white', textAlign:'center' }}>IaaS</th>
+              <th style={{ padding:'8px 12px', background:'#2da3d9', color:'white', textAlign:'center' }}>IaaS</th>
               <th style={{ padding:'8px 12px', background:'#48bb78', color:'white', textAlign:'center' }}>PaaS</th>
               <th style={{ padding:'8px 12px', background:'#ed8936', color:'white', textAlign:'center' }}>SaaS</th>
             </tr>
@@ -1175,10 +1175,10 @@ const diagrams: Record<string, React.FC> = {
       <h4 className="diagram-title">仮想マシン vs コンテナ</h4>
       <svg viewBox="0 0 480 200" className="diagram-svg">
         {/* VM */}
-        <rect x="10" y="10" width="210" height="180" rx="8" fill="#667eea" opacity="0.07" stroke="#667eea" strokeWidth="2"/>
-        <text x="115" y="30" textAnchor="middle" fill="#667eea" fontWeight="bold" fontSize="13">仮想マシン（VM）</text>
+        <rect x="10" y="10" width="210" height="180" rx="8" fill="#2da3d9" opacity="0.07" stroke="#2da3d9" strokeWidth="2"/>
+        <text x="115" y="30" textAnchor="middle" fill="#2da3d9" fontWeight="bold" fontSize="13">仮想マシン（VM）</text>
         {['アプリA','ゲストOS','アプリB','ゲストOS'].map((l,i)=>(
-          <rect key={i} x="20" y={40+i*30} width="85" height="25" rx="4" fill={i%2===0?'#667eea':'#9f7aea'} opacity="0.6"/>
+          <rect key={i} x="20" y={40+i*30} width="85" height="25" rx="4" fill={i%2===0?'#2da3d9':'#282867'} opacity="0.6"/>
         ))}
         {['アプリA','ゲストOS','アプリB','ゲストOS'].map((l,i)=>(
           <text key={i} x="62" y={57+i*30} textAnchor="middle" fill="white" fontSize="11">{l}</text>
@@ -1207,8 +1207,8 @@ const diagrams: Record<string, React.FC> = {
     <div className="diagram-container">
       <h4 className="diagram-title">ER図の例（社員と部署）</h4>
       <svg viewBox="0 0 480 160" className="diagram-svg">
-        <rect x="20" y="40" width="140" height="80" rx="8" fill="#667eea" opacity="0.15" stroke="#667eea" strokeWidth="2"/>
-        <text x="90" y="65" textAnchor="middle" fill="#667eea" fontWeight="bold" fontSize="13">社員</text>
+        <rect x="20" y="40" width="140" height="80" rx="8" fill="#2da3d9" opacity="0.15" stroke="#2da3d9" strokeWidth="2"/>
+        <text x="90" y="65" textAnchor="middle" fill="#2da3d9" fontWeight="bold" fontSize="13">社員</text>
         <text x="90" y="83" textAnchor="middle" fill="#4a5568" fontSize="11">社員ID (PK)</text>
         <text x="90" y="98" textAnchor="middle" fill="#4a5568" fontSize="11">氏名, 年齢</text>
         <text x="90" y="113" textAnchor="middle" fill="#e53e3e" fontSize="11">部署ID (FK)</text>
@@ -1229,10 +1229,10 @@ const diagrams: Record<string, React.FC> = {
       <h4 className="diagram-title">NoSQLの種類と用途</h4>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
         {[
-          { type: 'キーバリュー型', example: 'Redis, DynamoDB', use: 'セッション・キャッシュ', color: '#667eea' },
+          { type: 'キーバリュー型', example: 'Redis, DynamoDB', use: 'セッション・キャッシュ', color: '#2da3d9' },
           { type: 'ドキュメント型', example: 'MongoDB, Firestore', use: 'WebアプリのデータAPI', color: '#48bb78' },
           { type: 'カラム型', example: 'Cassandra, HBase', use: 'ビッグデータ・IoT分析', color: '#ed8936' },
-          { type: 'グラフ型', example: 'Neo4j', use: 'SNS関係・推薦エンジン', color: '#9f7aea' },
+          { type: 'グラフ型', example: 'Neo4j', use: 'SNS関係・推薦エンジン', color: '#282867' },
         ].map(n => (
           <div key={n.type} style={{ border: `2px solid ${n.color}`, borderRadius: 8, padding: '10px 12px', background: `${n.color}10` }}>
             <div style={{ color: n.color, fontWeight: 800, fontSize: 13 }}>{n.type}</div>
@@ -1257,7 +1257,7 @@ const diagrams: Record<string, React.FC> = {
             ['状態遷移図','オブジェクトの状態変化','状態機械の設計'],
           ].map(([name,desc,use])=>(
             <tr key={name}>
-              <td style={{fontWeight:700,color:'#667eea'}}>{name}</td>
+              <td style={{fontWeight:700,color:'#2da3d9'}}>{name}</td>
               <td style={{fontSize:12}}>{desc}</td>
               <td style={{fontSize:11,color:'#718096'}}>{use}</td>
             </tr>
@@ -1271,8 +1271,8 @@ const diagrams: Record<string, React.FC> = {
       <h4 className="diagram-title">ITILのサービスライフサイクル</h4>
       <svg viewBox="0 0 480 180" className="diagram-svg">
         {[
-          {x:190,y:10,label:'サービス戦略',color:'#667eea'},
-          {x:340,y:60,label:'サービス設計',color:'#9f7aea'},
+          {x:190,y:10,label:'サービス戦略',color:'#2da3d9'},
+          {x:340,y:60,label:'サービス設計',color:'#282867'},
           {x:280,y:130,label:'サービス移行',color:'#48bb78'},
           {x:100,y:130,label:'サービス運用',color:'#ed8936'},
           {x:40,y:60,label:'継続的改善',color:'#fc8181'},
@@ -1285,7 +1285,7 @@ const diagrams: Record<string, React.FC> = {
             </g>
           );
         })}
-        <text x="240" y="100" textAnchor="middle" fill="#667eea" fontSize="14" fontWeight="bold">ITIL</text>
+        <text x="240" y="100" textAnchor="middle" fill="#2da3d9" fontSize="14" fontWeight="bold">ITIL</text>
         <text x="240" y="118" textAnchor="middle" fill="#718096" fontSize="11">サービスライフサイクル</text>
       </svg>
     </div>
@@ -1295,8 +1295,8 @@ const diagrams: Record<string, React.FC> = {
       <h4 className="diagram-title">エンタープライズアーキテクチャ（EA）の4層</h4>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         {[
-          { label: 'ビジネスアーキテクチャ', desc: '業務プロセス・組織・業務ルール', color: '#667eea' },
-          { label: 'データアーキテクチャ', desc: 'データの構造・関係・流れ', color: '#9f7aea' },
+          { label: 'ビジネスアーキテクチャ', desc: '業務プロセス・組織・業務ルール', color: '#2da3d9' },
+          { label: 'データアーキテクチャ', desc: 'データの構造・関係・流れ', color: '#282867' },
           { label: 'アプリケーションアーキテクチャ', desc: 'システム・アプリの全体像と関係', color: '#48bb78' },
           { label: 'テクノロジアーキテクチャ', desc: 'インフラ・HW・OS・NW の技術基盤', color: '#ed8936' },
         ].map(l => (
@@ -1316,7 +1316,7 @@ const diagrams: Record<string, React.FC> = {
         {/* Graph structure */}
         {[[240,20],[120,80],[360,80],[60,150],[180,150],[300,150],[420,150]].map(([cx,cy],i)=>(
           <g key={i}>
-            <circle cx={cx} cy={cy} r={22} fill={i===0?'#667eea':'#e2e8f0'} stroke="#718096" strokeWidth={1.5}/>
+            <circle cx={cx} cy={cy} r={22} fill={i===0?'#2da3d9':'#e2e8f0'} stroke="#718096" strokeWidth={1.5}/>
             <text x={cx} y={cy+5} textAnchor="middle" fill={i===0?'white':'#4a5568'} fontSize={13} fontWeight="bold">{i+1}</text>
           </g>
         ))}
@@ -1332,7 +1332,7 @@ const diagrams: Record<string, React.FC> = {
       <h4 className="diagram-title">GoFデザインパターンの分類</h4>
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8 }}>
         {[
-          { cat: '生成パターン', patterns: ['Singleton','Factory Method','Abstract Factory','Builder','Prototype'], color: '#667eea' },
+          { cat: '生成パターン', patterns: ['Singleton','Factory Method','Abstract Factory','Builder','Prototype'], color: '#2da3d9' },
           { cat: '構造パターン', patterns: ['Adapter','Decorator','Facade','Composite','Proxy','Bridge','Flyweight'], color: '#48bb78' },
           { cat: '振る舞いパターン', patterns: ['Observer','Strategy','Template Method','Command','Iterator','State'], color: '#ed8936' },
         ].map(g => (
@@ -1349,10 +1349,10 @@ const diagrams: Record<string, React.FC> = {
       <h4 className="diagram-title">配列 vs 連結リストの構造</h4>
       <svg viewBox="0 0 480 180" className="diagram-svg">
         {/* Array */}
-        <text x="10" y="20" fill="#667eea" fontWeight="bold" fontSize="13">配列（連続メモリ）</text>
+        <text x="10" y="20" fill="#2da3d9" fontWeight="bold" fontSize="13">配列（連続メモリ）</text>
         {[10,20,30,40,50].map((v,i) => (
           <g key={i}>
-            <rect x={10+i*80} y={30} width={70} height={44} rx={4} fill="#667eea" opacity={0.7}/>
+            <rect x={10+i*80} y={30} width={70} height={44} rx={4} fill="#2da3d9" opacity={0.7}/>
             <text x={45+i*80} y={48} textAnchor="middle" fill="white" fontSize={10}>idx[{i}]</text>
             <text x={45+i*80} y={65} textAnchor="middle" fill="white" fontSize={16} fontWeight="bold">{v}</text>
           </g>
@@ -1384,7 +1384,7 @@ const diagrams: Record<string, React.FC> = {
         {[2,5,8,12,16,23,38,56].map((v,i) => (
           <g key={i}>
             <rect x={10+i*58} y={10} width={50} height={36} rx={4}
-              fill={i===5?'#48bb78':i===3||i===6?'#ed8936':'#667eea'} opacity={0.6}/>
+              fill={i===5?'#48bb78':i===3||i===6?'#ed8936':'#2da3d9'} opacity={0.6}/>
             <text x={35+i*58} y={24} textAnchor="middle" fill="white" fontSize={10}>idx{i}</text>
             <text x={35+i*58} y={40} textAnchor="middle" fill="white" fontSize={14} fontWeight="bold">{v}</text>
           </g>
