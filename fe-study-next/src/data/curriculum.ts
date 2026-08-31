@@ -2514,6 +2514,198 @@ IDS=検知のみ、IPS=検知＋自動ブロック、WAF=Webアプリ特化。<b
           },
         ],
       },
+      {
+        id: 'a4-6',
+        title: '量子暗号・ゼロトラスト・インシデント対応',
+        content: `
+<h3>量子暗号と耐量子暗号</h3>
+<p>量子コンピュータは現在の公開鍵暗号（RSA・楕円曲線）を短期間で解読できる可能性があり、暗号技術の転換点を迎えています。</p>
+
+<h4>量子コンピュータの脅威</h4>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">暗号方式</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">現在の安全性</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">量子コンピュータへの耐性</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">RSA（公開鍵暗号）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">素因数分解の困難さに依存</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ショアのアルゴリズムで解読可能 ⚠️</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">楕円曲線暗号（ECC）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">離散対数問題の困難さに依存</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ショアのアルゴリズムで解読可能 ⚠️</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">AES-256（共通鍵暗号）</td><td style="padding:5px 8px;border:1px solid var(--color-border)">鍵長256ビット</td><td style="padding:5px 8px;border:1px solid var(--color-border)">グローバーのアルゴリズムで実効鍵長が半減→128ビット相当。引き続き安全とされる ✅</td></tr>
+</table>
+
+<h4>量子鍵配送（QKD: Quantum Key Distribution）</h4>
+<p>量子力学の原理を使って<strong>盗聴が物理的に不可能</strong>な鍵配送を実現する技術です。盗聴しようとすると量子状態が変化し、盗聴の事実を検出できます。BB84プロトコルが代表例です。</p>
+
+<h4>耐量子暗号（PQC: Post-Quantum Cryptography）</h4>
+<p>量子コンピュータでも解読困難な新しい暗号方式。米国NISTが2022〜2024年に標準化を推進しています。</p>
+<ul>
+  <li><strong>格子暗号（Lattice-based）</strong>: CRYSTALS-Kyber / CRYSTALS-Dilithium — NISTが標準化した代表格</li>
+  <li><strong>ハッシュ署名（Hash-based）</strong>: SPHINCS+ — ハッシュ関数の安全性のみに依存</li>
+  <li><strong>特徴</strong>: 既存のインターネットインフラ上で動作可能（量子通信路不要）</li>
+</ul>
+
+<h3>ゼロトラストセキュリティ</h3>
+<p>「<strong>何も信頼しない（Never Trust, Always Verify）</strong>」を原則とするセキュリティモデルです。従来の「境界防御（社内ネットワーク内は安全）」の考え方を根本から変えます。</p>
+
+<h4>従来モデル vs ゼロトラストモデル</h4>
+<table style="border-collapse:collapse;width:100%;margin:8px 0;font-size:0.9em">
+  <tr style="background:var(--color-accent);color:#fff">
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">項目</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">境界防御（従来）</th>
+    <th style="padding:6px 8px;border:1px solid var(--color-border)">ゼロトラスト</th>
+  </tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">信頼の基準</td><td style="padding:5px 8px;border:1px solid var(--color-border)">社内ネットワーク内=信頼</td><td style="padding:5px 8px;border:1px solid var(--color-border)">場所に関わらず毎回検証</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">認証タイミング</td><td style="padding:5px 8px;border:1px solid var(--color-border)">ログイン時のみ</td><td style="padding:5px 8px;border:1px solid var(--color-border)">アクセスごとに継続的に検証</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">テレワーク対応</td><td style="padding:5px 8px;border:1px solid var(--color-border)">VPNで社内に接続</td><td style="padding:5px 8px;border:1px solid var(--color-border)">場所・デバイスを問わず最小権限で接続</td></tr>
+  <tr><td style="padding:5px 8px;border:1px solid var(--color-border)">侵害後の被害</td><td style="padding:5px 8px;border:1px solid var(--color-border)">内部に侵入されると横展開されやすい</td><td style="padding:5px 8px;border:1px solid var(--color-border)">マイクロセグメンテーションで被害を局所化</td></tr>
+</table>
+
+<h4>ゼロトラストの主要技術要素</h4>
+<ul>
+  <li><strong>MFA（多要素認証）</strong>: 認証強化。知識・所持・生体の複数要素を組み合わせる。</li>
+  <li><strong>マイクロセグメンテーション</strong>: ネットワークを細かく分割し、セグメント間の通信を制限。</li>
+  <li><strong>最小権限の原則</strong>: 業務に必要な最小限の権限のみ付与。不要な権限は持たせない。</li>
+  <li><strong>継続的な監視・検証</strong>: SIEM（セキュリティ情報・イベント管理）で異常を常時検知。</li>
+  <li><strong>デバイス健全性の確認</strong>: OSパッチ適用状況・EDR（エンドポイント検出・対応）の導入確認。</li>
+</ul>
+
+<h3>インシデント対応の詳細プロセス</h3>
+<p>NIST SP 800-61 や SANS の定義に基づく標準的な対応フロー：</p>
+
+<h4>① 準備（Preparation）</h4>
+<ul>
+  <li>インシデント対応計画・手順書の整備</li>
+  <li>CSIRTの組織化と役割分担</li>
+  <li>ログ収集基盤（SIEM）の整備</li>
+  <li>連絡体制・エスカレーション経路の確立</li>
+</ul>
+
+<h4>② 検知・分析（Detection & Analysis）</h4>
+<ul>
+  <li>ログ・アラートによるインシデントの発見</li>
+  <li>影響範囲・深刻度（CVSS）の評価</li>
+  <li><strong>IoC（侵害指標）</strong>の収集: 不審なIPアドレス・ファイルハッシュ・ドメインなど</li>
+</ul>
+
+<h4>③ 封じ込め（Containment）</h4>
+<ul>
+  <li><strong>短期封じ込め</strong>: 感染端末をネットワークから切り離す（隔離）</li>
+  <li><strong>長期封じ込め</strong>: システムを維持しつつ攻撃の拡大を防ぐ</li>
+  <li>証拠保全のため<strong>フォレンジクスイメージ</strong>を取得（削除前に必ず実施）</li>
+</ul>
+
+<h4>④ 根絶（Eradication）</h4>
+<ul>
+  <li>マルウェアの除去・バックドアの閉鎖</li>
+  <li>脆弱性へのパッチ適用</li>
+  <li>侵害された認証情報の変更</li>
+</ul>
+
+<h4>⑤ 復旧（Recovery）</h4>
+<ul>
+  <li>クリーンなバックアップからの復元</li>
+  <li>監視を強化した状態でのシステム稼働再開</li>
+</ul>
+
+<h4>⑥ 事後活動（Post-Incident Activity）</h4>
+<ul>
+  <li><strong>ポストモーテム（事後検証）</strong>: 何が起きたか・何がうまくいったか・何を改善するか</li>
+  <li>再発防止策の策定・セキュリティポリシーの更新</li>
+  <li>JPCERT/CC や警察への届出（必要に応じて）</li>
+</ul>
+
+<h3>デジタルフォレンジクス</h3>
+<p>インシデント発生後に証拠を収集・保全・分析する技術領域です。</p>
+<ul>
+  <li><strong>揮発性情報の優先収集</strong>: メモリ（RAM）の内容・実行中プロセス・ネットワーク接続状態は電源断で消える</li>
+  <li><strong>チェーン・オブ・カストディ</strong>: 証拠の収集・移送・保管の記録。法的証拠力の維持に必要</li>
+  <li><strong>ハッシュ値による完全性検証</strong>: 収集した証拠が改ざんされていないことをSHA-256などで証明</li>
+  <li><strong>タイムライン分析</strong>: ファイルのタイムスタンプ（作成・変更・アクセス）から攻撃の経緯を再構築</li>
+</ul>
+
+<div class="point-box">
+<strong>🎯 試験のポイント</strong><br/>
+量子コンピュータはRSA・ECCを脅かすが、AES-256は引き続き有効。<br/>
+ゼロトラスト = 「場所を信頼しない」→ 毎回検証・最小権限・継続的監視。<br/>
+インシデント対応順序: 準備→検知→封じ込め→根絶→復旧→事後活動。<br/>
+フォレンジクスは「揮発性情報を先に」「ハッシュで完全性を確保」が鉄則。
+</div>
+        `,
+        questions: [
+          {
+            id: 1076,
+            question: '量子コンピュータのショアのアルゴリズムによって解読が困難になると考えられる暗号方式はどれか。',
+            choices: [
+              'AES-256（共通鍵暗号）',
+              'RSA（公開鍵暗号）',
+              'ハッシュ関数（SHA-256）',
+              '耐量子暗号（格子暗号）',
+            ],
+            answer: 1,
+            explanation: 'ショアのアルゴリズムは素因数分解や離散対数問題を多項式時間で解けるため、RSA・ECCなどの公開鍵暗号を脅かします。AES-256はグローバーのアルゴリズムで安全性が半減するものの128ビット相当の強度を維持します。格子暗号はそもそも量子コンピュータへの耐性を持つ耐量子暗号です。',
+          },
+          {
+            id: 1077,
+            question: '量子鍵配送（QKD）の特徴として正しいものはどれか。',
+            choices: [
+              '量子コンピュータがあれば誰でも鍵を解読できる',
+              '盗聴しようとすると量子状態が変化し盗聴を検出できる',
+              '既存の公開鍵インフラ（PKI）をそのまま置き換える技術である',
+              '鍵を暗号化して送信することで安全性を確保する',
+            ],
+            answer: 1,
+            explanation: 'QKDは量子力学の不確定性原理・量子複製不可能定理を利用します。盗聴者が量子ビット（光子等）を観測すると量子状態が不可逆に変化するため、盗聴の事実を通信当事者が検出できます。これにより情報理論的に安全な鍵配送が実現します。',
+          },
+          {
+            id: 1078,
+            question: 'ゼロトラストセキュリティモデルの基本原則として正しいものはどれか。',
+            choices: [
+              '社内ネットワーク内のアクセスは信頼し、外部からのアクセスのみ検証する',
+              'VPNで社内に接続すれば全リソースへのアクセスを許可する',
+              '場所・デバイスに関わらず常に認証・認可を行い最小権限を適用する',
+              'ファイアウォールで境界を強固にすることで内部は安全とみなす',
+            ],
+            answer: 2,
+            explanation: 'ゼロトラストは「Never Trust, Always Verify（何も信頼しない、常に検証する）」が原則です。社内ネットワーク内であっても全アクセスを検証し、最小権限の原則を適用します。テレワーク・クラウド利用が増えた現代において有効なモデルです。',
+          },
+          {
+            id: 1079,
+            question: 'ゼロトラストアーキテクチャの主要な技術要素として適切でないものはどれか。',
+            choices: [
+              '多要素認証（MFA）による認証強化',
+              'マイクロセグメンテーションによるネットワーク分割',
+              '社内ネットワーク全体をVPN内に置いて境界を強化する',
+              'SIEMによる継続的な監視と異常検知',
+            ],
+            answer: 2,
+            explanation: 'VPNによる境界強化は従来の「境界防御モデル」の考え方であり、ゼロトラストとは逆の発想です。ゼロトラストでは境界を前提とせず、MFA・マイクロセグメンテーション・最小権限・継続的監視を組み合わせます。',
+          },
+          {
+            id: 1080,
+            question: 'セキュリティインシデント対応において、封じ込め（Containment）フェーズで最初に行うべき行動として適切なものはどれか。',
+            choices: [
+              '脆弱性へのパッチを適用して根本原因を除去する',
+              '感染端末をネットワークから切り離して被害拡大を防ぐ',
+              'システムを完全に初期化して復旧する',
+              'インシデント対応チームを組織化する',
+            ],
+            answer: 1,
+            explanation: '封じ込めフェーズの最初のステップは感染端末のネットワーク隔離（短期封じ込め）です。パッチ適用は根絶フェーズ、システム復元は復旧フェーズの作業です。チームの組織化は準備フェーズで行います。フォレンジクスのためのイメージ取得も封じ込め段階で行う重要作業です。',
+          },
+          {
+            id: 1081,
+            question: 'デジタルフォレンジクスにおける「揮発性情報」として正しいものはどれか。',
+            choices: [
+              'ハードディスクに保存されたログファイル',
+              'OS起動時に読み込まれる設定ファイル',
+              '実行中のプロセスリストとRAM（メモリ）の内容',
+              'ファイルシステム上のタイムスタンプ',
+            ],
+            answer: 2,
+            explanation: '揮発性情報とは電源を切ると消えてしまう情報です。RAM上の実行中プロセス・ネットワーク接続状態・暗号化キー・クリップボードの内容などが該当します。フォレンジクスでは揮発性の高い情報から優先的に収集するのが原則（RFC 3227）です。',
+          },
+        ],
+      },
     ],
   },
   {
