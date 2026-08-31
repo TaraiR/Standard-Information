@@ -6,6 +6,7 @@ import { Chapter, Question } from '@/data/curriculum';
 import Diagram from './Diagram';
 import Quiz from './Quiz';
 import { useProgress, recordStudyDay } from '@/hooks/useProgress';
+import { pastExamGuides } from '@/data/pastExams';
 
 interface Props {
   chapter: Chapter;
@@ -363,6 +364,34 @@ export default function ChapterContent({ chapter, prevChapter, nextChapter }: Pr
                 )}
               </div>
             )}
+
+            {pastExamGuides[chapter.id] && (() => {
+              const guide = pastExamGuides[chapter.id];
+              return (
+                <div className="past-exam-guide">
+                  <p className="past-exam-guide-title">📋 この章の試験ガイド</p>
+                  <div className="past-exam-meta">
+                    <span className="past-exam-badge category">{guide.category}</span>
+                    <span className="past-exam-badge count">{guide.feSection} ｜ {guide.approxCount}</span>
+                  </div>
+                  <div className="past-exam-topics">
+                    <p className="past-exam-topics-label">よく出るテーマ</p>
+                    <ul className="past-exam-topic-list">
+                      {guide.topics.map((t, i) => (
+                        <li key={i} className="past-exam-topic-item">
+                          <span className="past-exam-topic-dot" />
+                          {t}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="past-exam-tip">
+                    <span className="past-exam-tip-icon">💡</span>
+                    <p>{guide.tip}</p>
+                  </div>
+                </div>
+              );
+            })()}
 
             <div className="kakomon-section">
               <p className="kakomon-section-label">📝 過去問で実力確認</p>
