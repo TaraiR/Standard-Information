@@ -3,11 +3,22 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { curriculum } from '@/data/curriculum';
 import type { Chapter, Section } from '@/data/curriculum';
+import { glossaryGroups, termToId } from '@/data/glossary';
+import type { GlossaryTerm } from '@/data/glossary';
 
-interface SearchResult {
+interface ChapterResult {
+  type: 'chapter';
   chapter: Chapter;
   section?: Section;
 }
+
+interface GlossaryResult {
+  type: 'glossary';
+  term: GlossaryTerm;
+  category: string;
+}
+
+type SearchResult = ChapterResult | GlossaryResult;
 
 function htmlToText(html: string): string {
   const div = document.createElement('div');
@@ -15,18 +26,19 @@ function htmlToText(html: string): string {
   return div.innerText || div.textContent || '';
 }
 
-function searchCurriculum(query: string): SearchResult[] {
+function searchAll(query: string): SearchResult[] {
   if (!query.trim()) return [];
   const q = query.toLowerCase();
   const results: SearchResult[] = [];
   const seen = new Set<string>();
 
+  // Search chapters & sections
   for (const chapter of curriculum) {
     const chapKey = chapter.id;
     const chapMatch = chapter.title.toLowerCase().includes(q) || chapter.description.toLowerCase().includes(q);
     let addedChap = false;
     if (chapMatch && !seen.has(chapKey)) {
-      results.push({ chapter });
+      results.push({ type: 'chapter', chapter });
       seen.add(chapKey);
       addedChap = true;
     }
@@ -36,14 +48,33 @@ function searchCurriculum(query: string): SearchResult[] {
       const titleMatch = section.title.toLowerCase().includes(q);
       const contentMatch = !titleMatch && htmlToText(section.content).toLowerCase().includes(q);
       if (titleMatch || contentMatch) {
-        results.push({ chapter, section });
+        results.push({ type: 'chapter', chapter, section });
         seen.add(secKey);
         if (!addedChap) seen.add(chapKey);
       }
     }
   }
 
-  return results.slice(0, 8);
+  // Search glossary terms (cap at 4 so chapters still dominate)
+  let glossaryCount = 0;
+  for (const group of glossaryGroups) {
+    for (const term of group.terms) {
+      if (glossaryCount >= 4) break;
+      const key = 'g:' + term.term;
+      if (seen.has(key)) continue;
+      if (
+        term.term.toLowerCase().includes(q) ||
+        (term.reading && term.reading.toLowerCase().includes(q)) ||
+        term.definition.toLowerCase().includes(q)
+      ) {
+        results.push({ type: 'glossary', term, category: group.category });
+        seen.add(key);
+        glossaryCount++;
+      }
+    }
+  }
+
+  return results.slice(0, 10);
 }
 
 export default function SearchBox() {
@@ -51,7 +82,7 @@ export default function SearchBox() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const ref = useRef<HTMLDivElement>(null);
-  const results = searchCurriculum(query);
+  const results = searchAll(query);
   const hasQuery = query.trim().length > 0;
 
   useEffect(() => {
@@ -63,14 +94,18 @@ export default function SearchBox() {
   }, []);
 
   const navigate = (r: SearchResult) => {
-    const params = new URLSearchParams();
-    if (query.trim()) params.set('q', query.trim());
-    if (r.section) {
-      const idx = r.chapter.sections.findIndex(s => s.id === r.section!.id);
-      if (idx >= 0) params.set('s', String(idx));
+    if (r.type === 'glossary') {
+      router.push(`/glossary#${termToId(r.term.term)}`);
+    } else {
+      const params = new URLSearchParams();
+      if (query.trim()) params.set('q', query.trim());
+      if (r.section) {
+        const idx = r.chapter.sections.findIndex(s => s.id === r.section!.id);
+        if (idx >= 0) params.set('s', String(idx));
+      }
+      const qs = params.toString();
+      router.push(`/chapter/${r.chapter.id}${qs ? `?${qs}` : ''}`);
     }
-    const qs = params.toString();
-    router.push(`/chapter/${r.chapter.id}${qs ? `?${qs}` : ''}`);
     setQuery('');
     setOpen(false);
   };
@@ -93,15 +128,27 @@ export default function SearchBox() {
         <div className="search-dropdown">
           {results.length > 0 ? results.map((r, i) => (
             <button key={i} className="search-result" onClick={() => navigate(r)}>
-              <span className={`search-result-tag subject-tag subject-${r.chapter.subject.toLowerCase()}`}>
-                科目{r.chapter.subject}
-              </span>
-              <div className="search-result-text">
-                <span className="search-result-chapter">{r.chapter.title}</span>
-                {r.section && (
-                  <span className="search-result-section">› {r.section.title}</span>
-                )}
-              </div>
+              {r.type === 'glossary' ? (
+                <>
+                  <span className="search-result-tag search-result-tag-glossary">用語</span>
+                  <div className="search-result-text">
+                    <span className="search-result-chapter">{r.term.term}</span>
+                    <span className="search-result-section">› {r.category}</span>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <span className={`search-result-tag subject-tag subject-${r.chapter.subject.toLowerCase()}`}>
+                    科目{r.chapter.subject}
+                  </span>
+                  <div className="search-result-text">
+                    <span className="search-result-chapter">{r.chapter.title}</span>
+                    {r.section && (
+                      <span className="search-result-section">› {r.section.title}</span>
+                    )}
+                  </div>
+                </>
+              )}
             </button>
           )) : (
             <div className="search-no-results">「{query}」に一致する内容は見つかりませんでした</div>
