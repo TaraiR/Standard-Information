@@ -13,6 +13,16 @@ export const metadata: Metadata = {
   },
   description: '基本情報技術者試験（FE）を図解でわかりやすく解説。科目A・科目B両対応。2進数・ネットワーク・セキュリティ・アルゴリズムなど全13章・100問以上の練習問題付き。完全無料。',
   keywords: ['基本情報技術者試験', '基本情報', 'FE試験', '科目A', '科目B', 'IT資格', '勉強', '無料', '図解', 'アルゴリズム'],
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: '基本情報',
+  },
+  icons: {
+    icon: '/icon.svg',
+    apple: '/icon.svg',
+  },
   openGraph: {
     type: 'website',
     locale: 'ja_JP',
@@ -30,6 +40,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('fe-theme');if(t)document.documentElement.dataset.theme=t;else if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark';}catch(e){}` }} />
         <script dangerouslySetInnerHTML={{ __html: `(function(){var b=document.createElement('button');b.className='scroll-top-btn';b.setAttribute('aria-label','ページ上部へ戻る');b.textContent='↑';b.style.display='none';b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});document.addEventListener('DOMContentLoaded',function(){document.body.appendChild(b);window.addEventListener('scroll',function(){b.style.display=window.scrollY>320?'flex':'none';},{passive:true});});})();` }} />
+        <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}`}} />
         <Navbar />
         <div className="page-wrapper">
           {children}

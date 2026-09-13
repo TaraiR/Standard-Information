@@ -1,0 +1,46 @@
+{
+  "name": "基本情報技術者試験 学習サイト",
+  "short_name": "基本情報",
+  "description": "基本情報技術者試験を図解でわかりやすく学べる無料学習サイト。科目A・科目B両対応、完全無料。",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#feffff",
+  "theme_color": "#282867",
+  "lang": "ja",
+  "categories": ["education"],
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "科目A 学習",
+      "short_name": "科目A",
+      "url": "/chapter/a1",
+      "description": "科目A（テクノロジ・マネジメント・ストラテジ）の学習を始める"
+    },
+    {
+      "name": "科目B 学習",
+      "short_name": "科目B",
+      "url": "/chapter/b1",
+      "description": "科目B（アルゴリズムとプログラミング）の学習を始める"
+    },
+    {
+      "name": "模擬テスト",
+      "short_name": "模擬テスト",
+      "url": "/quiz",
+      "description": "全章から出題される模擬テストに挑戦する"
+    }
+  ]
+}
