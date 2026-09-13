@@ -357,6 +357,35 @@ a:hover { text-decoration: underline; }
 .chapter-est-time { font-size: 11px; color: var(--text-light); opacity: 0.75; white-space: nowrap; }
 .arrow { font-size: 16px; color: var(--primary); }
 
+.chapter-difficulty-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+.chapter-difficulty-dots {
+  display: flex;
+  gap: 3px;
+  align-items: center;
+}
+.chapter-difficulty-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-border, #e2e8f0);
+  display: inline-block;
+  transition: background 0.2s;
+}
+.chapter-difficulty-dot[data-filled="true"] {
+  /* background set inline via JS */
+}
+.chapter-difficulty-label {
+  font-size: 11px;
+  color: var(--text-light);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
 .features-section {
   margin-top: 48px;
   padding: 40px;

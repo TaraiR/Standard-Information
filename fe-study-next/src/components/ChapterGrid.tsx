@@ -3,6 +3,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Chapter } from '@/data/curriculum';
 import { useProgress } from '@/hooks/useProgress';
+import { chapterMeta, DIFFICULTY_COLOR } from '@/data/chapterMeta';
 
 interface Props {
   chapters: Chapter[];
@@ -21,6 +22,7 @@ export default function ChapterGrid({ chapters, subject }: Props) {
         const estMins = ch.sections.length * 3 + totalQuestions;
         const savedPos = (chapterPositions ?? {})[ch.id];
         const inProgress = !done && savedPos !== undefined && savedPos > 0;
+        const meta = chapterMeta[ch.id];
         return (
           <Link
             key={ch.id}
@@ -34,6 +36,21 @@ export default function ChapterGrid({ chapters, subject }: Props) {
             </div>
             <h3 className="chapter-card-title">{ch.title}</h3>
             <p className="chapter-card-desc">{ch.description}</p>
+            {meta && (
+              <div className="chapter-difficulty-row">
+                <span className="chapter-difficulty-dots">
+                  {([1, 2, 3, 4, 5] as const).map(n => (
+                    <span
+                      key={n}
+                      className="chapter-difficulty-dot"
+                      style={n <= meta.difficulty ? { background: DIFFICULTY_COLOR[meta.difficulty] } : undefined}
+                      data-filled={n <= meta.difficulty ? 'true' : 'false'}
+                    />
+                  ))}
+                </span>
+                <span className="chapter-difficulty-label">{meta.difficultyLabel}</span>
+              </div>
+            )}
             <div className="chapter-card-footer">
               <span>{ch.sections.length} セクション</span>
               <span className="chapter-est-time">⏱ 約{estMins}分</span>
