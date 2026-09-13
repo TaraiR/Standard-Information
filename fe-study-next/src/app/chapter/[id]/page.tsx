@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { Suspense } from 'react';
 import { curriculum, getChapterById } from '@/data/curriculum';
 import ChapterContent from '@/components/ChapterContent';
+import { chapterDescriptions } from '@/data/chapterSeo';
 
 const SITE_URL = 'https://standard-information.vercel.app';
 
@@ -21,14 +22,31 @@ export async function generateMetadata(
 
   const chapterIndex = curriculum.findIndex(c => c.id === id) + 1;
   const title = `${chapter.title}【第${chapterIndex}章・科目${chapter.subject}】基本情報技術者試験対策`;
-  const description = chapter.description + ` 図解・練習問題付きで${chapter.title}を徹底解説。基本情報技術者試験（FE試験）完全対策。`;
+  const description = chapterDescriptions[id]
+    ?? chapter.description + ` 図解・練習問題付きで${chapter.title}を徹底解説。基本情報技術者試験（FE試験）完全対策。`;
   const url = `${SITE_URL}/chapter/${id}`;
+  const keywords = [
+    chapter.title, `科目${chapter.subject}`, '基本情報技術者試験', 'FE試験',
+    ...chapter.sections.map(s => s.title),
+  ];
 
   return {
     title,
     description,
+    keywords,
     alternates: { canonical: url },
-    openGraph: { title, description, url },
+    openGraph: {
+      title,
+      description,
+      url,
+      images: [{ url: `${SITE_URL}/chapter/${id}/opengraph-image`, width: 1200, height: 630 }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [`${SITE_URL}/chapter/${id}/opengraph-image`],
+    },
   };
 }
 

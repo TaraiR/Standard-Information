@@ -28,8 +28,9 @@ export const metadata: Metadata = {
     locale: 'ja_JP',
     url: SITE_URL,
     siteName: '基本情報技術者試験 学習サイト',
+    images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: '基本情報技術者試験 完全対策 — 図解でわかる無料学習サイト' }],
   },
-  twitter: { card: 'summary' },
+  twitter: { card: 'summary_large_image' },
   verification: { google: '4qDlChGpmLa1t3TavfRDA-2LIvsEczGg-enqS8oCCJA' },
   robots: { index: true, follow: true },
 };
