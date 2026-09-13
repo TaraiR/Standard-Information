@@ -149,14 +149,41 @@ export default function ChapterContent({ chapter, prevChapter, nextChapter }: Pr
 
   useEffect(() => {
     let touchStartX = 0;
-    const onTouchStart = (e: TouchEvent) => { touchStartX = e.touches[0].clientX; };
+    let touchStartY = 0;
+    let touchTarget: EventTarget | null = null;
+
+    const hasHorizontalScroll = (el: HTMLElement | null): boolean => {
+      let node = el;
+      while (node && node !== document.body) {
+        const style = window.getComputedStyle(node);
+        const ox = style.overflowX;
+        if ((ox === 'auto' || ox === 'scroll') && node.scrollWidth > node.clientWidth) {
+          return true;
+        }
+        node = node.parentElement;
+      }
+      return false;
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touchTarget = e.target;
+    };
+
     const onTouchEnd = (e: TouchEvent) => {
       const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      // Too short, or more vertical than horizontal → ignore
       if (Math.abs(dx) < 60) return;
+      if (Math.abs(dy) > Math.abs(dx) * 0.8) return;
+      // Started on a horizontally scrollable element → ignore
+      if (hasHorizontalScroll(touchTarget as HTMLElement | null)) return;
       const total = chapter.sections.length;
       if (dx < 0 && activeSection < total) changeSection(activeSection + 1);
       if (dx > 0 && activeSection > 0) changeSection(activeSection - 1);
     };
+
     window.addEventListener('touchstart', onTouchStart, { passive: true });
     window.addEventListener('touchend', onTouchEnd, { passive: true });
     return () => {
