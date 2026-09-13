@@ -61,16 +61,39 @@ export default async function ChapterPage(
   const prevChapter = chapterIndex > 0 ? curriculum[chapterIndex - 1] : null;
   const nextChapter = chapterIndex < curriculum.length - 1 ? curriculum[chapterIndex + 1] : null;
 
+  const chapterUrl = `${SITE_URL}/chapter/${id}`;
+  const subjectLabel = chapter.subject === 'A' ? '科目A' : '科目B';
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Course',
     name: chapter.title,
-    description: chapter.description,
+    description: chapterDescriptions[id] ?? chapter.description,
     provider: { '@type': 'Organization', name: '基本情報技術者試験 学習サイト', url: SITE_URL },
-    url: `${SITE_URL}/chapter/${id}`,
+    url: chapterUrl,
     educationalLevel: 'intermediate',
     inLanguage: 'ja',
     about: { '@type': 'Thing', name: '基本情報技術者試験' },
+    teaches: chapter.sections.map(s => s.title),
+    hasPart: chapter.sections.map(s => ({
+      '@type': 'CourseSection',
+      name: s.title,
+    })),
+    isPartOf: {
+      '@type': 'Course',
+      name: '基本情報技術者試験 完全対策',
+      url: SITE_URL,
+    },
+  };
+
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'ホーム', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: subjectLabel, item: `${SITE_URL}/#subject-${chapter.subject.toLowerCase()}` },
+      { '@type': 'ListItem', position: 3, name: chapter.title, item: chapterUrl },
+    ],
   };
 
   return (
@@ -78,6 +101,10 @@ export default async function ChapterPage(
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
       <Suspense>
         <ChapterContent

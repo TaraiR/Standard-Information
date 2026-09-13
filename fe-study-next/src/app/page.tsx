@@ -22,19 +22,38 @@ export default function Home() {
   const subjectA = curriculum.filter(c => c.subject === 'A');
   const subjectB = curriculum.filter(c => c.subject === 'B');
 
-  const jsonLd = {
+  const websiteLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: '基本情報技術者試験 学習サイト',
     url: SITE_URL,
     description: '基本情報技術者試験を図解でわかりやすく解説する無料学習サイト',
+    inLanguage: 'ja',
+  };
+
+  const courseListLd = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: '基本情報技術者試験 学習章一覧',
+    url: SITE_URL,
+    numberOfItems: curriculum.length,
+    itemListElement: curriculum.map((ch, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: ch.title,
+      url: `${SITE_URL}/chapter/${ch.id}`,
+    })),
   };
 
   return (
     <div className="home">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseListLd) }}
       />
 
       <section className="hero">
