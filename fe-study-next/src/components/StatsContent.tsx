@@ -3,10 +3,47 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import { curriculum } from '@/data/curriculum';
 import { useProgress } from '@/hooks/useProgress';
+import { chapterMeta } from '@/data/chapterMeta';
 
 export default function StatsContent() {
   const { completedChapters, quizScores, streakDays, studyDates, resetProgress } = useProgress();
   const [confirmReset, setConfirmReset] = useState(false);
+
+  const exportCSV = () => {
+    const BOM = '﻿';
+    const rows: string[][] = [
+      ['章ID', '章タイトル', '科目', 'セクション数', '難易度', '難易度ラベル', '完了', 'スコア', '合計問題数', '正答率(%)'],
+    ];
+    for (const ch of curriculum) {
+      const score = quizScores[ch.id];
+      const meta = chapterMeta[ch.id];
+      rows.push([
+        ch.id,
+        ch.title,
+        `科目${ch.subject}`,
+        String(ch.sections.length),
+        meta ? String(meta.difficulty) : '',
+        meta ? meta.difficultyLabel : '',
+        completedChapters.includes(ch.id) ? '○' : '×',
+        score ? String(score.score) : '',
+        score ? String(score.total) : '',
+        score ? String(Math.round(score.score / score.total * 100)) : '',
+      ]);
+    }
+    rows.push([]);
+    rows.push(['連続学習日数', String(streakDays)]);
+    rows.push(['学習記録日数', String(studyDates.length)]);
+    rows.push(['最終学習日', studyDates[studyDates.length - 1] ?? '']);
+
+    const csv = BOM + rows.map(r => r.map(c => `"${c.replace(/"/g, '""')}"`).join(',')).join('\r\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `fe-study-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   const totalChapters = curriculum.length;
   const completedCount = completedChapters.length;
@@ -252,6 +289,7 @@ export default function StatsContent() {
 
       <div className="stats-actions">
         <Link href="/quiz" className="btn-go-quiz">📝 模擬テストで腕試し →</Link>
+        <button className="btn-export-csv" onClick={exportCSV}>📥 学習記録を CSV 出力</button>
         <Link href="/" className="btn-go-home">← トップへ戻る</Link>
       </div>
 

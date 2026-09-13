@@ -2260,6 +2260,21 @@ kbd {
   transition: background 0.15s, transform 0.15s;
 }
 .btn-go-quiz:hover { background: var(--primary-dark); transform: translateY(-1px); text-decoration: none; }
+.btn-export-csv {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 24px;
+  background: #2d6a2d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+}
+.btn-export-csv:hover { background: #245224; transform: translateY(-1px); }
 .btn-go-home {
   display: inline-flex;
   align-items: center;
