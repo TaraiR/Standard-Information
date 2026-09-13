@@ -17,9 +17,9 @@ export const chapterMeta: Record<string, ChapterMeta> = {
   a8:  { difficulty: 2, difficultyLabel: 'やや易' },  // マネジメント (PERT計算あり)
   a9:  { difficulty: 2, difficultyLabel: 'やや易' },  // ストラテジ (暗記中心)
   a10: { difficulty: 3, difficultyLabel: '普通' },    // AI・機械学習
-  b1:  { difficulty: 2, difficultyLabel: 'やや易' },  // アルゴリズム基礎
-  b2:  { difficulty: 3, difficultyLabel: '普通' },    // データ構造
-  b3:  { difficulty: 4, difficultyLabel: 'やや難' },  // 探索・整列
+  b1:  { difficulty: 2, difficultyLabel: 'やや易' },  // アルゴリズムとデータ構造
+  b2:  { difficulty: 3, difficultyLabel: '普通' },    // プログラミング基礎
+  b3:  { difficulty: 4, difficultyLabel: 'やや難' },  // 再帰・木・グラフ
   b4:  { difficulty: 3, difficultyLabel: '普通' },    // オブジェクト指向
 };
 
