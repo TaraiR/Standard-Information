@@ -55,7 +55,7 @@ export default async function ChapterPage(
 ) {
   const { id } = await params;
   const chapter = getChapterById(id);
-  if (!chapter) notFound();
+  if (!chapter) return notFound();
 
   const chapterIndex = curriculum.findIndex(c => c.id === id);
   const prevChapter = chapterIndex > 0 ? curriculum[chapterIndex - 1] : null;
