@@ -1738,10 +1738,10 @@ a:hover { text-decoration: underline; }
 }
 [data-theme="dark"] .perfect-msg { color: #4ade80; }
 [data-theme="dark"] .site-footer { background: #020617; }
-[data-theme="dark"] .mock-breakdown-row { background: #0f1923; }
-[data-theme="dark"] .mock-breakdown-row:hover { background: #1a2535; }
-[data-theme="dark"] .mock-count-btn { background: #0f1923; }
-[data-theme="dark"] .mock-count-btn.selected { background: rgba(2,132,199,0.12); }
+[data-theme="dark"] .mock-breakdown-row { background: var(--bg); }
+[data-theme="dark"] .mock-breakdown-row:hover { background: var(--surface); }
+[data-theme="dark"] .mock-count-btn { background: var(--bg); }
+[data-theme="dark"] .mock-count-btn.selected { background: rgba(56,189,248,0.1); }
 [data-theme="dark"] .review-section { border-color: #92400e; }
 [data-theme="dark"] .review-section-header {
   background: #1c1208;
