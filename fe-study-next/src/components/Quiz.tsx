@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Question } from '@/data/curriculum';
 
 interface QuizProps {
@@ -11,11 +11,48 @@ interface QuizProps {
 const Quiz: React.FC<QuizProps> = ({ questions, onComplete, isReview }) => {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
+  const [focusedIdx, setFocusedIdx] = useState(0);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const handleSelect = (qId: number, choiceIdx: number) => {
+  const handleSelect = (qId: number, choiceIdx: number, qArrayIdx: number) => {
     if (submitted) return;
     setAnswers(prev => ({ ...prev, [qId]: choiceIdx }));
+    // Auto-advance focus to next unanswered question
+    const nextUnanswered = questions.findIndex((q, i) => i > qArrayIdx && answers[q.id] === undefined);
+    if (nextUnanswered !== -1) {
+      setFocusedIdx(nextUnanswered);
+      setTimeout(() => cardRefs.current[nextUnanswered]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+    }
   };
+
+  useEffect(() => {
+    if (submitted) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+      const keyMap: Record<string, number> = { a: 0, A: 0, '1': 0, b: 1, B: 1, '2': 1, c: 2, C: 2, '3': 2, d: 3, D: 3, '4': 3 };
+      if (e.key in keyMap) {
+        e.preventDefault();
+        const q = questions[focusedIdx];
+        if (!q || answers[q.id] !== undefined) return;
+        const ci = keyMap[e.key];
+        if (ci < q.choices.length) handleSelect(q.id, ci, focusedIdx);
+      }
+      if (e.key === 'ArrowDown' || e.key === 'Tab') {
+        e.preventDefault();
+        const next = Math.min(focusedIdx + 1, questions.length - 1);
+        setFocusedIdx(next);
+        cardRefs.current[next]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const prev = Math.max(focusedIdx - 1, 0);
+        setFocusedIdx(prev);
+        cardRefs.current[prev]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [submitted, focusedIdx, answers, questions]);
 
   const allAnswered = questions.every(q => answers[q.id] !== undefined);
 
@@ -26,17 +63,27 @@ const Quiz: React.FC<QuizProps> = ({ questions, onComplete, isReview }) => {
   const reset = () => {
     setAnswers({});
     setSubmitted(false);
+    setFocusedIdx(0);
   };
 
   return (
     <div className={`quiz-section${isReview ? ' quiz-review-mode' : ''}`}>
+      {!submitted && questions.length > 1 && (
+        <p className="quiz-kb-hint">⌨️ <kbd>A</kbd><kbd>B</kbd><kbd>C</kbd><kbd>D</kbd> キーで選択 ／ <kbd>↑</kbd><kbd>↓</kbd> で移動</p>
+      )}
       {questions.map((q, qi) => {
         const selected = answers[q.id];
         const isCorrect = submitted && selected === q.answer;
         const isWrong = submitted && selected !== undefined && selected !== q.answer;
+        const isFocused = !submitted && qi === focusedIdx;
 
         return (
-          <div key={q.id} className={`quiz-card ${submitted ? (isCorrect ? 'correct' : isWrong ? 'wrong' : 'unanswered') : ''}`}>
+          <div
+            key={q.id}
+            ref={el => { cardRefs.current[qi] = el; }}
+            className={`quiz-card${submitted ? (isCorrect ? ' correct' : isWrong ? ' wrong' : ' unanswered') : ''}${isFocused ? ' kb-focused' : ''}`}
+            onClick={() => !submitted && setFocusedIdx(qi)}
+          >
             <p className="quiz-question">
               <span className="quiz-num">Q{qi + 1}.</span>
               {q.question.split('\n').map((line, i) => (
@@ -50,7 +97,7 @@ const Quiz: React.FC<QuizProps> = ({ questions, onComplete, isReview }) => {
                 if (submitted && ci === q.answer) cls += ' correct-answer';
                 if (submitted && selected === ci && ci !== q.answer) cls += ' wrong-answer';
                 return (
-                  <button key={ci} className={cls} onClick={() => handleSelect(q.id, ci)}>
+                  <button key={ci} className={cls} onClick={() => handleSelect(q.id, ci, qi)}>
                     <span className="choice-label">{String.fromCharCode(65 + ci)}.</span>
                     {choice}
                   </button>

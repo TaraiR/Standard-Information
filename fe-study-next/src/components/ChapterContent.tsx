@@ -230,6 +230,8 @@ export default function ChapterContent({ chapter, prevChapter, nextChapter }: Pr
                 <tr><td><kbd>F</kbd></td><td>フォーカスモード切替</td></tr>
                 <tr><td><kbd>?</kbd></td><td>このヘルプを表示/閉じる</td></tr>
                 <tr><td><kbd>Esc</kbd></td><td>閉じる</td></tr>
+                <tr><td><kbd>A</kbd><kbd>B</kbd><kbd>C</kbd><kbd>D</kbd></td><td>確認問題の選択肢を選ぶ</td></tr>
+                <tr><td><kbd>↑</kbd> <kbd>↓</kbd></td><td>問題間を移動</td></tr>
               </tbody>
             </table>
           </div>
@@ -336,7 +338,7 @@ export default function ChapterContent({ chapter, prevChapter, nextChapter }: Pr
                     <span key={i} className="confetti-piece" style={{
                       left: `${5 + (i * 5.5) % 90}%`,
                       animationDelay: `${(i * 0.07).toFixed(2)}s`,
-                      background: ['#2da3d9','#282867','#48bb78','#f6ad55','#f56565','#63b3ed'][i % 6],
+                      background: ['#0284c7','#7c3aed','#16a34a','#f59e0b','#ef4444','#38bdf8'][i % 6],
                     }} />
                   ))}
                 </div>
