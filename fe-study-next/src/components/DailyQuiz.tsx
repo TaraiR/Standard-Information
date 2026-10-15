@@ -86,8 +86,7 @@ export default function DailyQuiz() {
     if (current + 1 < DAILY_COUNT) {
       setCurrent(c => c + 1);
     } else {
-      const score = questions.filter((_, i) => answers[i] === questions[i].answer).length
-        + (answers[current] === q.answer ? 1 : 0);
+      const score = questions.filter((_, i) => answers[i] === questions[i].answer).length;
       setCompleted(true);
       try {
         localStorage.setItem(DAILY_KEY, JSON.stringify({ date: dateStr(), score }));

@@ -10,11 +10,11 @@ const SITE_URL = 'https://standard-information.vercel.app';
 
 export const metadata: Metadata = {
   title: '基本情報技術者試験 完全対策 | 図解でわかる無料学習サイト',
-  description: '基本情報技術者試験（FE）を図解・擬似コードでわかりやすく解説。科目A・科目B両対応。全13章・100問以上の練習問題付き。完全無料。',
+  description: '基本情報技術者試験（FE）を図解・擬似コードでわかりやすく解説。科目A・科目B両対応。全14章・300問以上の練習問題・模擬テスト・苦手克服モード付き。完全無料。',
   alternates: { canonical: SITE_URL },
   openGraph: {
     title: '基本情報技術者試験 完全対策 | 図解でわかる無料学習サイト',
-    description: '科目A・科目B対応。図解・練習問題付きで基本情報技術者試験を完全攻略。完全無料。',
+    description: '科目A・科目B対応。図解・300問以上の練習問題・模擬テスト・苦手克服モードで基本情報技術者試験を完全攻略。完全無料。',
     url: SITE_URL,
   },
 };
@@ -64,7 +64,8 @@ export default function Home() {
           <div className="hero-badges">
             <span className="badge badge-a">科目A 対応</span>
             <span className="badge badge-b">科目B 対応</span>
-            <span className="badge badge-q">章末問題付き</span>
+            <span className="badge badge-q">300問以上</span>
+            <span className="badge badge-free">完全無料</span>
           </div>
           <Link href="/chapter/a1" className="btn-start">学習を始める →</Link>
         </div>
@@ -121,9 +122,13 @@ export default function Home() {
         <div className="features-grid">
           {[
             { icon: '🎨', title: '図解つき解説', desc: '難しい概念もSVG図解でひと目でわかる' },
-            { icon: '✏️', title: '章末問題', desc: '各章の終わりに確認問題で定着チェック' },
-            { icon: '💻', title: '擬似コード', desc: '科目Bの擬似コードをステップで解説' },
-            { icon: '📱', title: 'スマホ対応', desc: 'どこでも学べるレスポンシブデザイン' },
+            { icon: '✏️', title: '章末確認問題', desc: '各章・セクションに練習問題（全14章・300問以上）' },
+            { icon: '💻', title: '擬似コード解説', desc: '科目Bの擬似コードをステップで解説' },
+            { icon: '📝', title: '総合模擬テスト', desc: '10/20/30問から選んでタイマー付き本番形式で演習' },
+            { icon: '⚠️', title: '苦手克服モード', desc: '正答率70%未満の章に絞って集中練習' },
+            { icon: '📅', title: '今日の5問', desc: '日替わり5問で毎日の学習習慣をサポート' },
+            { icon: '📊', title: '学習統計', desc: 'スコア推移・連続学習日・アチーブメントを管理' },
+            { icon: '⌨️', title: 'キーボード操作', desc: 'A/B/C/Dキーで答えを素早く選択できる' },
           ].map(f => (
             <div key={f.title} className="feature-card">
               <span className="feature-icon">{f.icon}</span>

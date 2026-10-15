@@ -311,6 +311,7 @@ a:hover { text-decoration: underline; }
 .badge-a { background: rgba(30,58,138,0.07); color: var(--subject-a); border: 1px solid rgba(30,58,138,0.2); }
 .badge-b { background: rgba(6,95,70,0.07); color: var(--subject-b); border: 1px solid rgba(6,95,70,0.2); }
 .badge-q { background: rgba(217,119,6,0.08); color: #b45309; border: 1px solid rgba(217,119,6,0.2); }
+.badge-free { background: rgba(22,163,74,0.08); color: #15803d; border: 1px solid rgba(22,163,74,0.2); }
 
 .btn-start {
   display: inline-block;
