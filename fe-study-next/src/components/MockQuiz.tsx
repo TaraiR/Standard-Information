@@ -26,8 +26,11 @@ export default function MockQuiz() {
   const [answers, setAnswers] = useState<Record<number, number>>({});
   const [submitted, setSubmitted] = useState(false);
   const [timeLeft, setTimeLeft] = useState(0);
+  const [paused, setPaused] = useState(false);
   const [showReview, setShowReview] = useState(false);
+  const [focusedQ, setFocusedQ] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   const allQuestions = useMemo<MockQuestion[]>(() => {
     const all: MockQuestion[] = [];
@@ -50,6 +53,8 @@ export default function MockQuiz() {
     setAnswers({});
     setSubmitted(false);
     setShowReview(false);
+    setPaused(false);
+    setFocusedQ(0);
     setStarted(true);
   };
 
@@ -59,10 +64,11 @@ export default function MockQuiz() {
     setAnswers({});
     setSubmitted(false);
     setTimeLeft(0);
+    setPaused(false);
   };
 
   useEffect(() => {
-    if (!started || submitted) return;
+    if (!started || submitted || paused) return;
     timerRef.current = setInterval(() => {
       setTimeLeft(t => {
         if (t <= 1) {
@@ -75,7 +81,44 @@ export default function MockQuiz() {
       });
     }, 1000);
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
-  }, [started, submitted]);
+  }, [started, submitted, paused]);
+
+  // Keyboard shortcuts for MockQuiz
+  useEffect(() => {
+    if (!started || submitted || paused) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement || e.target instanceof HTMLButtonElement) return;
+      const keyMap: Record<string, number> = { a: 0, A: 0, '1': 0, b: 1, B: 1, '2': 1, c: 2, C: 2, '3': 2, d: 3, D: 3, '4': 3 };
+      if (e.key in keyMap) {
+        e.preventDefault();
+        const mq = questions[focusedQ];
+        if (!mq || answers[focusedQ] !== undefined) return;
+        const ci = keyMap[e.key];
+        if (ci < mq.question.choices.length) {
+          setAnswers(prev => ({ ...prev, [focusedQ]: ci }));
+          const next = questions.findIndex((_, i) => i > focusedQ && answers[i] === undefined);
+          if (next !== -1) {
+            setFocusedQ(next);
+            setTimeout(() => cardRefs.current[next]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+          }
+        }
+      }
+      if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        const n = Math.min(focusedQ + 1, questions.length - 1);
+        setFocusedQ(n);
+        cardRefs.current[n]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+      if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        const n = Math.max(focusedQ - 1, 0);
+        setFocusedQ(n);
+        cardRefs.current[n]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    };
+    window.addEventListener('keydown', handler);
+    return () => window.removeEventListener('keydown', handler);
+  }, [started, submitted, paused, focusedQ, answers, questions]);
 
   const allAnswered = questions.length > 0 && questions.every((_, i) => answers[i] !== undefined);
   const score = submitted ? questions.filter((mq, i) => answers[i] === mq.question.answer).length : 0;
@@ -241,65 +284,114 @@ export default function MockQuiz() {
   const mins = Math.floor(timeLeft / 60);
   const secs = timeLeft % 60;
   const timerWarning = timeLeft <= 60 && timeLeft > 0;
+  const answeredCount = Object.keys(answers).length;
 
   return (
     <div className="mock-quiz">
       <div className="mock-progress-header">
         <span className="mock-progress-text">
-          {questions.length}問中 <strong>{Object.keys(answers).length}問</strong> 回答済み
+          {questions.length}問中 <strong>{answeredCount}問</strong> 回答済み
         </span>
-        <span className={`mock-timer${timerWarning ? ' warning' : ''}`}>
-          ⏱ {mins}:{String(secs).padStart(2, '0')}
-        </span>
+        <div className="mock-timer-group">
+          <span className={`mock-timer${timerWarning ? ' warning' : ''}${paused ? ' paused' : ''}`}>
+            ⏱ {paused ? '一時停止' : `${mins}:${String(secs).padStart(2, '0')}`}
+          </span>
+          <button
+            className={`mock-pause-btn${paused ? ' resume' : ''}`}
+            onClick={() => setPaused(p => !p)}
+            title={paused ? '再開' : '一時停止'}
+          >
+            {paused ? '▶' : '⏸'}
+          </button>
+        </div>
         <div className="mock-progress-bar">
           <div
             className="mock-progress-fill"
-            style={{ width: `${(Object.keys(answers).length / questions.length) * 100}%` }}
+            style={{ width: `${(answeredCount / questions.length) * 100}%` }}
           />
         </div>
       </div>
 
-      {questions.map((mq, qi) => (
-        <div key={qi} className="quiz-card">
-          <div className="mock-q-header">
-            <span className="quiz-num">Q{qi + 1}</span>
-            <Link
-              href={`/chapter/${mq.chapterId}`}
-              className={`subject-tag subject-${mq.subject.toLowerCase()} mock-chapter-tag`}
-              onClick={e => e.stopPropagation()}
-            >
-              {mq.chapterTitle}
-            </Link>
-          </div>
-          <p className="quiz-question" style={{ marginTop: 8 }}>
-            {mq.question.question.split('\n').map((line, i, arr) => (
-              <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
-            ))}
-          </p>
-          <div className="quiz-choices">
-            {mq.question.choices.map((choice, ci) => {
-              let cls = 'choice-btn';
-              if (answers[qi] === ci) cls += ' selected';
-              return (
-                <button key={ci} className={cls} onClick={() => setAnswers(prev => ({ ...prev, [qi]: ci }))}>
-                  <span className="choice-label">{String.fromCharCode(65 + ci)}.</span>
-                  {choice}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      ))}
-
-      <div className="quiz-actions">
-        <button
-          className="btn-submit"
-          disabled={!allAnswered}
-          onClick={() => { setSubmitted(true); recordStudyDay(); }}
-        >
-          {allAnswered ? '回答を確認する' : `残り ${questions.length - Object.keys(answers).length} 問未回答`}
-        </button>
+      {/* Question navigator */}
+      <div className="mock-q-navigator">
+        {questions.map((_, qi) => (
+          <button
+            key={qi}
+            className={`mock-qnav-btn${answers[qi] !== undefined ? ' done' : ''}${qi === focusedQ ? ' current' : ''}`}
+            onClick={() => {
+              setFocusedQ(qi);
+              cardRefs.current[qi]?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+            title={`Q${qi + 1}${answers[qi] !== undefined ? ' ✓' : ''}`}
+          >
+            {qi + 1}
+          </button>
+        ))}
       </div>
+
+      {paused ? (
+        <div className="mock-pause-overlay">
+          <span className="mock-pause-icon">⏸</span>
+          <p className="mock-pause-msg">一時停止中</p>
+          <button className="btn-start-mock" onClick={() => setPaused(false)}>再開する ▶</button>
+        </div>
+      ) : (
+        <>
+          {questions.map((mq, qi) => (
+            <div
+              key={qi}
+              ref={el => { cardRefs.current[qi] = el; }}
+              className={`quiz-card${qi === focusedQ ? ' kb-focused' : ''}`}
+              onClick={() => setFocusedQ(qi)}
+            >
+              <div className="mock-q-header">
+                <span className="quiz-num">Q{qi + 1}</span>
+                <Link
+                  href={`/chapter/${mq.chapterId}`}
+                  className={`subject-tag subject-${mq.subject.toLowerCase()} mock-chapter-tag`}
+                  onClick={e => e.stopPropagation()}
+                >
+                  {mq.chapterTitle}
+                </Link>
+              </div>
+              <p className="quiz-question" style={{ marginTop: 8 }}>
+                {mq.question.question.split('\n').map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
+              </p>
+              <div className="quiz-choices">
+                {mq.question.choices.map((choice, ci) => {
+                  let cls = 'choice-btn';
+                  if (answers[qi] === ci) cls += ' selected';
+                  return (
+                    <button key={ci} className={cls} onClick={() => {
+                      setAnswers(prev => ({ ...prev, [qi]: ci }));
+                      const next = questions.findIndex((_, i) => i > qi && answers[i] === undefined);
+                      if (next !== -1) {
+                        setFocusedQ(next);
+                        setTimeout(() => cardRefs.current[next]?.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 50);
+                      }
+                    }}>
+                      <span className="choice-label">{String.fromCharCode(65 + ci)}.</span>
+                      {choice}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+
+          <div className="quiz-actions">
+            <button
+              className="btn-submit"
+              disabled={!allAnswered}
+              onClick={() => { setSubmitted(true); recordStudyDay(); }}
+            >
+              {allAnswered ? '回答を確認する' : `残り ${questions.length - answeredCount} 問未回答`}
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
