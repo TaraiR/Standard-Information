@@ -3,7 +3,7 @@ import React, { useState, useMemo, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { curriculum } from '@/data/curriculum';
 import type { Question } from '@/data/curriculum';
-import { recordStudyDay } from '@/hooks/useProgress';
+import { recordStudyDay, useProgress } from '@/hooks/useProgress';
 
 interface MockQuestion {
   question: Question;
@@ -19,8 +19,10 @@ function shuffle<T>(arr: T[]): T[] {
 const SECS_PER_10 = 10 * 60;
 
 export default function MockQuiz() {
+  const { quizScores } = useProgress();
   const [count, setCount] = useState<10 | 20 | 30>(10);
   const [subjectFilter, setSubjectFilter] = useState<'all' | 'A' | 'B'>('all');
+  const [weakMode, setWeakMode] = useState(false);
   const [questions, setQuestions] = useState<MockQuestion[]>([]);
   const [started, setStarted] = useState(false);
   const [answers, setAnswers] = useState<Record<number, number>>({});
@@ -44,11 +46,27 @@ export default function MockQuiz() {
     return all;
   }, []);
 
+  const weakChapterIds = useMemo(() => {
+    return curriculum
+      .filter(ch => {
+        const s = quizScores[ch.id];
+        return s && s.score / s.total < 0.7;
+      })
+      .map(ch => ch.id);
+  }, [quizScores]);
+
+  const getPool = () => {
+    let pool = weakMode
+      ? allQuestions.filter(q => weakChapterIds.includes(q.chapterId))
+      : subjectFilter === 'all' ? allQuestions : allQuestions.filter(q => q.subject === subjectFilter);
+    return pool;
+  };
+
   const handleStart = () => {
     if (timerRef.current) clearInterval(timerRef.current);
     const secs = (count / 10) * SECS_PER_10;
     setTimeLeft(secs);
-    const pool = subjectFilter === 'all' ? allQuestions : allQuestions.filter(q => q.subject === subjectFilter);
+    const pool = getPool();
     setQuestions(shuffle(pool).slice(0, Math.min(count, pool.length)));
     setAnswers({});
     setSubmitted(false);
@@ -124,27 +142,67 @@ export default function MockQuiz() {
   const score = submitted ? questions.filter((mq, i) => answers[i] === mq.question.answer).length : 0;
 
   if (!started) {
-    const poolSize = subjectFilter === 'all' ? allQuestions.length : allQuestions.filter(q => q.subject === subjectFilter).length;
+    const poolSize = getPool().length;
+    const weakChapters = curriculum.filter(ch => weakChapterIds.includes(ch.id));
     return (
       <div className="mock-setup">
         <div className="mock-setup-icon">📝</div>
         <h2 className="mock-setup-title">総合模擬テスト</h2>
         <p className="mock-setup-desc">全章からランダムに問題を出題します。本番に近い形式で実力を試しましょう。</p>
 
-        <div className="mock-count-selector">
-          <p className="mock-count-label">科目を選んでください</p>
-          <div className="mock-subject-options">
-            {(['all', 'A', 'B'] as const).map(s => (
-              <button
-                key={s}
-                className={`mock-subject-btn${subjectFilter === s ? ' selected' : ''}`}
-                onClick={() => setSubjectFilter(s)}
-              >
-                {s === 'all' ? '全科目' : `科目${s}`}
-              </button>
-            ))}
+        {/* Weak mode banner */}
+        {weakChapters.length > 0 && (
+          <div className={`mock-weak-banner${weakMode ? ' active' : ''}`}>
+            <div className="mock-weak-banner-info">
+              <span className="mock-weak-banner-icon">⚠️</span>
+              <div>
+                <strong>苦手克服モード</strong>
+                <span className="mock-weak-banner-desc">
+                  正答率70%未満の章（{weakChapters.length}章）から集中出題
+                </span>
+              </div>
+            </div>
+            <button
+              className={`mock-weak-toggle${weakMode ? ' on' : ''}`}
+              onClick={() => setWeakMode(w => !w)}
+            >
+              {weakMode ? 'ON' : 'OFF'}
+            </button>
           </div>
-        </div>
+        )}
+
+        {!weakMode && (
+          <div className="mock-count-selector">
+            <p className="mock-count-label">科目を選んでください</p>
+            <div className="mock-subject-options">
+              {(['all', 'A', 'B'] as const).map(s => (
+                <button
+                  key={s}
+                  className={`mock-subject-btn${subjectFilter === s ? ' selected' : ''}`}
+                  onClick={() => setSubjectFilter(s)}
+                >
+                  {s === 'all' ? '全科目' : `科目${s}`}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {weakMode && weakChapters.length > 0 && (
+          <div className="mock-weak-chapters">
+            {weakChapters.map(ch => {
+              const s = quizScores[ch.id];
+              const pct = s ? Math.round(s.score / s.total * 100) : 0;
+              return (
+                <span key={ch.id} className="mock-weak-chip">
+                  <span className={`subject-tag subject-${ch.subject.toLowerCase()}`}>科目{ch.subject}</span>
+                  {ch.title}
+                  <span className="mock-weak-chip-score">{pct}%</span>
+                </span>
+              );
+            })}
+          </div>
+        )}
 
         <div className="mock-count-selector">
           <p className="mock-count-label">出題数を選んでください <span className="mock-pool-note">（プール: {poolSize}問）</span></p>
@@ -163,7 +221,9 @@ export default function MockQuiz() {
           </div>
         </div>
 
-        <button className="btn-start-mock" onClick={handleStart}>テストを開始する →</button>
+        <button className="btn-start-mock" onClick={handleStart}>
+          {weakMode ? '苦手克服テストを開始 →' : 'テストを開始する →'}
+        </button>
       </div>
     );
   }
