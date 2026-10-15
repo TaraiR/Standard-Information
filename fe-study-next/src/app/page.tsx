@@ -68,14 +68,18 @@ export default function Home() {
           <Link href="/chapter/a1" className="btn-start">学習を始める →</Link>
         </div>
         <div className="hero-illustration">
-          <svg viewBox="0 0 200 200" width="200" height="200">
-            <circle cx="100" cy="100" r="90" fill="#2da3d9" opacity="0.1"/>
-            <rect x="50" y="60" width="100" height="80" rx="8" fill="white" stroke="#2da3d9" strokeWidth="2"/>
-            <line x1="65" y1="85" x2="135" y2="85" stroke="#2da3d9" strokeWidth="2"/>
-            <line x1="65" y1="100" x2="120" y2="100" stroke="#e2e8f0" strokeWidth="2"/>
-            <line x1="65" y1="115" x2="130" y2="115" stroke="#e2e8f0" strokeWidth="2"/>
-            <circle cx="140" cy="145" r="20" fill="#48bb78"/>
-            <text x="140" y="151" textAnchor="middle" fill="white" fontSize="18" fontWeight="bold">✓</text>
+          <svg viewBox="0 0 200 200" width="180" height="180" aria-hidden="true">
+            <circle cx="100" cy="100" r="88" fill="#0284c7" opacity="0.06"/>
+            <rect x="46" y="44" width="108" height="128" rx="8" fill="white" stroke="#e2e8f0" strokeWidth="1.5"/>
+            <rect x="46" y="44" width="108" height="28" rx="8" fill="#0284c7" opacity="0.08"/>
+            <rect x="62" y="86" width="76" height="4" rx="2" fill="#0284c7" opacity="0.45"/>
+            <rect x="62" y="98" width="60" height="3" rx="1.5" fill="#e2e8f0"/>
+            <rect x="62" y="110" width="68" height="3" rx="1.5" fill="#e2e8f0"/>
+            <rect x="62" y="122" width="52" height="3" rx="1.5" fill="#e2e8f0"/>
+            <rect x="62" y="134" width="64" height="3" rx="1.5" fill="#e2e8f0"/>
+            <rect x="62" y="146" width="44" height="3" rx="1.5" fill="#e2e8f0"/>
+            <circle cx="138" cy="152" r="22" fill="#0284c7"/>
+            <path d="M129 152 L136 159 L148 143" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
           </svg>
         </div>
       </section>
