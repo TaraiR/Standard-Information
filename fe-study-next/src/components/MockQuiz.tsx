@@ -20,6 +20,7 @@ const SECS_PER_10 = 10 * 60;
 
 export default function MockQuiz() {
   const [count, setCount] = useState<10 | 20 | 30>(10);
+  const [subjectFilter, setSubjectFilter] = useState<'all' | 'A' | 'B'>('all');
   const [questions, setQuestions] = useState<MockQuestion[]>([]);
   const [started, setStarted] = useState(false);
   const [answers, setAnswers] = useState<Record<number, number>>({});
@@ -44,7 +45,8 @@ export default function MockQuiz() {
     if (timerRef.current) clearInterval(timerRef.current);
     const secs = (count / 10) * SECS_PER_10;
     setTimeLeft(secs);
-    setQuestions(shuffle(allQuestions).slice(0, Math.min(count, allQuestions.length)));
+    const pool = subjectFilter === 'all' ? allQuestions : allQuestions.filter(q => q.subject === subjectFilter);
+    setQuestions(shuffle(pool).slice(0, Math.min(count, pool.length)));
     setAnswers({});
     setSubmitted(false);
     setShowReview(false);
@@ -79,19 +81,37 @@ export default function MockQuiz() {
   const score = submitted ? questions.filter((mq, i) => answers[i] === mq.question.answer).length : 0;
 
   if (!started) {
+    const poolSize = subjectFilter === 'all' ? allQuestions.length : allQuestions.filter(q => q.subject === subjectFilter).length;
     return (
       <div className="mock-setup">
         <div className="mock-setup-icon">📝</div>
         <h2 className="mock-setup-title">総合模擬テスト</h2>
         <p className="mock-setup-desc">全章からランダムに問題を出題します。本番に近い形式で実力を試しましょう。</p>
+
         <div className="mock-count-selector">
-          <p className="mock-count-label">出題数を選んでください</p>
+          <p className="mock-count-label">科目を選んでください</p>
+          <div className="mock-subject-options">
+            {(['all', 'A', 'B'] as const).map(s => (
+              <button
+                key={s}
+                className={`mock-subject-btn${subjectFilter === s ? ' selected' : ''}`}
+                onClick={() => setSubjectFilter(s)}
+              >
+                {s === 'all' ? '全科目' : `科目${s}`}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="mock-count-selector">
+          <p className="mock-count-label">出題数を選んでください <span className="mock-pool-note">（プール: {poolSize}問）</span></p>
           <div className="mock-count-options">
             {([10, 20, 30] as const).map(n => (
               <button
                 key={n}
-                className={`mock-count-btn${count === n ? ' selected' : ''}`}
-                onClick={() => setCount(n)}
+                className={`mock-count-btn${count === n ? ' selected' : ''}${n > poolSize ? ' disabled' : ''}`}
+                onClick={() => n <= poolSize && setCount(n)}
+                disabled={n > poolSize}
               >
                 <span className="mock-count-num">{n}</span>
                 <span className="mock-count-unit">問</span>
@@ -99,6 +119,7 @@ export default function MockQuiz() {
             ))}
           </div>
         </div>
+
         <button className="btn-start-mock" onClick={handleStart}>テストを開始する →</button>
       </div>
     );
