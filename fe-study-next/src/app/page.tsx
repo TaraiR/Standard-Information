@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { curriculum } from '@/data/curriculum';
 import ProgressBanner from '@/components/ProgressBanner';
 import ChapterGrid from '@/components/ChapterGrid';
+import DailyQuiz from '@/components/DailyQuiz';
 
 
 const SITE_URL = 'https://standard-information.vercel.app';
@@ -85,6 +86,7 @@ export default function Home() {
       </section>
 
       <ProgressBanner />
+      <DailyQuiz />
 
       <section className="subject-section">
         <h2 className="section-heading">
