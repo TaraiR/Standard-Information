@@ -16,6 +16,11 @@ import SubnetVisual from './visuals/SubnetVisual';
 import DnsVisual from './visuals/DnsVisual';
 import SwitchVisual from './visuals/SwitchVisual';
 import HttpVisual from './visuals/HttpVisual';
+import SecurityVisual from './visuals/SecurityVisual';
+import AttackVisual from './visuals/AttackVisual';
+import CryptoVisual from './visuals/CryptoVisual';
+import SignatureVisual from './visuals/SignatureVisual';
+import MeasuresVisual from './visuals/MeasuresVisual';
 
 interface DiagramProps {
   type: string;
@@ -54,31 +59,6 @@ const StackQueueDiagram = () => (
         <div className="ds-note">先に入れたものが先に出る</div>
       </div>
     </div>
-  </div>
-);
-
-const SecurityDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">情報セキュリティのCIA</h4>
-    <svg viewBox="0 0 400 220" className="diagram-svg">
-      <circle cx="200" cy="100" r="90" fill="none" stroke="#e2e8f0" strokeWidth="2"/>
-
-      <circle cx="200" cy="50" r="55" fill="#2da3d9" opacity="0.2" stroke="#2da3d9" strokeWidth="2"/>
-      <text x="200" y="42" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="13">機密性</text>
-      <text x="200" y="58" textAnchor="middle" fill="#2da3d9" fontSize="11">Confidentiality</text>
-
-      <circle cx="140" cy="148" r="55" fill="#48bb78" opacity="0.2" stroke="#48bb78" strokeWidth="2"/>
-      <text x="140" y="140" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="13">完全性</text>
-      <text x="140" y="156" textAnchor="middle" fill="#48bb78" fontSize="11">Integrity</text>
-
-      <circle cx="260" cy="148" r="55" fill="#ed8936" opacity="0.2" stroke="#ed8936" strokeWidth="2"/>
-      <text x="260" y="140" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="13">可用性</text>
-      <text x="260" y="156" textAnchor="middle" fill="#ed8936" fontSize="11">Availability</text>
-
-      <text x="200" y="105" textAnchor="middle" fill="#4a5568" fontSize="16" fontWeight="bold">CIA</text>
-
-      <text x="200" y="200" textAnchor="middle" fill="#718096" fontSize="11">情報セキュリティの三大要素</text>
-    </svg>
   </div>
 );
 
@@ -547,7 +527,7 @@ const diagrams: Record<string, React.FC> = {
   cpu: CpuVisual,
   osi: OsiVisual,
   'stack-queue': StackQueueDiagram,
-  security: SecurityDiagram,
+  security: SecurityVisual,
   sort: SortDiagram,
   flowchart: FlowchartDiagram,
   clock: PerformanceVisual,
@@ -572,131 +552,10 @@ const diagrams: Record<string, React.FC> = {
   ipaddress: SubnetVisual,
   dns: DnsVisual,
   http: HttpVisual,
-  attack: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">主な攻撃手法の分類</h4>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-        {[
-          { cat: 'マルウェア系', items: ['ウイルス', 'ワーム', 'ランサムウェア', 'トロイの木馬'], color: '#fc8181' },
-          { cat: 'Web攻撃系', items: ['SQLインジェクション', 'XSS', 'CSRF', 'DoS/DDoS'], color: '#ed8936' },
-          { cat: 'ソーシャル系', items: ['フィッシング', 'スピアフィッシング', 'ビッシング', 'ショルダーハック'], color: '#282867' },
-          { cat: 'パスワード系', items: ['ブルートフォース', '辞書攻撃', 'リスト型攻撃', '中間者攻撃'], color: '#2da3d9' },
-        ].map(g => (
-          <div key={g.cat} style={{ background: `${g.color}18`, border: `2px solid ${g.color}`, borderRadius: 8, padding: '10px 12px' }}>
-            <div style={{ color: g.color, fontWeight: 800, fontSize: 13, marginBottom: 6 }}>{g.cat}</div>
-            {g.items.map(item => (
-              <div key={item} style={{ fontSize: 12, color: '#4a5568', padding: '2px 0' }}>• {item}</div>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  )) as React.FC,
-  crypto: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">共通鍵 vs 公開鍵暗号方式</h4>
-      <svg viewBox="0 0 480 180" className="diagram-svg">
-        {/* 共通鍵 */}
-        <rect x="10" y="10" width="220" height="150" rx="8" fill="#2da3d9" opacity="0.08" stroke="#2da3d9" strokeWidth="2"/>
-        <text x="120" y="32" textAnchor="middle" fill="#2da3d9" fontWeight="bold" fontSize="13">共通鍵暗号（AES等）</text>
-        <rect x="20" y="42" width="60" height="28" rx="5" fill="#2da3d9" opacity="0.7"/>
-        <text x="50" y="61" textAnchor="middle" fill="white" fontSize="11">送信者</text>
-        <rect x="150" y="42" width="70" height="28" rx="5" fill="#2da3d9" opacity="0.7"/>
-        <text x="185" y="61" textAnchor="middle" fill="white" fontSize="11">受信者</text>
-        <path d="M 82 56 L 148 56" stroke="#2da3d9" strokeWidth="2" markerEnd="url(#akey)"/>
-        <text x="115" y="50" textAnchor="middle" fill="#2da3d9" fontSize="10">同じ鍵🔑</text>
-        <text x="120" y="100" textAnchor="middle" fill="#4a5568" fontSize="11">✓ 高速・大量データ向き</text>
-        <text x="120" y="118" textAnchor="middle" fill="#c53030" fontSize="11">✗ 鍵の安全な配送が課題</text>
-        <text x="120" y="148" textAnchor="middle" fill="#718096" fontSize="10">例: AES, DES</text>
-        {/* 公開鍵 */}
-        <rect x="250" y="10" width="220" height="150" rx="8" fill="#48bb78" opacity="0.08" stroke="#48bb78" strokeWidth="2"/>
-        <text x="360" y="32" textAnchor="middle" fill="#48bb78" fontWeight="bold" fontSize="13">公開鍵暗号（RSA等）</text>
-        <rect x="260" y="42" width="60" height="28" rx="5" fill="#48bb78" opacity="0.7"/>
-        <text x="290" y="61" textAnchor="middle" fill="white" fontSize="11">送信者</text>
-        <rect x="390" y="42" width="70" height="28" rx="5" fill="#48bb78" opacity="0.7"/>
-        <text x="425" y="61" textAnchor="middle" fill="white" fontSize="11">受信者</text>
-        <path d="M 322 56 L 388 56" stroke="#48bb78" strokeWidth="2" markerEnd="url(#akey)"/>
-        <text x="355" y="46" textAnchor="middle" fill="#276749" fontSize="10">公開鍵🔓で暗号化</text>
-        <text x="355" y="58" textAnchor="middle" fill="#276749" fontSize="10">秘密鍵🔒で復号</text>
-        <text x="360" y="100" textAnchor="middle" fill="#4a5568" fontSize="11">✓ 鍵配送問題を解決</text>
-        <text x="360" y="118" textAnchor="middle" fill="#c53030" fontSize="11">✗ 低速・少量データ向き</text>
-        <text x="360" y="148" textAnchor="middle" fill="#718096" fontSize="10">例: RSA, ECC</text>
-        <defs>
-          <marker id="akey" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
-          </marker>
-        </defs>
-      </svg>
-    </div>
-  )) as React.FC,
-  'digital-signature': (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">デジタル署名の仕組み</h4>
-      <svg viewBox="0 0 480 180" className="diagram-svg">
-        {/* 署名作成 */}
-        <text x="10" y="20" fill="#2da3d9" fontWeight="bold" fontSize="12">【署名作成：送信者側】</text>
-        <rect x="10" y="28" width="80" height="28" rx="5" fill="#2da3d9" opacity="0.6"/>
-        <text x="50" y="47" textAnchor="middle" fill="white" fontSize="11">元データ</text>
-        <path d="M 92 42 L 112 42" stroke="#718096" strokeWidth="1.5" markerEnd="url(#asig)"/>
-        <rect x="114" y="28" width="80" height="28" rx="5" fill="#282867" opacity="0.6"/>
-        <text x="154" y="47" textAnchor="middle" fill="white" fontSize="11">ハッシュ化</text>
-        <path d="M 196 42 L 216 42" stroke="#718096" strokeWidth="1.5" markerEnd="url(#asig)"/>
-        <rect x="218" y="28" width="100" height="28" rx="5" fill="#ed8936" opacity="0.6"/>
-        <text x="268" y="42" textAnchor="middle" fill="white" fontSize="11">秘密鍵で</text>
-        <text x="268" y="54" textAnchor="middle" fill="white" fontSize="11">暗号化→署名</text>
-        {/* 検証 */}
-        <text x="10" y="100" fill="#48bb78" fontWeight="bold" fontSize="12">【署名検証：受信者側】</text>
-        <rect x="10" y="108" width="80" height="28" rx="5" fill="#48bb78" opacity="0.6"/>
-        <text x="50" y="127" textAnchor="middle" fill="white" fontSize="11">受信データ</text>
-        <path d="M 92 122 L 112 122" stroke="#718096" strokeWidth="1.5" markerEnd="url(#asig)"/>
-        <rect x="114" y="108" width="80" height="28" rx="5" fill="#282867" opacity="0.6"/>
-        <text x="154" y="127" textAnchor="middle" fill="white" fontSize="11">ハッシュ化</text>
-        <rect x="330" y="108" width="100" height="28" rx="5" fill="#ed8936" opacity="0.6"/>
-        <text x="380" y="122" textAnchor="middle" fill="white" fontSize="11">公開鍵で</text>
-        <text x="380" y="134" textAnchor="middle" fill="white" fontSize="11">署名を復号</text>
-        <path d="M 200" stroke="#718096"/>
-        <text x="240" y="160" textAnchor="middle" fill="#4a5568" fontSize="12">ハッシュ値が一致 → 改ざんなし・送信者確認 ✓</text>
-        <defs>
-          <marker id="asig" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
-          </marker>
-        </defs>
-      </svg>
-    </div>
-  )) as React.FC,
-  'security-measures': (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">DMZとファイアウォールの構成</h4>
-      <svg viewBox="0 0 480 180" className="diagram-svg">
-        <rect x="10" y="60" width="80" height="60" rx="8" fill="#2da3d9" opacity="0.7"/>
-        <text x="50" y="87" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">インター</text>
-        <text x="50" y="103" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">ネット</text>
-        <rect x="130" y="70" width="20" height="40" rx="4" fill="#fc8181" opacity="0.9"/>
-        <text x="140" y="115" textAnchor="middle" fill="#c53030" fontSize="10" fontWeight="bold">FW</text>
-        <rect x="185" y="40" width="100" height="100" rx="8" fill="#ed8936" opacity="0.12" stroke="#ed8936" strokeWidth="2" strokeDasharray="6"/>
-        <text x="235" y="58" textAnchor="middle" fill="#ed8936" fontWeight="bold" fontSize="12">DMZ</text>
-        <rect x="198" y="65" width="78" height="50" rx="6" fill="#ed8936" opacity="0.6"/>
-        <text x="237" y="88" textAnchor="middle" fill="white" fontSize="11">Webサーバ</text>
-        <text x="237" y="104" textAnchor="middle" fill="white" fontSize="10">メールサーバ</text>
-        <rect x="330" y="70" width="20" height="40" rx="4" fill="#fc8181" opacity="0.9"/>
-        <text x="340" y="115" textAnchor="middle" fill="#c53030" fontSize="10" fontWeight="bold">FW</text>
-        <rect x="380" y="50" width="90" height="80" rx="8" fill="#48bb78" opacity="0.15" stroke="#48bb78" strokeWidth="2"/>
-        <text x="425" y="75" textAnchor="middle" fill="#276749" fontWeight="bold" fontSize="12">内部LAN</text>
-        <text x="425" y="95" textAnchor="middle" fill="#4a5568" fontSize="11">PC・サーバ</text>
-        <text x="425" y="110" textAnchor="middle" fill="#4a5568" fontSize="11">重要データ</text>
-        <path d="M 92 90 L 128 90" stroke="#718096" strokeWidth="2" markerEnd="url(#afw)"/>
-        <path d="M 152 90 L 183 90" stroke="#718096" strokeWidth="2" markerEnd="url(#afw)"/>
-        <path d="M 287 90 L 328 90" stroke="#718096" strokeWidth="2" markerEnd="url(#afw)"/>
-        <path d="M 352 90 L 378 90" stroke="#718096" strokeWidth="2" markerEnd="url(#afw)"/>
-        <defs>
-          <marker id="afw" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
-          </marker>
-        </defs>
-        <text x="240" y="165" textAnchor="middle" fill="#718096" fontSize="11">外部公開サーバをDMZに置き、内部LANを保護</text>
-      </svg>
-    </div>
-  )) as React.FC,
+  attack: AttackVisual,
+  crypto: CryptoVisual,
+  'digital-signature': SignatureVisual,
+  'security-measures': MeasuresVisual,
   paging: (() => (
     <div className="diagram-container">
       <h4 className="diagram-title">仮想記憶とページング</h4>

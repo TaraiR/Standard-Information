@@ -259,6 +259,9 @@
 .viz-table td.is-left { text-align: left; }
 .viz-table-wrap { overflow-x: auto; }
 
+.viz-sql { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.85rem; word-break: break-all; }
+.viz-sql mark { background: #fde68a; color: #92400e; border-radius: 3px; padding: 0 2px; }
+[data-theme="dark"] .viz-sql mark { background: rgba(253, 230, 138, 0.25); color: #fcd34d; }
 .viz-float-fields { display: flex; flex-wrap: wrap; gap: 10px 14px; margin-top: 12px; }
 .viz-float-fields > div { display: flex; flex-direction: column; gap: 4px; }
 .viz-float-fields small { font-size: 0.75rem; color: var(--text-light); font-weight: 700; }
