@@ -1,0 +1,19 @@
+# Cloudflare Pages のレスポンスヘッダー設定（旧 next.config.ts の headers() から移行）
+# https://developers.cloudflare.com/pages/configuration/headers/
+
+/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://cloudflareinsights.com; frame-ancestors 'none'
+
+# ビルドごとにファイル名が変わる JS/CSS は長期キャッシュ
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# OGP 画像は拡張子なしで出力されるため、画像として配信されるよう明示する
+/opengraph-image
+  Content-Type: image/png
+/chapter/*/opengraph-image
+  Content-Type: image/png

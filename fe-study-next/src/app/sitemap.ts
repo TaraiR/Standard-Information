@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
 import { curriculum } from '@/data/curriculum';
+import { SITE_URL } from '@/lib/site';
 
-const SITE_URL = 'https://standard-information.vercel.app';
+export const dynamic = 'force-static'; // 静的書き出し（output: 'export'）に必要
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [

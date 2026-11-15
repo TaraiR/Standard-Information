@@ -1,9 +1,10 @@
 import { ImageResponse } from 'next/og';
 import { curriculum, getChapterById } from '@/data/curriculum';
 import { loadOgFont, OG_FONT_NAME } from '@/lib/ogFont';
-const SITE_HOST = 'standard-information.vercel.app';
+import { SITE_HOST } from '@/lib/site';
 
 // edge ランタイムは generateStaticParams と併用できずビルドが失敗するため指定しない（ビルド時に静的生成）
+export const dynamic = 'force-static';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 

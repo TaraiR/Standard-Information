@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import '../styles/global.css';
 import Navbar from '@/components/Navbar';
-import { Analytics } from '@vercel/analytics/react';
-
-const SITE_URL = 'https://standard-information.vercel.app';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -61,7 +59,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </nav>
           </div>
         </footer>
-        <Analytics />
       </body>
     </html>
   );

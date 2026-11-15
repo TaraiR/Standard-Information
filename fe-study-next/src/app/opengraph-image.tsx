@@ -1,8 +1,9 @@
 import { ImageResponse } from 'next/og';
 import { loadOgFont, OG_FONT_NAME } from '@/lib/ogFont';
-const SITE_HOST = 'standard-information.vercel.app';
+import { SITE_HOST } from '@/lib/site';
 
 // edge を外し、章ページと同じくビルド時に静的生成する
+export const dynamic = 'force-static';
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 export const alt = '基本情報技術者試験 完全対策 — 図解でわかる無料学習サイト';

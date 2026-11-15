@@ -4,9 +4,7 @@ import { curriculum } from '@/data/curriculum';
 import ProgressBanner from '@/components/ProgressBanner';
 import ChapterGrid from '@/components/ChapterGrid';
 import DailyQuiz from '@/components/DailyQuiz';
-
-
-const SITE_URL = 'https://standard-information.vercel.app';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata: Metadata = {
   title: '基本情報技術者試験 完全対策 | 図解でわかる無料学習サイト',

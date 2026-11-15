@@ -4,8 +4,7 @@ import { Suspense } from 'react';
 import { curriculum, getChapterById } from '@/data/curriculum';
 import ChapterContent from '@/components/ChapterContent';
 import { chapterDescriptions } from '@/data/chapterSeo';
-
-const SITE_URL = 'https://standard-information.vercel.app';
+import { SITE_URL } from '@/lib/site';
 
 // ビルド時に全章のパスを静的生成
 export function generateStaticParams() {
