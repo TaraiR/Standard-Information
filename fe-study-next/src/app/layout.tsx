@@ -31,7 +31,8 @@ export const metadata: Metadata = {
     images: [{ url: `${SITE_URL}/opengraph-image`, width: 1200, height: 630, alt: '基本情報技術者試験 完全対策 — 図解でわかる無料学習サイト' }],
   },
   twitter: { card: 'summary_large_image' },
-  verification: { google: '4qDlChGpmLa1t3TavfRDA-2LIvsEczGg-enqS8oCCJA' },
+  // Search Console の所有権確認（旧 vercel.app 用, 新 workers.dev 用）
+  verification: { google: ['4qDlChGpmLa1t3TavfRDA-2LIvsEczGg-enqS8oCCJA', 'GTwrxnrMOxGZsSFq3RomOMv59bgdMjXkBG-xQZ6_n7o'] },
   robots: { index: true, follow: true },
 };
 
