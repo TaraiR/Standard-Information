@@ -176,5 +176,68 @@ export function UnitBox({ x, y, w, h, title, sub, tone = 'focus', active = false
   );
 }
 
+export interface SeqActor { id: string; label: string; sub?: string }
+export interface SeqItem { from: string; to: string; label: string; tone?: CellTone }
+
+/**
+ * シーケンス図。messages の先頭 shown 個を表示し、最後の1個を強調する。
+ * 高さは全メッセージ分を最初から確保して、ステップを進めても図がずれないようにする。
+ */
+export function SequenceDiagram({ actors, messages, shown, width = 640 }: {
+  actors: readonly SeqActor[];
+  messages: readonly SeqItem[];
+  shown: number;
+  width?: number;
+}) {
+  const margin = 70;
+  const laneX = (id: string) => {
+    const i = actors.findIndex(a => a.id === id);
+    return actors.length === 1 ? width / 2 : margin + (i * (width - 2 * margin)) / (actors.length - 1);
+  };
+  const top = 66;
+  const rowH = 50;
+  const height = top + messages.length * rowH + 16;
+  const boxW = Math.min(124, (width - 20) / actors.length - 8);
+  return (
+    // レーンが多い図は縮小しすぎると読めないので、最小幅を保って横スクロールにする
+    <div className="viz-scroll">
+    <svg className="viz-svg" viewBox={`0 0 ${width} ${height}`} role="img" style={{ minWidth: Math.round(width * 0.8) }}
+      aria-label={messages.slice(0, shown).map(m => `${m.from}→${m.to}: ${m.label}`).join('、')}>
+      {actors.map(a => (
+        <g key={a.id}>
+          <line className="viz-line" x1={laneX(a.id)} x2={laneX(a.id)} y1={52} y2={height - 6} strokeDasharray="4 5" />
+          <rect className="viz-box" x={laneX(a.id) - boxW / 2} y={6} width={boxW} height={a.sub ? 46 : 40} rx={8} />
+          <text className="viz-seq-actor" x={laneX(a.id)} y={a.sub ? 24 : 27} textAnchor="middle" dominantBaseline="central">{a.label}</text>
+          {a.sub && <text className="viz-seq-sub" x={laneX(a.id)} y={42} textAnchor="middle" dominantBaseline="central">{a.sub}</text>}
+        </g>
+      ))}
+      {messages.map((m, i) => {
+        if (i >= shown) return null;
+        const y = top + i * rowH + 30;
+        const current = i === shown - 1;
+        const tone = m.tone ?? 'range';
+        if (m.from === m.to) {
+          const x = laneX(m.from);
+          return (
+            <g key={i} className={`viz-seq-note${current ? ' is-current' : ''}`}>
+              <rect className={`viz-box${current ? ` tone-${tone}` : ''}`} x={x - 92} y={y - 22} width={184} height={32} rx={8} />
+              <text className="viz-seq-label" x={x} y={y - 6} textAnchor="middle" dominantBaseline="central">{m.label}</text>
+            </g>
+          );
+        }
+        const x1 = laneX(m.from);
+        const x2 = laneX(m.to);
+        return (
+          <g key={i} className={current ? 'viz-seq-msg is-current' : 'viz-seq-msg'}>
+            <Arrow points={[[x1, y], [x2, y]]} tone={tone} active={current} />
+            <text className={`viz-seq-label${current ? ` tone-${tone}` : ''}`} x={(x1 + x2) / 2} y={y - 9} textAnchor="middle">{m.label}</text>
+          </g>
+        );
+      })}
+    </svg>
+    </div>
+  );
+}
+
 /** CellRow の幅（viewBox 単位） */
 export const rowWidth = (count: number, size = 52, gap = 6) => count * size + Math.max(0, count - 1) * gap;

@@ -92,6 +92,19 @@
 .viz-unit .viz-box { stroke-width: 2; }
 .viz-unit.is-active .viz-box { stroke-width: 3; }
 
+.viz-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* シーケンス図 */
+.viz-seq-actor { font-size: 17px; font-weight: 700; fill: var(--text); }
+.viz-seq-sub { font-size: 13px; fill: var(--text-light); }
+.viz-seq-label { font-size: 16px; fill: var(--text-light); transition: fill 0.3s; }
+.viz-seq-label.tone-range { fill: var(--viz-range); font-weight: 700; }
+.viz-seq-label.tone-focus { fill: var(--viz-focus); font-weight: 700; }
+.viz-seq-label.tone-done { fill: var(--viz-done); font-weight: 700; }
+.viz-seq-label.tone-muted { fill: var(--text); font-weight: 700; }
+.viz-seq-msg .viz-arrow:not(.is-active) polyline, .viz-seq-msg .viz-arrow:not(.is-active) polygon { opacity: 0.6; }
+.viz-seq-note.is-current .viz-seq-label { fill: var(--text); font-weight: 700; }
+
 /* 表形式のタイムライン（パイプライン・入出力） */
 .viz-grid { border-collapse: separate; border-spacing: 3px; font-size: 0.8rem; margin: 0 auto; }
 .viz-grid th { color: var(--text-light); font-weight: 600; padding: 0 4px; white-space: nowrap; }

@@ -11,33 +11,15 @@ import PipelineVisual from './visuals/PipelineVisual';
 import PerformanceVisual from './visuals/PerformanceVisual';
 import CacheVisual from './visuals/CacheVisual';
 import IoVisual from './visuals/IoVisual';
+import OsiVisual from './visuals/OsiVisual';
+import SubnetVisual from './visuals/SubnetVisual';
+import DnsVisual from './visuals/DnsVisual';
+import SwitchVisual from './visuals/SwitchVisual';
+import HttpVisual from './visuals/HttpVisual';
 
 interface DiagramProps {
   type: string;
 }
-
-const OsiDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">OSI参照モデル</h4>
-    <div className="osi-layers">
-      {[
-        { num: 7, name: 'アプリケーション層', protocol: 'HTTP, FTP, DNS', color: '#2da3d9' },
-        { num: 6, name: 'プレゼンテーション層', protocol: '暗号化, 文字コード変換', color: '#2090bc' },
-        { num: 5, name: 'セッション層', protocol: 'セッション管理', color: '#282867' },
-        { num: 4, name: 'トランスポート層', protocol: 'TCP, UDP', color: '#48bb78' },
-        { num: 3, name: 'ネットワーク層', protocol: 'IP, ICMP', color: '#38a169' },
-        { num: 2, name: 'データリンク層', protocol: 'Ethernet, MACアドレス', color: '#ed8936' },
-        { num: 1, name: '物理層', protocol: '電気信号, ビット', color: '#fc8181' },
-      ].map(layer => (
-        <div key={layer.num} className="osi-layer" style={{ borderLeftColor: layer.color }}>
-          <span className="osi-num" style={{ background: layer.color }}>第{layer.num}層</span>
-          <span className="osi-name">{layer.name}</span>
-          <span className="osi-protocol">{layer.protocol}</span>
-        </div>
-      ))}
-    </div>
-  </div>
-);
 
 const StackQueueDiagram = () => (
   <div className="diagram-container">
@@ -563,7 +545,7 @@ const diagrams: Record<string, React.FC> = {
   binary: BaseConversionVisual,
   logic: LogicShiftVisual,
   cpu: CpuVisual,
-  osi: OsiDiagram,
+  osi: OsiVisual,
   'stack-queue': StackQueueDiagram,
   security: SecurityDiagram,
   sort: SortDiagram,
@@ -586,114 +568,10 @@ const diagrams: Record<string, React.FC> = {
   pipeline: PipelineVisual,
   memoryhierarchy: CacheVisual,
   bus: IoVisual,
-  'network-devices': (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">ネットワーク機器とOSI層の対応</h4>
-      <svg viewBox="0 0 480 200" className="diagram-svg">
-        {[
-          { layer: '第7〜5層', label: 'アプリケーション〜セッション', color: '#2da3d9', y: 10 },
-          { layer: '第4層', label: 'トランスポート層', color: '#282867', y: 42 },
-          { layer: '第3層', label: 'ネットワーク層', color: '#48bb78', y: 74 },
-          { layer: '第2層', label: 'データリンク層', color: '#ed8936', y: 106 },
-          { layer: '第1層', label: '物理層', color: '#fc8181', y: 138 },
-        ].map(l => (
-          <g key={l.layer}>
-            <rect x={10} y={l.y} width={160} height={28} rx={5} fill={l.color} opacity={0.7}/>
-            <text x={90} y={l.y+18} textAnchor="middle" fill="white" fontSize={11} fontWeight="bold">{l.layer}: {l.label}</text>
-          </g>
-        ))}
-        {[
-          { name: 'ルータ', layers: [74,106,138], color: '#48bb78', x: 220 },
-          { name: 'L2スイッチ', layers: [106,138], color: '#ed8936', x: 320 },
-          { name: 'ハブ', layers: [138], color: '#fc8181', x: 410 },
-        ].map(dev => (
-          <g key={dev.name}>
-            {dev.layers.map(y => (
-              <rect key={y} x={dev.x} y={y} width={70} height={28} rx={4} fill={dev.color} opacity={0.6}/>
-            ))}
-            <text x={dev.x+35} y={185} textAnchor="middle" fill="#4a5568" fontSize={11} fontWeight="bold">{dev.name}</text>
-          </g>
-        ))}
-      </svg>
-    </div>
-  )) as React.FC,
-  ipaddress: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">IPアドレスの構造（例: 192.168.1.10 /24）</h4>
-      <svg viewBox="0 0 480 150" className="diagram-svg">
-        <rect x="10" y="20" width="340" height="44" rx="6" fill="#2da3d9" opacity="0.2" stroke="#2da3d9" strokeWidth="2"/>
-        <text x="180" y="38" textAnchor="middle" fill="#2da3d9" fontSize="12" fontWeight="bold">ネットワーク部（24ビット）</text>
-        <text x="180" y="54" textAnchor="middle" fill="#4a5568" fontSize="13" fontFamily="monospace">192 . 168 . 1</text>
-
-        <rect x="355" y="20" width="115" height="44" rx="6" fill="#48bb78" opacity="0.2" stroke="#48bb78" strokeWidth="2"/>
-        <text x="412" y="38" textAnchor="middle" fill="#48bb78" fontSize="12" fontWeight="bold">ホスト部（8ビット）</text>
-        <text x="412" y="54" textAnchor="middle" fill="#4a5568" fontSize="13" fontFamily="monospace">. 10</text>
-
-        <text x="10" y="90" fill="#4a5568" fontSize="12">サブネットマスク: <tspan fontWeight="bold">255.255.255.0</tspan> = /24</text>
-        <text x="10" y="110" fill="#4a5568" fontSize="12">ネットワークアドレス: <tspan fontWeight="bold">192.168.1.0</tspan>（ホスト部=全0）</text>
-        <text x="10" y="130" fill="#4a5568" fontSize="12">ブロードキャスト: <tspan fontWeight="bold">192.168.1.255</tspan>（ホスト部=全1）</text>
-        <text x="10" y="148" fill="#718096" fontSize="11">使用可能ホスト数: 2⁸ - 2 = <tspan fontWeight="bold">254台</tspan></text>
-      </svg>
-    </div>
-  )) as React.FC,
-  dns: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">DNS名前解決の流れ</h4>
-      <svg viewBox="0 0 480 170" className="diagram-svg">
-        {[
-          { x:10, y:60, label:'クライアント', sub:'PC/スマホ', color:'#2da3d9' },
-          { x:130, y:60, label:'DNSキャッシュ', sub:'サーバ', color:'#282867' },
-          { x:260, y:10, label:'ルートDNS', sub:'サーバ', color:'#ed8936' },
-          { x:260, y:110, label:'権威DNS', sub:'サーバ', color:'#48bb78' },
-        ].map(n => (
-          <g key={n.label}>
-            <rect x={n.x} y={n.y} width={100} height={50} rx={8} fill={n.color} opacity={0.7}/>
-            <text x={n.x+50} y={n.y+22} textAnchor="middle" fill="white" fontSize={11} fontWeight="bold">{n.label}</text>
-            <text x={n.x+50} y={n.y+38} textAnchor="middle" fill="white" fontSize={10}>{n.sub}</text>
-          </g>
-        ))}
-        <path d="M 110 80 L 128 80" stroke="#718096" strokeWidth="1.5" markerEnd="url(#adns)"/>
-        <path d="M 230 75 L 258 35" stroke="#718096" strokeWidth="1.5" markerEnd="url(#adns)"/>
-        <path d="M 230 85 L 258 125" stroke="#48bb78" strokeWidth="1.5" markerEnd="url(#adns)"/>
-        <text x="240" y="160" textAnchor="middle" fill="#718096" fontSize="11">① 問い合わせ → ② ルート確認 → ③ 権威DNSからIPを取得</text>
-        <defs>
-          <marker id="adns" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
-          </marker>
-        </defs>
-      </svg>
-    </div>
-  )) as React.FC,
-  http: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">主なプロトコルとポート番号</h4>
-      <table className="truth-table">
-        <thead>
-          <tr><th>プロトコル</th><th>ポート</th><th>用途</th><th>TCP/UDP</th></tr>
-        </thead>
-        <tbody>
-          {[
-            ['HTTP', '80', 'Webページ', 'TCP'],
-            ['HTTPS', '443', '暗号化Web', 'TCP'],
-            ['FTP', '21', 'ファイル転送', 'TCP'],
-            ['SSH', '22', 'セキュアリモート', 'TCP'],
-            ['SMTP', '25', 'メール送信', 'TCP'],
-            ['POP3', '110', 'メール受信', 'TCP'],
-            ['IMAP', '143', 'メール管理', 'TCP'],
-            ['DNS', '53', '名前解決', 'UDP/TCP'],
-            ['DHCP', '67/68', 'IP自動割当', 'UDP'],
-          ].map(([proto, port, use, type]) => (
-            <tr key={proto}>
-              <td style={{ fontWeight: 700, color: '#2da3d9' }}>{proto}</td>
-              <td style={{ fontFamily: 'monospace', fontWeight: 700 }}>{port}</td>
-              <td>{use}</td>
-              <td style={{ color: type.includes('TCP') ? '#48bb78' : '#ed8936' }}>{type}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )) as React.FC,
+  'network-devices': SwitchVisual,
+  ipaddress: SubnetVisual,
+  dns: DnsVisual,
+  http: HttpVisual,
   attack: (() => (
     <div className="diagram-container">
       <h4 className="diagram-title">主な攻撃手法の分類</h4>
