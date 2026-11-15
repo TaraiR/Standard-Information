@@ -36,6 +36,12 @@ import TestingVisual from './visuals/TestingVisual';
 import CpmVisual from './visuals/CpmVisual';
 import ReliabilityVisual from './visuals/ReliabilityVisual';
 import ItsmVisual from './visuals/ItsmVisual';
+import StrategyVisual from './visuals/StrategyVisual';
+import EaVisual from './visuals/EaVisual';
+import LawVisual from './visuals/LawVisual';
+import MarketingVisual from './visuals/MarketingVisual';
+import FinanceVisual from './visuals/FinanceVisual';
+import OrIeVisual from './visuals/OrIeVisual';
 
 interface DiagramProps {
   type: string;
@@ -150,44 +156,6 @@ const FlowchartDiagram = () => (
         </marker>
       </defs>
     </svg>
-  </div>
-);
-
-const StrategyDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">SWOT分析</h4>
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-      {[
-        { label: 'S 強み', sub: 'Strengths', desc: '自社の競合優位性', color: '#2da3d9', bg: 'rgba(45,163,217,0.1)' },
-        { label: 'W 弱み', sub: 'Weaknesses', desc: '自社の改善が必要な点', color: '#fc8181', bg: 'rgba(252,129,129,0.1)' },
-        { label: 'O 機会', sub: 'Opportunities', desc: '外部環境の有利な変化', color: '#48bb78', bg: 'rgba(72,187,120,0.1)' },
-        { label: 'T 脅威', sub: 'Threats', desc: '外部環境の不利な変化', color: '#ed8936', bg: 'rgba(237,137,54,0.1)' },
-      ].map(item => (
-        <div key={item.label} style={{ background: item.bg, border: `2px solid ${item.color}`, borderRadius: 8, padding: '12px 14px' }}>
-          <div style={{ color: item.color, fontWeight: 800, fontSize: 15 }}>{item.label}</div>
-          <div style={{ color: '#718096', fontSize: 11, marginBottom: 4 }}>{item.sub}</div>
-          <div style={{ fontSize: 13, color: '#4a5568' }}>{item.desc}</div>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
-const LawDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">知的財産権の種類と保護期間</h4>
-    <table className="truth-table">
-      <thead>
-        <tr><th>権利の種類</th><th>保護対象</th><th>保護期間</th><th>登録</th></tr>
-      </thead>
-      <tbody>
-        <tr><td style={{ fontWeight: 700, color: '#2da3d9' }}>著作権</td><td>プログラム・文章・音楽</td><td>死後70年</td><td>不要</td></tr>
-        <tr><td style={{ fontWeight: 700, color: '#48bb78' }}>特許権</td><td>発明（技術的アイデア）</td><td>出願から20年</td><td>必要</td></tr>
-        <tr><td style={{ fontWeight: 700, color: '#ed8936' }}>実用新案権</td><td>考案（形状・構造）</td><td>出願から10年</td><td>必要</td></tr>
-        <tr><td style={{ fontWeight: 700, color: '#282867' }}>意匠権</td><td>デザイン（外観）</td><td>登録から25年</td><td>必要</td></tr>
-        <tr><td style={{ fontWeight: 700, color: '#fc8181' }}>商標権</td><td>ブランド名・ロゴ</td><td>登録から10年（更新可）</td><td>必要</td></tr>
-      </tbody>
-    </table>
   </div>
 );
 
@@ -330,8 +298,8 @@ const diagrams: Record<string, React.FC> = {
   testing: TestingVisual,
   gantt: CpmVisual,
   reliability: ReliabilityVisual,
-  strategy: StrategyDiagram,
-  law: LawDiagram,
+  strategy: StrategyVisual,
+  law: LawVisual,
   recursion: RecursionDiagram,
   tree: TreeDiagram,
   oop: OopDiagram,
@@ -354,25 +322,7 @@ const diagrams: Record<string, React.FC> = {
   nosql: NosqlVisual,
   uml: UmlVisual,
   itsm: ItsmVisual,
-  ea: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">エンタープライズアーキテクチャ（EA）の4層</h4>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {[
-          { label: 'ビジネスアーキテクチャ', desc: '業務プロセス・組織・業務ルール', color: '#2da3d9' },
-          { label: 'データアーキテクチャ', desc: 'データの構造・関係・流れ', color: '#282867' },
-          { label: 'アプリケーションアーキテクチャ', desc: 'システム・アプリの全体像と関係', color: '#48bb78' },
-          { label: 'テクノロジアーキテクチャ', desc: 'インフラ・HW・OS・NW の技術基盤', color: '#ed8936' },
-        ].map(l => (
-          <div key={l.label} style={{ display: 'flex', alignItems: 'center', gap: 12, background: `${l.color}15`, border: `2px solid ${l.color}`, borderRadius: 8, padding: '8px 14px' }}>
-            <div style={{ width: 14, height: 14, borderRadius: '50%', background: l.color, flexShrink: 0 }} />
-            <span style={{ fontWeight: 700, fontSize: 13, color: '#4a5568', minWidth: 200 }}>{l.label}</span>
-            <span style={{ fontSize: 12, color: '#718096' }}>{l.desc}</span>
-          </div>
-        ))}
-      </div>
-    </div>
-  )) as React.FC,
+  ea: EaVisual,
   graph: (() => (
     <div className="diagram-container">
       <h4 className="diagram-title">BFS vs DFS の探索順序の違い</h4>
@@ -442,6 +392,9 @@ const diagrams: Record<string, React.FC> = {
     </div>
   )) as React.FC,
   search: BinarySearchVisual,
+  marketing: MarketingVisual,
+  finance: FinanceVisual,
+  'or-ie': OrIeVisual,
   complement: ComplementVisual,
   floatingpoint: FloatingPointVisual,
   datasize: EncodingVisual,
