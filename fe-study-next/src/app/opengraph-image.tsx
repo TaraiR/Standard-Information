@@ -1,26 +1,18 @@
 import { ImageResponse } from 'next/og';
+import { loadOgFont, OG_FONT_NAME } from '@/lib/ogFont';
+const SITE_HOST = 'standard-information.vercel.app';
 
-export const runtime = 'edge';
+// edge を外し、章ページと同じくビルド時に静的生成する
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 export const alt = '基本情報技術者試験 完全対策 — 図解でわかる無料学習サイト';
 
-async function loadFont(): Promise<ArrayBuffer | null> {
-  try {
-    const css = await fetch(
-      'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap',
-      { headers: { 'User-Agent': 'Mozilla/5.0 (compatible)' } }
-    ).then(r => r.text());
-    const m = css.match(/src:\s*url\(([^)]+)\)\s*format\('(?:woff2?)'\)/);
-    if (!m) return null;
-    return fetch(m[1]).then(r => r.arrayBuffer());
-  } catch {
-    return null;
-  }
-}
+const BADGES = ['科目A 対応', '科目B 対応', '章末問題付き'] as const;
 
 export default async function Image() {
-  const fontData = await loadFont();
+  const fontData = await loadOgFont(
+    `無料学習サイト基本情報技術者試験完全対策図解でわかりやすく学べる無料学習サイト${BADGES.join('')}${SITE_HOST}`
+  );
 
   return new ImageResponse(
     (
@@ -33,7 +25,7 @@ export default async function Image() {
           height: '100%',
           background: '#282867',
           padding: '56px 64px 48px',
-          fontFamily: fontData ? 'NotoSansJP' : 'sans-serif',
+          fontFamily: OG_FONT_NAME,
         }}
       >
         {/* Top: site tag */}
@@ -68,7 +60,7 @@ export default async function Image() {
         {/* Bottom: badges + URL */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', gap: 14 }}>
-            {(['科目A 対応', '科目B 対応', '章末問題付き'] as const).map((label) => (
+            {BADGES.map((label) => (
               <div
                 key={label}
                 style={{
@@ -86,16 +78,14 @@ export default async function Image() {
             ))}
           </div>
           <div style={{ color: '#6b8ba4', fontSize: 18 }}>
-            standard-information.vercel.app
+            {SITE_HOST}
           </div>
         </div>
       </div>
     ),
     {
       ...size,
-      fonts: fontData
-        ? [{ name: 'NotoSansJP', data: fontData, weight: 700, style: 'normal' }]
-        : [],
+      fonts: [{ name: OG_FONT_NAME, data: fontData, weight: 700, style: 'normal' }],
     }
   );
 }

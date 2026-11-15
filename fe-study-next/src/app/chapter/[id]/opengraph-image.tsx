@@ -1,7 +1,9 @@
 import { ImageResponse } from 'next/og';
 import { curriculum, getChapterById } from '@/data/curriculum';
+import { loadOgFont, OG_FONT_NAME } from '@/lib/ogFont';
+const SITE_HOST = 'standard-information.vercel.app';
 
-export const runtime = 'edge';
+// edge ランタイムは generateStaticParams と併用できずビルドが失敗するため指定しない（ビルド時に静的生成）
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -9,28 +11,17 @@ export function generateStaticParams() {
   return curriculum.map(ch => ({ id: ch.id }));
 }
 
-async function loadFont(): Promise<ArrayBuffer | null> {
-  try {
-    const css = await fetch(
-      'https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap',
-      { headers: { 'User-Agent': 'Mozilla/5.0 (compatible)' } }
-    ).then(r => r.text());
-    const m = css.match(/src:\s*url\(([^)]+)\)\s*format\('(?:woff2?)'\)/);
-    if (!m) return null;
-    return fetch(m[1]).then(r => r.arrayBuffer());
-  } catch {
-    return null;
-  }
-}
+const SITE_NAME = '基本情報技術者試験 学習サイト';
 
-export default async function Image({ params }: { params: { id: string } }) {
-  const chapter = getChapterById(params.id);
-  const fontData = await loadFont();
+export default async function Image({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params; // Next 16 では params は Promise
+  const chapter = getChapterById(id);
 
   const title = chapter?.title ?? '学習コンテンツ';
   const subject = chapter?.subject ?? 'A';
   const chIdx = chapter ? curriculum.findIndex(c => c.id === chapter.id) + 1 : 0;
   const subjectColor = subject === 'A' ? '#2563eb' : '#7c3aed';
+  const fontData = await loadOgFont(`科目${subject}第${chIdx}章${title}FE 対策${SITE_NAME}${SITE_HOST}`);
 
   return new ImageResponse(
     (
@@ -43,7 +34,7 @@ export default async function Image({ params }: { params: { id: string } }) {
           height: '100%',
           background: '#282867',
           padding: '52px 64px 48px',
-          fontFamily: fontData ? 'NotoSansJP' : 'sans-serif',
+          fontFamily: OG_FONT_NAME,
         }}
       >
         {/* Top: subject badge + chapter number */}
@@ -58,11 +49,11 @@ export default async function Image({ params }: { params: { id: string } }) {
               fontWeight: 700,
             }}
           >
-            科目{subject}
+            {`科目${subject}`}
           </div>
           {chIdx > 0 && (
             <div style={{ color: '#b0c4d8', fontSize: 22 }}>
-              第{chIdx}章
+              {`第${chIdx}章`}
             </div>
           )}
         </div>
@@ -113,19 +104,17 @@ export default async function Image({ params }: { params: { id: string } }) {
             >
               FE 対策
             </div>
-            基本情報技術者試験 学習サイト
+            {SITE_NAME}
           </div>
           <div style={{ color: '#4a6580', fontSize: 18 }}>
-            standard-information.vercel.app
+            {SITE_HOST}
           </div>
         </div>
       </div>
     ),
     {
       ...size,
-      fonts: fontData
-        ? [{ name: 'NotoSansJP', data: fontData, weight: 700, style: 'normal' }]
-        : [],
+      fonts: [{ name: OG_FONT_NAME, data: fontData, weight: 700, style: 'normal' }],
     }
   );
 }
