@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import '../styles/global.css';
+import '../styles/visuals.css';
 import Navbar from '@/components/Navbar';
 import { SITE_URL } from '@/lib/site';
 
@@ -42,7 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <script dangerouslySetInnerHTML={{ __html: `try{var t=localStorage.getItem('fe-theme');if(t)document.documentElement.dataset.theme=t;else if(window.matchMedia('(prefers-color-scheme: dark)').matches)document.documentElement.dataset.theme='dark';}catch(e){}` }} />
         <script dangerouslySetInnerHTML={{ __html: `(function(){var b=document.createElement('button');b.className='scroll-top-btn';b.setAttribute('aria-label','ページ上部へ戻る');b.textContent='↑';b.style.display='none';b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'});});document.addEventListener('DOMContentLoaded',function(){document.body.appendChild(b);window.addEventListener('scroll',function(){b.style.display=window.scrollY>320?'flex':'none';},{passive:true});});})();` }} />
-        <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}`}} />
+        <script dangerouslySetInnerHTML={{ __html: `if('serviceWorker' in navigator&&!/^(localhost|127\\.0\\.0\\.1)$/.test(location.hostname)){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});});}`}} />
         <Navbar />
         <div className="page-wrapper">
           {children}

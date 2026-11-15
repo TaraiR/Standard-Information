@@ -1,66 +1,15 @@
 'use client';
 import React from 'react';
+import BinarySearchVisual from './visuals/BinarySearchVisual';
+import BaseConversionVisual from './visuals/BaseConversionVisual';
+import ComplementVisual from './visuals/ComplementVisual';
+import LogicShiftVisual from './visuals/LogicShiftVisual';
+import FloatingPointVisual from './visuals/FloatingPointVisual';
+import EncodingVisual from './visuals/EncodingVisual';
 
 interface DiagramProps {
   type: string;
 }
-
-const BinaryDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">基数変換チャート</h4>
-    <svg viewBox="0 0 500 200" className="diagram-svg">
-      {/* Boxes */}
-      <rect x="10" y="60" width="110" height="80" rx="8" fill="#2da3d9" opacity="0.15" stroke="#2da3d9" strokeWidth="2"/>
-      <text x="65" y="95" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="14">10進数</text>
-      <text x="65" y="115" textAnchor="middle" fill="#2da3d9" fontSize="20" fontWeight="bold">26</text>
-
-      <rect x="195" y="60" width="110" height="80" rx="8" fill="#48bb78" opacity="0.15" stroke="#48bb78" strokeWidth="2"/>
-      <text x="250" y="95" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="14">2進数</text>
-      <text x="250" y="115" textAnchor="middle" fill="#276749" fontSize="20" fontWeight="bold">11010</text>
-
-      <rect x="380" y="60" width="110" height="80" rx="8" fill="#ed8936" opacity="0.15" stroke="#ed8936" strokeWidth="2"/>
-      <text x="435" y="95" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="14">16進数</text>
-      <text x="435" y="115" textAnchor="middle" fill="#c05621" fontSize="20" fontWeight="bold">1A</text>
-
-      {/* Arrows */}
-      <path d="M 120 100 L 190 100" stroke="#718096" strokeWidth="2" markerEnd="url(#arrow)"/>
-      <text x="155" y="90" textAnchor="middle" fill="#718096" fontSize="11">÷2</text>
-
-      <path d="M 305 100 L 375 100" stroke="#718096" strokeWidth="2" markerEnd="url(#arrow)"/>
-      <text x="340" y="90" textAnchor="middle" fill="#718096" fontSize="11">4bit→1桁</text>
-
-      <defs>
-        <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-          <polygon points="0 0, 10 3.5, 0 7" fill="#718096"/>
-        </marker>
-      </defs>
-
-      {/* Labels */}
-      <text x="250" y="170" textAnchor="middle" fill="#718096" fontSize="12">例: 26₁₀ = 11010₂ = 1A₁₆</text>
-    </svg>
-  </div>
-);
-
-const LogicDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">論理演算の真理値表</h4>
-    <div className="truth-table-wrapper">
-      <table className="truth-table">
-        <thead>
-          <tr>
-            <th>A</th><th>B</th><th>A AND B</th><th>A OR B</th><th>A XOR B</th><th>NOT A</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr><td>0</td><td>0</td><td className="and">0</td><td className="or">0</td><td className="xor">0</td><td className="not">1</td></tr>
-          <tr><td>0</td><td>1</td><td className="and">0</td><td className="or">1</td><td className="xor">1</td><td className="not">1</td></tr>
-          <tr><td>1</td><td>0</td><td className="and">0</td><td className="or">1</td><td className="xor">1</td><td className="not">0</td></tr>
-          <tr><td>1</td><td>1</td><td className="and">1</td><td className="or">1</td><td className="xor">0</td><td className="not">0</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-);
 
 const CpuDiagram = () => (
   <div className="diagram-container">
@@ -681,90 +630,9 @@ const InheritanceDiagram = () => (
   </div>
 );
 
-const ComplementDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">2の補数の求め方（例: +5 → -5）</h4>
-    <svg viewBox="0 0 480 160" className="diagram-svg">
-      <rect x="10" y="30" width="120" height="40" rx="6" fill="#2da3d9" opacity="0.2" stroke="#2da3d9" strokeWidth="2"/>
-      <text x="70" y="47" textAnchor="middle" fill="#4a5568" fontSize="12" fontWeight="bold">元の数 (+5)</text>
-      <text x="70" y="63" textAnchor="middle" fill="#2da3d9" fontSize="16" fontWeight="bold" fontFamily="monospace">0101</text>
-
-      <path d="M 135 50 L 175 50" stroke="#718096" strokeWidth="2" markerEnd="url(#ac1)"/>
-      <text x="155" y="42" textAnchor="middle" fill="#718096" fontSize="11">①反転</text>
-
-      <rect x="180" y="30" width="120" height="40" rx="6" fill="#ed8936" opacity="0.2" stroke="#ed8936" strokeWidth="2"/>
-      <text x="240" y="47" textAnchor="middle" fill="#4a5568" fontSize="12" fontWeight="bold">ビット反転</text>
-      <text x="240" y="63" textAnchor="middle" fill="#ed8936" fontSize="16" fontWeight="bold" fontFamily="monospace">1010</text>
-
-      <path d="M 305 50 L 345 50" stroke="#718096" strokeWidth="2" markerEnd="url(#ac1)"/>
-      <text x="325" y="42" textAnchor="middle" fill="#718096" fontSize="11">②+1</text>
-
-      <rect x="350" y="30" width="120" height="40" rx="6" fill="#48bb78" opacity="0.2" stroke="#48bb78" strokeWidth="2"/>
-      <text x="410" y="47" textAnchor="middle" fill="#4a5568" fontSize="12" fontWeight="bold">2の補数 (-5)</text>
-      <text x="410" y="63" textAnchor="middle" fill="#276749" fontSize="16" fontWeight="bold" fontFamily="monospace">1011</text>
-
-      <text x="240" y="110" textAnchor="middle" fill="#4a5568" fontSize="13">確認: 0101 + 1011 = 10000 → 下4桁 = 0000 ✓</text>
-      <text x="240" y="130" textAnchor="middle" fill="#718096" fontSize="11">（足すと桁溢れしてちょうど 0 になる = 正しい補数）</text>
-
-      <defs>
-        <marker id="ac1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-          <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
-        </marker>
-      </defs>
-    </svg>
-  </div>
-);
-
-const FloatingPointDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">IEEE 754 単精度浮動小数点数（32ビット）の構造</h4>
-    <svg viewBox="0 0 480 140" className="diagram-svg">
-      <rect x="10" y="30" width="40" height="50" rx="4" fill="#fc8181" opacity="0.7"/>
-      <text x="30" y="52" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">符号</text>
-      <text x="30" y="68" textAnchor="middle" fill="white" fontSize="11">1bit</text>
-
-      <rect x="55" y="30" width="120" height="50" rx="4" fill="#2da3d9" opacity="0.7"/>
-      <text x="115" y="52" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">指数部</text>
-      <text x="115" y="68" textAnchor="middle" fill="white" fontSize="11">8bit</text>
-
-      <rect x="180" y="30" width="290" height="50" rx="4" fill="#48bb78" opacity="0.7"/>
-      <text x="325" y="52" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">仮数部</text>
-      <text x="325" y="68" textAnchor="middle" fill="white" fontSize="11">23bit</text>
-
-      <text x="30" y="105" textAnchor="middle" fill="#c53030" fontSize="11">0=正 1=負</text>
-      <text x="115" y="105" textAnchor="middle" fill="#4a5568" fontSize="11">実際の指数+127</text>
-      <text x="325" y="105" textAnchor="middle" fill="#276749" fontSize="11">小数点以下のビット列</text>
-
-      <text x="240" y="130" textAnchor="middle" fill="#718096" fontSize="11">値 = (-1)^符号 × 1.仮数部 × 2^(指数部-127)</text>
-    </svg>
-  </div>
-);
-
-const DataSizeDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">データ容量の単位</h4>
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-      {[
-        { label: '1 bit', desc: '0か1の1桁', size: 4, color: '#e2e8f0' },
-        { label: '1 Byte = 8 bit', desc: '英字1文字（ASCII）', size: 20, color: '#bee3f8' },
-        { label: '1 KB = 1,024 B', desc: '短いテキスト程度', size: 40, color: '#90cdf4' },
-        { label: '1 MB = 1,024 KB', desc: '写真1枚〜音楽1曲', size: 65, color: '#2da3d9' },
-        { label: '1 GB = 1,024 MB', desc: '動画10〜20分', size: 90, color: '#553c9a' },
-        { label: '1 TB = 1,024 GB', desc: 'HDD/SSDの容量単位', size: 115, color: '#322659' },
-      ].map(item => (
-        <div key={item.label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div style={{ width: item.size, height: 22, background: item.color, borderRadius: 4, flexShrink: 0 }} />
-          <span style={{ fontWeight: 700, fontSize: 13, minWidth: 140 }}>{item.label}</span>
-          <span style={{ fontSize: 12, color: '#718096' }}>{item.desc}</span>
-        </div>
-      ))}
-    </div>
-  </div>
-);
-
 const diagrams: Record<string, React.FC> = {
-  binary: BinaryDiagram,
-  logic: LogicDiagram,
+  binary: BaseConversionVisual,
+  logic: LogicShiftVisual,
   cpu: CpuDiagram,
   osi: OsiDiagram,
   'stack-queue': StackQueueDiagram,
@@ -1377,35 +1245,10 @@ const diagrams: Record<string, React.FC> = {
       </svg>
     </div>
   )) as React.FC,
-  search: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">二分探索のトレース（配列から23を探す）</h4>
-      <svg viewBox="0 0 480 170" className="diagram-svg">
-        {[2,5,8,12,16,23,38,56].map((v,i) => (
-          <g key={i}>
-            <rect x={10+i*58} y={10} width={50} height={36} rx={4}
-              fill={i===5?'#48bb78':i===3||i===6?'#ed8936':'#2da3d9'} opacity={0.6}/>
-            <text x={35+i*58} y={24} textAnchor="middle" fill="white" fontSize={10}>idx{i}</text>
-            <text x={35+i*58} y={40} textAnchor="middle" fill="white" fontSize={14} fontWeight="bold">{v}</text>
-          </g>
-        ))}
-        {/* Step 1 */}
-        <text x={10} y={65} fill="#4a5568" fontSize={12} fontWeight="bold">第1回:</text>
-        <text x={60} y={65} fill="#4a5568" fontSize={12}>左=0, 右=7 → 中央=3 → A[3]=12 &lt; 23 → 左=4</text>
-        <rect x={10+3*58} y={8} width={50} height={40} rx={4} fill="none" stroke="#ed8936" strokeWidth={2.5}/>
-        {/* Step 2 */}
-        <text x={10} y={85} fill="#4a5568" fontSize={12} fontWeight="bold">第2回:</text>
-        <text x={60} y={85} fill="#4a5568" fontSize={12}>左=4, 右=7 → 中央=5 → A[5]=23 = 23 → 発見！</text>
-        <rect x={10+5*58} y={8} width={50} height={40} rx={4} fill="none" stroke="#48bb78" strokeWidth={2.5}/>
-        <text x={240} y={115} textAnchor="middle" fill="#48bb78" fontSize={13} fontWeight="bold">✓ 8要素をわずか2回で発見！</text>
-        <text x={240} y={133} textAnchor="middle" fill="#718096" fontSize={11}>線形探索なら最大8回必要</text>
-        <text x={240} y={155} textAnchor="middle" fill="#718096" fontSize={11}>n要素 → 最大 log₂n 回（n=1024なら10回）</text>
-      </svg>
-    </div>
-  )) as React.FC,
-  complement: ComplementDiagram,
-  floatingpoint: FloatingPointDiagram,
-  datasize: DataSizeDiagram,
+  search: BinarySearchVisual,
+  complement: ComplementVisual,
+  floatingpoint: FloatingPointVisual,
+  datasize: EncodingVisual,
 };
 
 const Diagram: React.FC<DiagramProps> = ({ type }) => {

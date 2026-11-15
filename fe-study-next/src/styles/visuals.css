@@ -1,0 +1,245 @@
+/* ===== ステップ再生型ビジュアル教材（StepPlayer）===== */
+
+:root {
+  --viz-range: #2563eb;      --viz-range-bg: #dbeafe;   /* 探索範囲など: 青 */
+  --viz-focus: #ea580c;      --viz-focus-bg: #ffedd5;   /* 注目中の要素: オレンジ */
+  --viz-done: #16a34a;       --viz-done-bg: #dcfce7;    /* 確定・発見: 緑 */
+  --viz-muted: #94a3b8;      --viz-muted-bg: #f1f5f9;   /* 対象外: グレー */
+  --viz-code-active: rgba(234, 88, 12, 0.14);
+  --viz-ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+[data-theme="dark"] {
+  --viz-range: #60a5fa;      --viz-range-bg: rgba(96, 165, 250, 0.16);
+  --viz-focus: #fb923c;      --viz-focus-bg: rgba(251, 146, 60, 0.2);
+  --viz-done: #4ade80;       --viz-done-bg: rgba(74, 222, 128, 0.16);
+  --viz-muted: #64748b;      --viz-muted-bg: rgba(100, 116, 139, 0.12);
+  --viz-code-active: rgba(251, 146, 60, 0.18);
+}
+
+.viz {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  outline: none;
+}
+.viz:focus-visible { box-shadow: 0 0 0 3px var(--viz-range-bg); }
+
+.viz-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.viz-title { margin: 0; font-size: 1rem; font-weight: 700; color: var(--text); }
+.viz-count { font-size: 0.85rem; color: var(--text-light); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* 設定（探索対象の変更など） */
+.viz-settings { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-bottom: 12px; font-size: 0.9rem; }
+.viz-field { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; color: var(--text-light); white-space: nowrap; }
+.viz-field .viz-hint { flex-basis: 100%; white-space: normal; }
+.viz-input {
+  width: 5.5em; min-height: 40px; padding: 6px 10px; font-size: 1rem;
+  border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text);
+}
+.viz-input:focus { outline: 2px solid var(--viz-range); outline-offset: 1px; }
+.viz-input[aria-invalid="true"] { border-color: var(--viz-focus); }
+.viz-segment { display: inline-flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.viz-segment button {
+  min-height: 40px; padding: 6px 12px; border: 0; background: transparent; color: var(--text-light);
+  font-size: 0.85rem; cursor: pointer;
+}
+.viz-segment button + button { border-left: 1px solid var(--border); }
+.viz-segment button.is-on { background: var(--viz-range-bg); color: var(--viz-range); font-weight: 700; }
+
+/* 描画エリア */
+.viz-stage { overflow: hidden; }
+.viz-svg { display: block; width: 100%; height: auto; max-width: 720px; margin: 0 auto; }
+.viz-svg text { font-family: inherit; }
+
+/* 配列セル・ビット */
+.viz-cell { transition: transform 0.5s var(--viz-ease); }
+.viz-cell.is-plain rect { fill: var(--surface); stroke: var(--border); }
+.viz-cell.is-plain .viz-val { fill: var(--text); }
+.viz-label { font-size: 18px; font-weight: 700; fill: var(--text-light); }
+.viz-text { font-size: 20px; fill: var(--text); }
+.viz-text.is-strong { font-weight: 700; }
+.viz-text.tone-range { fill: var(--viz-range); }
+.viz-text.tone-focus { fill: var(--viz-focus); }
+.viz-text.tone-done { fill: var(--viz-done); }
+.viz-text.tone-muted { fill: var(--viz-muted); }
+.viz-text, .viz-label { transition: fill 0.4s var(--viz-ease), opacity 0.4s var(--viz-ease); }
+.viz-line { stroke: var(--border); stroke-width: 2; fill: none; }
+.viz-line.tone-range { stroke: var(--viz-range); }
+.viz-line.tone-focus { stroke: var(--viz-focus); }
+.viz-line.tone-done { stroke: var(--viz-done); }
+.viz-box { fill: var(--viz-muted-bg); stroke: var(--border); transition: fill 0.4s, stroke 0.4s; }
+.viz-box.tone-range { fill: var(--viz-range-bg); stroke: var(--viz-range); }
+.viz-box.tone-focus { fill: var(--viz-focus-bg); stroke: var(--viz-focus); }
+.viz-box.tone-done { fill: var(--viz-done-bg); stroke: var(--viz-done); }
+.viz-fade { transition: opacity 0.45s var(--viz-ease); }
+.viz-fade.is-hidden { opacity: 0; }
+.viz-hint { font-size: 0.75rem; color: var(--text-light); }
+.viz-cell rect { stroke-width: 2; transition: fill 0.45s var(--viz-ease), stroke 0.45s var(--viz-ease), opacity 0.45s var(--viz-ease); }
+.viz-cell text { transition: fill 0.45s var(--viz-ease), opacity 0.45s var(--viz-ease); }
+/* SVG 内の px は viewBox 単位。スマホ幅で縮小されても読める大きさにしている */
+.viz-cell .viz-val { font-size: 26px; font-weight: 700; }
+.viz-cell .viz-idx { font-size: 17px; fill: var(--text-light); }
+.viz-cell.is-range rect { fill: var(--viz-range-bg); stroke: var(--viz-range); }
+.viz-cell.is-range .viz-val { fill: var(--viz-range); }
+.viz-cell.is-focus rect { fill: var(--viz-focus-bg); stroke: var(--viz-focus); stroke-width: 3; }
+.viz-cell.is-focus .viz-val { fill: var(--viz-focus); }
+.viz-cell.is-done rect { fill: var(--viz-done-bg); stroke: var(--viz-done); stroke-width: 3; }
+.viz-cell.is-done .viz-val { fill: var(--viz-done); }
+.viz-cell.is-muted rect { fill: var(--viz-muted-bg); stroke: var(--viz-muted); opacity: 0.55; }
+.viz-cell.is-muted .viz-val { fill: var(--viz-muted); opacity: 0.6; }
+.viz-cell.is-muted .viz-idx { opacity: 0.5; }
+
+/* ポインタ（left / mid / right） */
+.viz-pointer { transition: transform 0.5s var(--viz-ease), opacity 0.3s var(--viz-ease); }
+.viz-pointer text { font-size: 19px; font-weight: 700; }
+.viz-pointer.tone-range { fill: var(--viz-range); }
+.viz-pointer.tone-focus { fill: var(--viz-focus); }
+.viz-pointer.tone-done { fill: var(--viz-done); }
+.viz-pointer.is-hidden { opacity: 0; }
+
+/* 凡例 */
+.viz-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; list-style: none; padding: 0; margin: 10px 0 0; font-size: 0.8rem; color: var(--text-light); }
+.viz-legend li { display: inline-flex; align-items: center; gap: 6px; }
+.viz-swatch { width: 14px; height: 14px; border-radius: 4px; border: 2px solid; }
+.viz-swatch.tone-range { background: var(--viz-range-bg); border-color: var(--viz-range); }
+.viz-swatch.tone-focus { background: var(--viz-focus-bg); border-color: var(--viz-focus); }
+.viz-swatch.tone-done { background: var(--viz-done-bg); border-color: var(--viz-done); }
+.viz-swatch.tone-muted { background: var(--viz-muted-bg); border-color: var(--viz-muted); }
+
+/* 変数表示 */
+.viz-vars { display: grid; grid-template-columns: repeat(auto-fit, minmax(84px, 1fr)); gap: 8px; margin: 14px 0 0; }
+.viz-var { border: 1px solid var(--border); border-radius: 10px; padding: 6px 10px; text-align: center; transition: border-color 0.3s, background 0.3s; }
+.viz-var dt { font-size: 0.75rem; color: var(--text-light); }
+.viz-var dd { margin: 2px 0 0; font-size: 1.15rem; font-weight: 700; color: var(--text); font-variant-numeric: tabular-nums; }
+.viz-var.tone-range { border-color: var(--viz-range); }
+.viz-var.tone-range dd { color: var(--viz-range); }
+.viz-var.tone-focus { border-color: var(--viz-focus); }
+.viz-var.tone-focus dd { color: var(--viz-focus); }
+.viz-var.tone-done { border-color: var(--viz-done); background: var(--viz-done-bg); }
+.viz-var.tone-done dd { color: var(--viz-done); }
+
+/* 説明文 */
+.viz-message {
+  margin: 12px 0 0; padding: 12px 14px; min-height: 4.6em;
+  background: var(--bg); border-left: 4px solid var(--viz-range); border-radius: 8px;
+  font-size: 0.95rem; line-height: 1.7; color: var(--text);
+}
+
+.viz-progress { height: 4px; margin-top: 12px; background: var(--border); border-radius: 2px; overflow: hidden; }
+.viz-progress-bar { height: 100%; background: var(--viz-range); transition: width 0.4s var(--viz-ease); }
+
+/* 操作ボタン（スマホで押しやすい 44px 以上） */
+.viz-controls { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+.viz-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+  min-height: 44px; padding: 8px 6px; border: 1px solid var(--border); border-radius: 10px;
+  background: var(--surface); color: var(--text); font-size: 0.9rem; font-weight: 600; cursor: pointer;
+  touch-action: manipulation; transition: background 0.2s, border-color 0.2s, transform 0.1s;
+}
+.viz-btn:hover:not(:disabled) { border-color: var(--viz-range); }
+.viz-btn:active:not(:disabled) { transform: scale(0.97); }
+.viz-btn:disabled { opacity: 0.4; cursor: default; }
+.viz-btn:focus-visible { outline: 2px solid var(--viz-range); outline-offset: 2px; }
+.viz-btn-primary { background: var(--viz-range); border-color: var(--viz-range); color: #fff; }
+.viz-btn-primary:hover:not(:disabled) { filter: brightness(1.08); }
+[data-theme="dark"] .viz-btn-primary { color: #0f172a; }
+.viz-btn-play[aria-pressed="true"] { background: var(--viz-focus-bg); border-color: var(--viz-focus); color: var(--viz-focus); }
+
+.viz-speed { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; margin-top: 10px; font-size: 0.8rem; color: var(--text-light); }
+.viz-chip {
+  min-height: 32px; padding: 4px 12px; border: 1px solid var(--border); border-radius: 999px;
+  background: transparent; color: var(--text-light); font-size: 0.8rem; cursor: pointer;
+}
+.viz-chip.is-on { border-color: var(--viz-range); color: var(--viz-range); background: var(--viz-range-bg); font-weight: 700; }
+.viz-mini-btn {
+  min-height: 40px; padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px;
+  background: var(--surface); color: var(--text); font-size: 0.85rem; cursor: pointer;
+}
+.viz-mini-btn:hover { border-color: var(--viz-range); }
+
+/* 擬似コード */
+.viz-code-wrap { margin-top: 14px; }
+.viz-code-wrap summary { cursor: pointer; font-size: 0.85rem; color: var(--text-light); padding: 4px 0; }
+.viz-code {
+  margin: 6px 0 0; padding: 10px 0; background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+  font-size: 0.82rem; line-height: 1.7; overflow-x: auto;
+}
+.viz-code span { display: block; padding: 0 12px; white-space: pre; transition: background 0.3s; border-left: 3px solid transparent; }
+.viz-code span.is-active { background: var(--viz-code-active); border-left-color: var(--viz-focus); font-weight: 700; }
+
+/* HTML で並べるビット（折り返しが必要な長いビット列用） */
+.viz-bits { display: inline-flex; flex-wrap: wrap; gap: 3px; vertical-align: middle; }
+.viz-bit {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 1.55em; height: 1.9em; padding: 0 2px;
+  border: 2px solid var(--border); border-radius: 6px; background: var(--surface); color: var(--text);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-weight: 700; font-size: 0.95rem;
+  transition: background 0.4s, border-color 0.4s, color 0.4s;
+}
+.viz-bit.tone-range { background: var(--viz-range-bg); border-color: var(--viz-range); color: var(--viz-range); }
+.viz-bit.tone-focus { background: var(--viz-focus-bg); border-color: var(--viz-focus); color: var(--viz-focus); }
+.viz-bit.tone-done { background: var(--viz-done-bg); border-color: var(--viz-done); color: var(--viz-done); }
+.viz-bit.tone-muted { background: var(--viz-muted-bg); border-color: var(--viz-muted); color: var(--viz-muted); }
+.viz-bit.tone-alt { background: rgba(147, 51, 234, 0.12); border-color: #9333ea; color: #9333ea; }
+[data-theme="dark"] .viz-bit.tone-alt { background: rgba(192, 132, 252, 0.16); border-color: #c084fc; color: #c084fc; }
+.viz-bit.is-fixed { border-style: dashed; }
+
+/* 作業メモ（計算の途中経過を1行ずつ表示） */
+.viz-work { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.viz-work li {
+  display: grid; grid-template-columns: 6.5em 1fr; gap: 8px; align-items: center;
+  padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; background: var(--bg);
+  font-size: 0.92rem; line-height: 1.6; color: var(--text); transition: border-color 0.3s, background 0.3s, opacity 0.3s;
+}
+.viz-work li > span:first-child { font-size: 0.8rem; font-weight: 700; color: var(--text-light); }
+.viz-work li.is-current { border-color: var(--viz-focus); background: var(--viz-focus-bg); }
+.viz-work li.is-pending { opacity: 0.35; }
+.viz-work code, .viz-mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; word-break: break-all; }
+
+/* 小さな表（真理値表・範囲表など） */
+.viz-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin-top: 10px; }
+.viz-table th, .viz-table td { border: 1px solid var(--border); padding: 5px 8px; text-align: center; transition: background 0.3s, color 0.3s; }
+.viz-table th { background: var(--bg); color: var(--text-light); font-weight: 700; }
+.viz-table tr.is-active td { background: var(--viz-focus-bg); color: var(--viz-focus); font-weight: 700; }
+.viz-table td.is-left { text-align: left; }
+.viz-table-wrap { overflow-x: auto; }
+
+.viz-float-fields { display: flex; flex-wrap: wrap; gap: 10px 14px; margin-top: 12px; }
+.viz-float-fields > div { display: flex; flex-direction: column; gap: 4px; }
+.viz-float-fields small { font-size: 0.75rem; color: var(--text-light); font-weight: 700; }
+.viz-group { display: grid; gap: 10px; }
+.viz-presets { display: inline-flex; flex-wrap: wrap; gap: 6px; }
+.viz-big { font-size: 1.6rem; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+
+@media (max-width: 480px) {
+  .viz-hide-sm { display: none; }
+  .viz-work li { grid-template-columns: 1fr; gap: 2px; }
+  .viz-bit { font-size: 0.85rem; min-width: 1.4em; }
+}
+
+.viz-footnote { margin: 10px 0 0; font-size: 0.8rem; color: var(--text-light); line-height: 1.6; }
+
+@media (max-width: 480px) {
+  /* 本文の左右余白（.section-content の 20px）まで広げ、図を少しでも大きく見せる */
+  .diagram-wrapper:has(> .viz) { margin-inline: -20px; }
+  .viz { padding: 12px 10px; border-radius: 12px; }
+  /* 図は画面幅に合わせて縮小されるため、SVG 内の文字を大きくして読める大きさを保つ */
+  .viz-cell .viz-val { font-size: 38px; }
+  .viz-cell .viz-idx { font-size: 24px; }
+  .viz-pointer text { font-size: 28px; }
+  .viz-label { font-size: 24px; }
+  .viz-text { font-size: 26px; }
+  .viz-vars { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+  .viz-var { padding: 4px 6px; }
+  .viz-var dt { font-size: 0.68rem; }
+  .viz-var dd { font-size: 1rem; }
+  .viz-settings { gap: 6px 8px; }
+  .viz-mini-btn { padding: 6px 10px; font-size: 0.8rem; }
+  .viz-controls { gap: 6px; }
+  .viz-btn { flex-direction: column; gap: 0; font-size: 0.75rem; padding: 6px 2px; }
+  .viz-message { font-size: 0.9rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viz *, .viz *::before, .viz *::after { transition: none !important; }
+}
