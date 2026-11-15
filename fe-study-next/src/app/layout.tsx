@@ -3,6 +3,8 @@ import '../styles/global.css';
 import Navbar from '@/components/Navbar';
 import { SITE_URL } from '@/lib/site';
 
+const CF_ANALYTICS_TOKEN = '47f38f57a9ea43b2af81bc25deb29783';
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -59,6 +61,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </nav>
           </div>
         </footer>
+        {/* Cloudflare Web Analytics（Cookie を使わない計測。トークンは公開用の値） */}
+        <script
+          type="module"
+          defer
+          src="https://static.cloudflareinsights.com/beacon.min.js"
+          data-cf-beacon={JSON.stringify({ token: CF_ANALYTICS_TOKEN })}
+        />
       </body>
     </html>
   );
