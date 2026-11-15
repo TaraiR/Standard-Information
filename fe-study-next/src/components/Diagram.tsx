@@ -6,61 +6,15 @@ import ComplementVisual from './visuals/ComplementVisual';
 import LogicShiftVisual from './visuals/LogicShiftVisual';
 import FloatingPointVisual from './visuals/FloatingPointVisual';
 import EncodingVisual from './visuals/EncodingVisual';
+import CpuVisual from './visuals/CpuVisual';
+import PipelineVisual from './visuals/PipelineVisual';
+import PerformanceVisual from './visuals/PerformanceVisual';
+import CacheVisual from './visuals/CacheVisual';
+import IoVisual from './visuals/IoVisual';
 
 interface DiagramProps {
   type: string;
 }
-
-const CpuDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">コンピュータの5大装置</h4>
-    <svg viewBox="0 0 520 240" className="diagram-svg">
-      {/* CPU box */}
-      <rect x="170" y="10" width="180" height="130" rx="10" fill="#2da3d9" opacity="0.1" stroke="#2da3d9" strokeWidth="2.5"/>
-      <text x="260" y="32" textAnchor="middle" fill="#2da3d9" fontWeight="bold" fontSize="13">CPU</text>
-
-      {/* Control unit */}
-      <rect x="182" y="42" width="72" height="44" rx="6" fill="#2da3d9" opacity="0.2" stroke="#2da3d9" strokeWidth="1.5"/>
-      <text x="218" y="61" textAnchor="middle" fill="#4a5568" fontSize="11" fontWeight="bold">制御装置</text>
-      <text x="218" y="77" textAnchor="middle" fill="#4a5568" fontSize="10">命令解読</text>
-
-      {/* ALU */}
-      <rect x="264" y="42" width="72" height="44" rx="6" fill="#2da3d9" opacity="0.2" stroke="#2da3d9" strokeWidth="1.5"/>
-      <text x="300" y="61" textAnchor="middle" fill="#4a5568" fontSize="11" fontWeight="bold">演算装置</text>
-      <text x="300" y="77" textAnchor="middle" fill="#4a5568" fontSize="10">ALU</text>
-
-      {/* Memory */}
-      <rect x="182" y="96" width="154" height="34" rx="6" fill="#48bb78" opacity="0.2" stroke="#48bb78" strokeWidth="1.5"/>
-      <text x="259" y="118" textAnchor="middle" fill="#276749" fontSize="11" fontWeight="bold">主記憶装置（RAM）</text>
-
-      {/* Input */}
-      <rect x="10" y="90" width="110" height="50" rx="8" fill="#ed8936" opacity="0.15" stroke="#ed8936" strokeWidth="2"/>
-      <text x="65" y="111" textAnchor="middle" fill="#c05621" fontWeight="bold" fontSize="12">入力装置</text>
-      <text x="65" y="127" textAnchor="middle" fill="#744210" fontSize="10">キーボード等</text>
-
-      {/* Output */}
-      <rect x="400" y="90" width="110" height="50" rx="8" fill="#282867" opacity="0.15" stroke="#282867" strokeWidth="2"/>
-      <text x="455" y="111" textAnchor="middle" fill="#1a2060" fontWeight="bold" fontSize="12">出力装置</text>
-      <text x="455" y="127" textAnchor="middle" fill="#1a2060" fontSize="10">ディスプレイ等</text>
-
-      {/* Storage */}
-      <rect x="185" y="180" width="150" height="44" rx="8" fill="#fc8181" opacity="0.15" stroke="#fc8181" strokeWidth="2"/>
-      <text x="260" y="199" textAnchor="middle" fill="#c53030" fontWeight="bold" fontSize="12">補助記憶装置</text>
-      <text x="260" y="215" textAnchor="middle" fill="#822727" fontSize="10">HDD / SSD</text>
-
-      {/* Arrows */}
-      <path d="M 120 115 L 168 115" stroke="#ed8936" strokeWidth="2" markerEnd="url(#arrow2)"/>
-      <path d="M 352 115 L 398 115" stroke="#282867" strokeWidth="2" markerEnd="url(#arrow2)"/>
-      <path d="M 260 144 L 260 178" stroke="#fc8181" strokeWidth="2" markerEnd="url(#arrow2)"/>
-
-      <defs>
-        <marker id="arrow2" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-          <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
-        </marker>
-      </defs>
-    </svg>
-  </div>
-);
 
 const OsiDiagram = () => (
   <div className="diagram-container">
@@ -219,31 +173,6 @@ const FlowchartDiagram = () => (
         </marker>
       </defs>
     </svg>
-  </div>
-);
-
-const ClockDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">CPU性能の計算式</h4>
-    <div className="formula-box">
-      <div className="formula">
-        <span className="formula-label">実行時間</span>
-        <span className="formula-eq">=</span>
-        <span className="formula-num">命令数 × CPI</span>
-        <span className="formula-div">÷</span>
-        <span className="formula-denom">クロック周波数</span>
-      </div>
-      <div className="formula" style={{ marginTop: '16px' }}>
-        <span className="formula-label">MIPS</span>
-        <span className="formula-eq">=</span>
-        <span className="formula-num">クロック周波数(MHz)</span>
-        <span className="formula-div">÷</span>
-        <span className="formula-denom">CPI</span>
-      </div>
-      <div className="formula-example">
-        例: 2GHz ÷ CPI4 = <strong>500 MIPS</strong>
-      </div>
-    </div>
   </div>
 );
 
@@ -633,13 +562,13 @@ const InheritanceDiagram = () => (
 const diagrams: Record<string, React.FC> = {
   binary: BaseConversionVisual,
   logic: LogicShiftVisual,
-  cpu: CpuDiagram,
+  cpu: CpuVisual,
   osi: OsiDiagram,
   'stack-queue': StackQueueDiagram,
   security: SecurityDiagram,
   sort: SortDiagram,
   flowchart: FlowchartDiagram,
-  clock: ClockDiagram,
+  clock: PerformanceVisual,
   os: OsDiagram,
   filesystem: FilesystemDiagram,
   database: DatabaseDiagram,
@@ -654,84 +583,9 @@ const diagrams: Record<string, React.FC> = {
   tree: TreeDiagram,
   oop: OopDiagram,
   inheritance: InheritanceDiagram,
-  pipeline: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">パイプライン処理（4段）</h4>
-      <svg viewBox="0 0 480 180" className="diagram-svg">
-        {['フェッチ','デコード','実行','書戻し'].map((stage, si) => (
-          <g key={stage}>
-            <rect x={10 + si*116} y={10} width={108} height={32} rx={6} fill="#2da3d9" opacity={0.6 + si*0.1}/>
-            <text x={10 + si*116 + 54} y={31} textAnchor="middle" fill="white" fontSize={12} fontWeight="bold">{stage}</text>
-            {si < 3 && <path d={`M ${118+si*116} 26 L ${126+si*116} 26`} stroke="#718096" strokeWidth={2} markerEnd="url(#ap1)"/>}
-          </g>
-        ))}
-        {[0,1,2,3].map(cmd => (
-          [0,1,2,3].map(stage => {
-            const col = cmd + stage;
-            if (col > 6) return null;
-            const colors = ['#2da3d9','#48bb78','#ed8936','#282867'];
-            return (
-              <rect key={`${cmd}-${stage}`} x={10 + col*60} y={60 + cmd*28} width={52} height={22} rx={4}
-                fill={colors[cmd]} opacity={0.7}/>
-            );
-          })
-        ))}
-        {[0,1,2,3].map(cmd => (
-          <text key={cmd} x={2} y={75 + cmd*28} fill="#718096" fontSize={11} textAnchor="middle">命令{cmd+1}</text>
-        ))}
-        <text x={240} y={175} textAnchor="middle" fill="#718096" fontSize={11}>→ クロック時間</text>
-        <defs>
-          <marker id="ap1" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
-          </marker>
-        </defs>
-      </svg>
-    </div>
-  )) as React.FC,
-  memoryhierarchy: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">メモリ階層（速度 vs 容量）</h4>
-      <div style={{ display:'flex', flexDirection:'column', alignItems:'center', gap:6 }}>
-        {[
-          { label:'レジスタ', speed:'〜1ns', cap:'数十B', w:80, color:'#2da3d9' },
-          { label:'キャッシュ (L1/L2/L3)', speed:'1〜10ns', cap:'KB〜MB', w:160, color:'#282867' },
-          { label:'主記憶（RAM）', speed:'〜100ns', cap:'GB', w:260, color:'#48bb78' },
-          { label:'SSD', speed:'〜0.1ms', cap:'数百GB', w:340, color:'#ed8936' },
-          { label:'HDD', speed:'〜10ms', cap:'TB', w:420, color:'#fc8181' },
-        ].map(m => (
-          <div key={m.label} style={{ width:m.w, background:m.color, borderRadius:6, padding:'6px 12px', color:'white', display:'flex', justifyContent:'space-between', opacity:0.85 }}>
-            <span style={{ fontSize:12, fontWeight:700 }}>{m.label}</span>
-            <span style={{ fontSize:11, opacity:0.9 }}>{m.speed} / {m.cap}</span>
-          </div>
-        ))}
-        <div style={{ fontSize:12, color:'#718096', marginTop:4 }}>↑ 速い・小容量・高価　　↓ 遅い・大容量・安価</div>
-      </div>
-    </div>
-  )) as React.FC,
-  bus: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">バスとDMA転送</h4>
-      <svg viewBox="0 0 480 180" className="diagram-svg">
-        <rect x="10" y="60" width="90" height="60" rx="8" fill="#2da3d9" opacity="0.7"/>
-        <text x="55" y="88" textAnchor="middle" fill="white" fontSize="13" fontWeight="bold">CPU</text>
-        <text x="55" y="106" textAnchor="middle" fill="white" fontSize="10">制御・演算</text>
-        <rect x="195" y="60" width="90" height="60" rx="8" fill="#48bb78" opacity="0.7"/>
-        <text x="240" y="88" textAnchor="middle" fill="white" fontSize="13" fontWeight="bold">主記憶</text>
-        <text x="240" y="106" textAnchor="middle" fill="white" fontSize="10">RAM</text>
-        <rect x="380" y="20" width="90" height="50" rx="8" fill="#ed8936" opacity="0.7"/>
-        <text x="425" y="43" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">入出力</text>
-        <text x="425" y="60" textAnchor="middle" fill="white" fontSize="10">装置</text>
-        <rect x="380" y="110" width="90" height="50" rx="8" fill="#282867" opacity="0.7"/>
-        <text x="425" y="133" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">DMA</text>
-        <text x="425" y="150" textAnchor="middle" fill="white" fontSize="10">コントローラ</text>
-        <line x1="100" y1="90" x2="193" y2="90" stroke="#4a5568" strokeWidth="3"/>
-        <line x1="285" y1="90" x2="378" y2="45" stroke="#4a5568" strokeWidth="1.5" strokeDasharray="4"/>
-        <line x1="285" y1="90" x2="378" y2="135" stroke="#ed8936" strokeWidth="2"/>
-        <line x1="378" y1="135" x2="325" y2="90" stroke="#ed8936" strokeWidth="2"/>
-        <text x="240" y="170" textAnchor="middle" fill="#ed8936" fontSize="11">DMA: CPUを介さずに主記憶↔入出力を直結</text>
-      </svg>
-    </div>
-  )) as React.FC,
+  pipeline: PipelineVisual,
+  memoryhierarchy: CacheVisual,
+  bus: IoVisual,
   'network-devices': (() => (
     <div className="diagram-container">
       <h4 className="diagram-title">ネットワーク機器とOSI層の対応</h4>

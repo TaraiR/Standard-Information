@@ -75,6 +75,48 @@
 .viz-fade { transition: opacity 0.45s var(--viz-ease); }
 .viz-fade.is-hidden { opacity: 0; }
 .viz-hint { font-size: 0.75rem; color: var(--text-light); }
+
+/* 矢印（データの流れ・制御信号） */
+.viz-arrow polyline { fill: none; stroke: var(--viz-muted); stroke-width: 2; opacity: 0.35; transition: stroke 0.3s, opacity 0.3s, stroke-width 0.3s; }
+.viz-arrow polygon { fill: var(--viz-muted); opacity: 0.35; transition: fill 0.3s, opacity 0.3s; }
+.viz-arrow.is-dashed polyline { stroke-dasharray: 7 6; }
+.viz-arrow.is-active polyline { opacity: 1; stroke-width: 4; stroke-dasharray: 10 6; animation: viz-flow 0.8s linear infinite; }
+.viz-arrow.is-active polygon { opacity: 1; }
+.viz-arrow.is-active.tone-range polyline { stroke: var(--viz-range); }
+.viz-arrow.is-active.tone-range polygon { fill: var(--viz-range); }
+.viz-arrow.is-active.tone-focus polyline { stroke: var(--viz-focus); }
+.viz-arrow.is-active.tone-focus polygon { fill: var(--viz-focus); }
+.viz-arrow.is-active.tone-done polyline { stroke: var(--viz-done); }
+.viz-arrow.is-active.tone-done polygon { fill: var(--viz-done); }
+@keyframes viz-flow { to { stroke-dashoffset: -32; } }
+.viz-unit .viz-box { stroke-width: 2; }
+.viz-unit.is-active .viz-box { stroke-width: 3; }
+
+/* 表形式のタイムライン（パイプライン・入出力） */
+.viz-grid { border-collapse: separate; border-spacing: 3px; font-size: 0.8rem; margin: 0 auto; }
+.viz-grid th { color: var(--text-light); font-weight: 600; padding: 0 4px; white-space: nowrap; }
+.viz-grid th.is-now { color: var(--viz-focus); }
+.viz-grid td {
+  min-width: 2.1em; height: 2.1em; text-align: center; border-radius: 6px; font-weight: 700;
+  background: var(--bg); border: 1px dashed var(--border); color: var(--text-light);
+  transition: background 0.35s, border-color 0.35s, color 0.35s;
+}
+.viz-grid td.tone-range { background: var(--viz-range-bg); border: 1px solid var(--viz-range); color: var(--viz-range); }
+.viz-grid td.tone-focus { background: var(--viz-focus-bg); border: 2px solid var(--viz-focus); color: var(--viz-focus); }
+.viz-grid td.tone-done { background: var(--viz-done-bg); border: 1px solid var(--viz-done); color: var(--viz-done); }
+.viz-grid td.tone-muted { background: var(--viz-muted-bg); border: 1px solid var(--viz-muted); color: var(--viz-muted); }
+.viz-grid td.is-now { box-shadow: 0 0 0 2px var(--viz-focus-bg); }
+
+/* レジスタ・主記憶の一覧 */
+.viz-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+.viz-panel { border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; background: var(--bg); }
+.viz-panel h5 { margin: 0 0 6px; font-size: 0.8rem; color: var(--text-light); }
+.viz-kv { display: grid; grid-template-columns: auto 1fr; gap: 3px 10px; font-size: 0.85rem; margin: 0; }
+.viz-kv dt { font-weight: 700; color: var(--text-light); font-family: ui-monospace, Menlo, Consolas, monospace; }
+.viz-kv dd { margin: 0; font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--text); transition: color 0.3s, background 0.3s; border-radius: 4px; padding: 0 4px; }
+.viz-kv dd.is-changed { color: var(--viz-focus); background: var(--viz-focus-bg); font-weight: 700; }
+.viz-kv dd.is-hl { color: var(--viz-range); background: var(--viz-range-bg); font-weight: 700; }
+@media (max-width: 480px) { .viz-panels { grid-template-columns: 1fr; } }
 .viz-cell rect { stroke-width: 2; transition: fill 0.45s var(--viz-ease), stroke 0.45s var(--viz-ease), opacity 0.45s var(--viz-ease); }
 .viz-cell text { transition: fill 0.45s var(--viz-ease), opacity 0.45s var(--viz-ease); }
 /* SVG 内の px は viewBox 単位。スマホ幅で縮小されても読める大きさにしている */
@@ -241,5 +283,5 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .viz *, .viz *::before, .viz *::after { transition: none !important; }
+  .viz *, .viz *::before, .viz *::after { transition: none !important; animation: none !important; }
 }

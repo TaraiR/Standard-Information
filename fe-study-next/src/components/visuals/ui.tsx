@@ -130,5 +130,51 @@ export function CellRow({ cells, x, y, size = 52, gap = 6, above, caption }: {
   );
 }
 
+/**
+ * 折れ線の矢印。active のときだけ色を付けて太くし、データの流れる向きに破線を動かす。
+ * dashed は制御信号など（常に破線）。
+ */
+export function Arrow({ points, tone = 'range', active = false, dashed = false }: {
+  points: readonly (readonly [number, number])[];
+  tone?: CellTone;
+  active?: boolean;
+  dashed?: boolean;
+}) {
+  const [x1, y1] = points[points.length - 2];
+  const [x2, y2] = points[points.length - 1];
+  const ang = Math.atan2(y2 - y1, x2 - x1);
+  const h = 14;
+  const w = 7;
+  const head = [
+    [x2, y2],
+    [x2 - h * Math.cos(ang) + w * Math.sin(ang), y2 - h * Math.sin(ang) - w * Math.cos(ang)],
+    [x2 - h * Math.cos(ang) - w * Math.sin(ang), y2 - h * Math.sin(ang) + w * Math.cos(ang)],
+  ];
+  // 線の終わりを矢じりの付け根で止める
+  const body = [...points.slice(0, -1), [x2 - (h - 2) * Math.cos(ang), y2 - (h - 2) * Math.sin(ang)]];
+  return (
+    <g className={`viz-arrow tone-${tone}${active ? ' is-active' : ''}${dashed ? ' is-dashed' : ''}`}>
+      <polyline points={body.map(p => p.join(',')).join(' ')} />
+      <polygon points={head.map(p => p.join(',')).join(' ')} />
+    </g>
+  );
+}
+
+/** 装置などの箱（active で強調） */
+export function UnitBox({ x, y, w, h, title, sub, tone = 'focus', active = false }: {
+  x: number; y: number; w: number; h: number; title: string; sub?: string; tone?: CellTone; active?: boolean;
+}) {
+  return (
+    <g className={`viz-unit${active ? ' is-active' : ''}`}>
+      <rect className={`viz-box${active ? ` tone-${tone}` : ''}`} x={x} y={y} width={w} height={h} rx={12} />
+      <text className={`viz-text is-strong${active ? ` tone-${tone}` : ''}`} x={x + w / 2} y={sub ? y + h / 2 - 10 : y + h / 2}
+        textAnchor="middle" dominantBaseline="central">{title}</text>
+      {sub && (
+        <text className="viz-label" x={x + w / 2} y={y + h / 2 + 16} textAnchor="middle" dominantBaseline="central">{sub}</text>
+      )}
+    </g>
+  );
+}
+
 /** CellRow の幅（viewBox 単位） */
 export const rowWidth = (count: number, size = 52, gap = 6) => count * size + Math.max(0, count - 1) * gap;
