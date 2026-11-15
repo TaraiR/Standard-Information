@@ -1,5 +1,5 @@
-# Cloudflare Pages のレスポンスヘッダー設定（旧 next.config.ts の headers() から移行）
-# https://developers.cloudflare.com/pages/configuration/headers/
+# Cloudflare Workers 静的アセットのレスポンスヘッダー設定（旧 next.config.ts の headers() から移行）
+# https://developers.cloudflare.com/workers/static-assets/headers/
 
 /*
   X-Content-Type-Options: nosniff

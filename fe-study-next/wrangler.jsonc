@@ -1,0 +1,13 @@
+// Cloudflare Workers の設定（静的アセットのみ配信。サーバー側のコードはない）
+// ビルド: npm run build → out/ をそのまま配信する。ヘッダーは out/_headers（public/_headers）で設定。
+{
+  "name": "standard-information",
+  "compatibility_date": "2025-10-01",
+  "assets": {
+    "directory": "./out",
+    // /chapter/a1 → chapter/a1.html のように拡張子なしの URL で HTML を返す
+    "html_handling": "auto-trailing-slash",
+    // 存在しない URL には out/404.html を 404 で返す
+    "not_found_handling": "404-page"
+  }
+}
