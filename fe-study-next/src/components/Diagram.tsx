@@ -30,6 +30,12 @@ import DatabaseVisual from './visuals/DatabaseVisual';
 import NormalizeVisual from './visuals/NormalizeVisual';
 import TransactionVisual from './visuals/TransactionVisual';
 import NosqlVisual from './visuals/NosqlVisual';
+import DevModelVisual from './visuals/DevModelVisual';
+import UmlVisual from './visuals/UmlVisual';
+import TestingVisual from './visuals/TestingVisual';
+import CpmVisual from './visuals/CpmVisual';
+import ReliabilityVisual from './visuals/ReliabilityVisual';
+import ItsmVisual from './visuals/ItsmVisual';
 
 interface DiagramProps {
   type: string;
@@ -143,109 +149,6 @@ const FlowchartDiagram = () => (
           <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
         </marker>
       </defs>
-    </svg>
-  </div>
-);
-
-const WaterfallDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">ウォーターフォールモデル</h4>
-    <svg viewBox="0 0 420 220" className="diagram-svg">
-      {[
-        { y: 10, label: '要件定義', color: '#2da3d9' },
-        { y: 55, label: '外部設計', color: '#2090bc' },
-        { y: 100, label: '内部設計', color: '#282867' },
-        { y: 145, label: '実装・単体テスト', color: '#48bb78' },
-        { y: 190, label: '結合・システムテスト', color: '#38a169' },
-      ].map((step, i) => (
-        <g key={step.label}>
-          <rect x={10 + i * 20} y={step.y} width={400 - i * 40} height="38" rx="6" fill={step.color} opacity="0.75"/>
-          <text x={210} y={step.y + 24} textAnchor="middle" fill="white" fontSize="13" fontWeight="bold">{step.label}</text>
-        </g>
-      ))}
-    </svg>
-  </div>
-);
-
-const TestingDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">テストの種類（V字モデル）</h4>
-    <svg viewBox="0 0 440 200" className="diagram-svg">
-      {[
-        { lx: 10, ly: 20, label: '要件定義', rx: 340, ry: 20, rlabel: '受入テスト', color: '#2da3d9' },
-        { lx: 50, ly: 60, label: '外部設計', rx: 300, ry: 60, rlabel: 'システムテスト', color: '#282867' },
-        { lx: 90, ly: 100, label: '内部設計', rx: 260, ry: 100, rlabel: '結合テスト', color: '#ed8936' },
-        { lx: 130, ly: 140, label: '実装', rx: 220, ry: 140, rlabel: '単体テスト', color: '#48bb78' },
-      ].map(row => (
-        <g key={row.label}>
-          <rect x={row.lx} y={row.ly} width="90" height="28" rx="5" fill={row.color} opacity="0.7"/>
-          <text x={row.lx + 45} y={row.ly + 19} textAnchor="middle" fill="white" fontSize="11" fontWeight="bold">{row.label}</text>
-          <rect x={row.rx} y={row.ry} width="90" height="28" rx="5" fill={row.color} opacity="0.4" stroke={row.color} strokeWidth="1.5"/>
-          <text x={row.rx + 45} y={row.ry + 19} textAnchor="middle" fill="#4a5568" fontSize="11" fontWeight="bold">{row.rlabel}</text>
-          <line x1={row.lx + 90} y1={row.ly + 14} x2={row.rx} y2={row.ry + 14} stroke={row.color} strokeWidth="1" strokeDasharray="4" opacity="0.5"/>
-        </g>
-      ))}
-      <path d="M 175 155 L 215 155" stroke="#718096" strokeWidth="2" markerEnd="url(#a5)"/>
-      <defs>
-        <marker id="a5" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-          <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
-        </marker>
-      </defs>
-    </svg>
-  </div>
-);
-
-const GanttDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">ガントチャート（例）</h4>
-    <div style={{ overflowX: 'auto' }}>
-      <table style={{ borderCollapse: 'collapse', width: '100%', fontSize: 13 }}>
-        <thead>
-          <tr>
-            <th style={{ padding: '6px 10px', background: '#2da3d9', color: 'white', textAlign: 'left', width: 120 }}>作業</th>
-            {['1週', '2週', '3週', '4週', '5週', '6週'].map(w => (
-              <th key={w} style={{ padding: '6px 8px', background: '#2da3d9', color: 'white', textAlign: 'center', width: 60 }}>{w}</th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {[
-            { name: '要件定義', start: 0, len: 2, color: '#2da3d9' },
-            { name: '設計', start: 1, len: 2, color: '#282867' },
-            { name: '実装', start: 2, len: 3, color: '#48bb78' },
-            { name: 'テスト', start: 4, len: 2, color: '#ed8936' },
-          ].map(task => (
-            <tr key={task.name}>
-              <td style={{ padding: '6px 10px', borderBottom: '1px solid #e2e8f0', fontWeight: 600 }}>{task.name}</td>
-              {[0, 1, 2, 3, 4, 5].map(w => (
-                <td key={w} style={{ padding: 4, borderBottom: '1px solid #e2e8f0' }}>
-                  {w >= task.start && w < task.start + task.len && (
-                    <div style={{ background: task.color, borderRadius: 4, height: 20, opacity: 0.75 }} />
-                  )}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  </div>
-);
-
-const ReliabilityDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">稼働率の計算</h4>
-    <svg viewBox="0 0 440 160" className="diagram-svg">
-      <rect x="10" y="30" width="180" height="50" rx="8" fill="#48bb78" opacity="0.2" stroke="#48bb78" strokeWidth="2"/>
-      <text x="100" y="52" textAnchor="middle" fill="#276749" fontWeight="bold" fontSize="13">MTBF（平均故障間隔）</text>
-      <text x="100" y="70" textAnchor="middle" fill="#276749" fontSize="12">正常に動いている時間</text>
-
-      <rect x="250" y="30" width="180" height="50" rx="8" fill="#fc8181" opacity="0.2" stroke="#fc8181" strokeWidth="2"/>
-      <text x="340" y="52" textAnchor="middle" fill="#c53030" fontWeight="bold" fontSize="13">MTTR（平均修復時間）</text>
-      <text x="340" y="70" textAnchor="middle" fill="#c53030" fontSize="12">故障してから復旧までの時間</text>
-
-      <rect x="100" y="110" width="240" height="40" rx="8" fill="#2da3d9" opacity="0.15" stroke="#2da3d9" strokeWidth="2"/>
-      <text x="220" y="132" textAnchor="middle" fill="#4a5568" fontSize="13" fontWeight="bold">稼働率 = MTBF ÷ (MTBF + MTTR)</text>
     </svg>
   </div>
 );
@@ -423,10 +326,10 @@ const diagrams: Record<string, React.FC> = {
   filesystem: FilesystemVisual,
   database: DatabaseVisual,
   transaction: TransactionVisual,
-  waterfall: WaterfallDiagram,
-  testing: TestingDiagram,
-  gantt: GanttDiagram,
-  reliability: ReliabilityDiagram,
+  waterfall: DevModelVisual,
+  testing: TestingVisual,
+  gantt: CpmVisual,
+  reliability: ReliabilityVisual,
   strategy: StrategyDiagram,
   law: LawDiagram,
   recursion: RecursionDiagram,
@@ -449,53 +352,8 @@ const diagrams: Record<string, React.FC> = {
   virtualization: VirtualizationVisual,
   'er-diagram': NormalizeVisual,
   nosql: NosqlVisual,
-  uml: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">主なUML図の種類</h4>
-      <table className="truth-table">
-        <thead><tr><th>図の名前</th><th>表現するもの</th><th>使いどき</th></tr></thead>
-        <tbody>
-          {[
-            ['ユースケース図','ユーザーとシステムの対話','要件定義・機能一覧'],
-            ['クラス図','クラスの構造と関係','設計・実装前'],
-            ['シーケンス図','時系列のメッセージ交換','API設計・処理フロー'],
-            ['アクティビティ図','処理の流れ（フロー）','業務フロー・ロジック'],
-            ['状態遷移図','オブジェクトの状態変化','状態機械の設計'],
-          ].map(([name,desc,use])=>(
-            <tr key={name}>
-              <td style={{fontWeight:700,color:'#2da3d9'}}>{name}</td>
-              <td style={{fontSize:12}}>{desc}</td>
-              <td style={{fontSize:11,color:'#718096'}}>{use}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )) as React.FC,
-  itsm: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">ITILのサービスライフサイクル</h4>
-      <svg viewBox="0 0 480 180" className="diagram-svg">
-        {[
-          {x:190,y:10,label:'サービス戦略',color:'#2da3d9'},
-          {x:340,y:60,label:'サービス設計',color:'#282867'},
-          {x:280,y:130,label:'サービス移行',color:'#48bb78'},
-          {x:100,y:130,label:'サービス運用',color:'#ed8936'},
-          {x:40,y:60,label:'継続的改善',color:'#fc8181'},
-        ].map((s,i,arr)=>{
-          const next = arr[(i+1)%arr.length];
-          return (
-            <g key={s.label}>
-              <rect x={s.x} y={s.y} width={110} height={36} rx={6} fill={s.color} opacity={0.75}/>
-              <text x={s.x+55} y={s.y+22} textAnchor="middle" fill="white" fontSize={11} fontWeight="bold">{s.label}</text>
-            </g>
-          );
-        })}
-        <text x="240" y="100" textAnchor="middle" fill="#2da3d9" fontSize="14" fontWeight="bold">ITIL</text>
-        <text x="240" y="118" textAnchor="middle" fill="#718096" fontSize="11">サービスライフサイクル</text>
-      </svg>
-    </div>
-  )) as React.FC,
+  uml: UmlVisual,
+  itsm: ItsmVisual,
   ea: (() => (
     <div className="diagram-container">
       <h4 className="diagram-title">エンタープライズアーキテクチャ（EA）の4層</h4>
