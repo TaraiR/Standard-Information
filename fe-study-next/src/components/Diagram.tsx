@@ -21,6 +21,11 @@ import AttackVisual from './visuals/AttackVisual';
 import CryptoVisual from './visuals/CryptoVisual';
 import SignatureVisual from './visuals/SignatureVisual';
 import MeasuresVisual from './visuals/MeasuresVisual';
+import OsVisual from './visuals/OsVisual';
+import PagingVisual from './visuals/PagingVisual';
+import FilesystemVisual from './visuals/FilesystemVisual';
+import CloudVisual from './visuals/CloudVisual';
+import VirtualizationVisual from './visuals/VirtualizationVisual';
 
 interface DiagramProps {
   type: string;
@@ -134,66 +139,6 @@ const FlowchartDiagram = () => (
           <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
         </marker>
       </defs>
-    </svg>
-  </div>
-);
-
-const OsDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">OSの主な機能</h4>
-    <svg viewBox="0 0 480 200" className="diagram-svg">
-      <rect x="10" y="10" width="460" height="60" rx="8" fill="#2da3d9" opacity="0.15" stroke="#2da3d9" strokeWidth="2"/>
-      <text x="240" y="38" textAnchor="middle" fill="#4a5568" fontWeight="bold" fontSize="14">アプリケーション</text>
-      <text x="240" y="58" textAnchor="middle" fill="#2da3d9" fontSize="12">Word / Chrome / ゲームなど</text>
-      {[
-        { x: 10, label: 'プロセス管理', sub: 'マルチタスク', color: '#48bb78' },
-        { x: 125, label: 'メモリ管理', sub: '仮想記憶', color: '#ed8936' },
-        { x: 240, label: 'ファイル管理', sub: 'ディスクI/O', color: '#282867' },
-        { x: 355, label: 'デバイス管理', sub: 'ドライバ', color: '#fc8181' },
-      ].map(item => (
-        <g key={item.label}>
-          <rect x={item.x} y="85" width="105" height="55" rx="6" fill={item.color} opacity="0.2" stroke={item.color} strokeWidth="1.5"/>
-          <text x={item.x + 52} y="108" textAnchor="middle" fill="#4a5568" fontSize="12" fontWeight="bold">{item.label}</text>
-          <text x={item.x + 52} y="128" textAnchor="middle" fill="#718096" fontSize="11">{item.sub}</text>
-        </g>
-      ))}
-      <rect x="10" y="155" width="460" height="38" rx="8" fill="#2d3748" opacity="0.8"/>
-      <text x="240" y="179" textAnchor="middle" fill="white" fontWeight="bold" fontSize="13">ハードウェア（CPU・メモリ・ディスク）</text>
-    </svg>
-  </div>
-);
-
-const FilesystemDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">ディレクトリ構造（ツリー）</h4>
-    <svg viewBox="0 0 380 200" className="diagram-svg">
-      <rect x="155" y="10" width="70" height="32" rx="6" fill="#2da3d9" opacity="0.8"/>
-      <text x="190" y="31" textAnchor="middle" fill="white" fontSize="13" fontWeight="bold">/ (ルート)</text>
-      <line x1="190" y1="42" x2="100" y2="75" stroke="#718096" strokeWidth="1.5"/>
-      <line x1="190" y1="42" x2="190" y2="75" stroke="#718096" strokeWidth="1.5"/>
-      <line x1="190" y1="42" x2="280" y2="75" stroke="#718096" strokeWidth="1.5"/>
-      {[
-        { x: 65, label: 'home' },
-        { x: 155, label: 'etc' },
-        { x: 245, label: 'var' },
-      ].map(d => (
-        <g key={d.label}>
-          <rect x={d.x} y="75" width="70" height="28" rx="5" fill="#48bb78" opacity="0.7"/>
-          <text x={d.x + 35} y="94" textAnchor="middle" fill="white" fontSize="12" fontWeight="bold">{d.label}</text>
-        </g>
-      ))}
-      <line x1="100" y1="103" x2="65" y2="135" stroke="#718096" strokeWidth="1.5"/>
-      <line x1="100" y1="103" x2="135" y2="135" stroke="#718096" strokeWidth="1.5"/>
-      {[
-        { x: 30, label: 'user1' },
-        { x: 100, label: 'user2' },
-      ].map(d => (
-        <g key={d.label}>
-          <rect x={d.x} y="135" width="65" height="26" rx="5" fill="#ed8936" opacity="0.7"/>
-          <text x={d.x + 32} y="152" textAnchor="middle" fill="white" fontSize="11">{d.label}</text>
-        </g>
-      ))}
-      <text x="190" y="190" textAnchor="middle" fill="#718096" fontSize="11">絶対パス例: /home/user1/file.txt</text>
     </svg>
   </div>
 );
@@ -531,8 +476,8 @@ const diagrams: Record<string, React.FC> = {
   sort: SortDiagram,
   flowchart: FlowchartDiagram,
   clock: PerformanceVisual,
-  os: OsDiagram,
-  filesystem: FilesystemDiagram,
+  os: OsVisual,
+  filesystem: FilesystemVisual,
   database: DatabaseDiagram,
   transaction: TransactionDiagram,
   waterfall: WaterfallDiagram,
@@ -556,112 +501,9 @@ const diagrams: Record<string, React.FC> = {
   crypto: CryptoVisual,
   'digital-signature': SignatureVisual,
   'security-measures': MeasuresVisual,
-  paging: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">仮想記憶とページング</h4>
-      <svg viewBox="0 0 480 180" className="diagram-svg">
-        <rect x="10" y="10" width="130" height="160" rx="8" fill="#2da3d9" opacity="0.08" stroke="#2da3d9" strokeWidth="2"/>
-        <text x="75" y="30" textAnchor="middle" fill="#2da3d9" fontWeight="bold" fontSize="12">仮想アドレス空間</text>
-        {['ページ0','ページ1','ページ2','ページ3','ページ4'].map((p,i)=>(
-          <g key={p}>
-            <rect x="20" y={40+i*26} width="110" height="22" rx="4" fill="#2da3d9" opacity={0.3+i*0.1}/>
-            <text x="75" y={56+i*26} textAnchor="middle" fill="white" fontSize="11">{p}</text>
-          </g>
-        ))}
-        <rect x="200" y="10" width="130" height="120" rx="8" fill="#48bb78" opacity="0.08" stroke="#48bb78" strokeWidth="2"/>
-        <text x="265" y="30" textAnchor="middle" fill="#48bb78" fontWeight="bold" fontSize="12">物理メモリ（RAM）</text>
-        {[{label:'ページ0',c:'#48bb78'},{label:'ページ2',c:'#48bb78'},{label:'ページ4',c:'#48bb78'},{label:'(空き)',c:'#e2e8f0'}].map((p,i)=>(
-          <g key={i}>
-            <rect x="210" y={40+i*22} width="110" height="18" rx="3" fill={p.c} opacity={p.label==='(空き)'?0.5:0.6}/>
-            <text x="265" y={54+i*22} textAnchor="middle" fill="white" fontSize="10">{p.label}</text>
-          </g>
-        ))}
-        <rect x="380" y="10" width="90" height="90" rx="8" fill="#ed8936" opacity="0.08" stroke="#ed8936" strokeWidth="2"/>
-        <text x="425" y="30" textAnchor="middle" fill="#ed8936" fontWeight="bold" fontSize="11">スワップ領域</text>
-        {[{label:'ページ1'},{label:'ページ3'}].map((p,i)=>(
-          <g key={i}>
-            <rect x="388" y={40+i*26} width="74" height="22" rx="4" fill="#ed8936" opacity="0.5"/>
-            <text x="425" y={56+i*26} textAnchor="middle" fill="white" fontSize="10">{p.label}</text>
-          </g>
-        ))}
-        <path d="M 142 80 L 198 80" stroke="#2da3d9" strokeWidth="1.5" markerEnd="url(#apg)"/>
-        <path d="M 332 60 L 378 55" stroke="#ed8936" strokeWidth="1.5" strokeDasharray="4" markerEnd="url(#apg)"/>
-        <text x="240" y="165" textAnchor="middle" fill="#718096" fontSize="11">使用頻度の低いページをディスクに退避してメモリを節約</text>
-        <defs>
-          <marker id="apg" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
-          </marker>
-        </defs>
-      </svg>
-    </div>
-  )) as React.FC,
-  cloud: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">クラウドサービスの責任範囲</h4>
-      <div style={{ overflowX:'auto' }}>
-        <table style={{ borderCollapse:'collapse', width:'100%', fontSize:13, minWidth:400 }}>
-          <thead>
-            <tr>
-              <th style={{ padding:'8px 12px', background:'#2d3748', color:'white', textAlign:'left' }}>レイヤー</th>
-              <th style={{ padding:'8px 12px', background:'#2da3d9', color:'white', textAlign:'center' }}>IaaS</th>
-              <th style={{ padding:'8px 12px', background:'#48bb78', color:'white', textAlign:'center' }}>PaaS</th>
-              <th style={{ padding:'8px 12px', background:'#ed8936', color:'white', textAlign:'center' }}>SaaS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[
-              ['アプリケーション','利用者','利用者','提供者'],
-              ['ランタイム・MW','利用者','提供者','提供者'],
-              ['OS','利用者','提供者','提供者'],
-              ['仮想化・サーバ','提供者','提供者','提供者'],
-              ['ネットワーク','提供者','提供者','提供者'],
-            ].map(([layer,...rest])=>(
-              <tr key={layer}>
-                <td style={{ padding:'7px 12px', fontWeight:700, borderBottom:'1px solid #e2e8f0' }}>{layer}</td>
-                {rest.map((v,i)=>(
-                  <td key={i} style={{ padding:'7px 12px', textAlign:'center', borderBottom:'1px solid #e2e8f0',
-                    background: v==='利用者' ? '#fef3c7' : '#dcfce7', color: v==='利用者' ? '#92400e' : '#166534', fontWeight:600 }}>{v}</td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  )) as React.FC,
-  virtualization: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">仮想マシン vs コンテナ</h4>
-      <svg viewBox="0 0 480 200" className="diagram-svg">
-        {/* VM */}
-        <rect x="10" y="10" width="210" height="180" rx="8" fill="#2da3d9" opacity="0.07" stroke="#2da3d9" strokeWidth="2"/>
-        <text x="115" y="30" textAnchor="middle" fill="#2da3d9" fontWeight="bold" fontSize="13">仮想マシン（VM）</text>
-        {['アプリA','ゲストOS','アプリB','ゲストOS'].map((l,i)=>(
-          <rect key={i} x="20" y={40+i*30} width="85" height="25" rx="4" fill={i%2===0?'#2da3d9':'#282867'} opacity="0.6"/>
-        ))}
-        {['アプリA','ゲストOS','アプリB','ゲストOS'].map((l,i)=>(
-          <text key={i} x="62" y={57+i*30} textAnchor="middle" fill="white" fontSize="11">{l}</text>
-        ))}
-        <rect x="20" y="165" width="180" height="18" rx="4" fill="#2d3748" opacity="0.7"/>
-        <text x="110" y="178" textAnchor="middle" fill="white" fontSize="11">ハイパーバイザー + 物理HW</text>
-        {/* Container */}
-        <rect x="260" y="10" width="210" height="180" rx="8" fill="#48bb78" opacity="0.07" stroke="#48bb78" strokeWidth="2"/>
-        <text x="365" y="30" textAnchor="middle" fill="#48bb78" fontWeight="bold" fontSize="13">コンテナ</text>
-        {['アプリA','アプリB','アプリC'].map((l,i)=>(
-          <rect key={i} x={270+i*60} y="40" width="55" height="60" rx="4" fill="#48bb78" opacity="0.6"/>
-        ))}
-        {['アプリA','アプリB','アプリC'].map((l,i)=>(
-          <text key={i} x={297+i*60} y="75" textAnchor="middle" fill="white" fontSize="11">{l}</text>
-        ))}
-        <rect x="270" y="110" width="190" height="20" rx="4" fill="#38a169" opacity="0.7"/>
-        <text x="365" y="124" textAnchor="middle" fill="white" fontSize="11">コンテナランタイム（Docker等）</text>
-        <rect x="270" y="138" width="190" height="20" rx="4" fill="#276749" opacity="0.7"/>
-        <text x="365" y="152" textAnchor="middle" fill="white" fontSize="11">ホストOS（共有カーネル）</text>
-        <rect x="270" y="162" width="190" height="20" rx="4" fill="#2d3748" opacity="0.7"/>
-        <text x="365" y="176" textAnchor="middle" fill="white" fontSize="11">物理ハードウェア</text>
-      </svg>
-    </div>
-  )) as React.FC,
+  paging: PagingVisual,
+  cloud: CloudVisual,
+  virtualization: VirtualizationVisual,
   'er-diagram': (() => (
     <div className="diagram-container">
       <h4 className="diagram-title">ER図の例（社員と部署）</h4>
