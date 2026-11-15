@@ -26,6 +26,10 @@ import PagingVisual from './visuals/PagingVisual';
 import FilesystemVisual from './visuals/FilesystemVisual';
 import CloudVisual from './visuals/CloudVisual';
 import VirtualizationVisual from './visuals/VirtualizationVisual';
+import DatabaseVisual from './visuals/DatabaseVisual';
+import NormalizeVisual from './visuals/NormalizeVisual';
+import TransactionVisual from './visuals/TransactionVisual';
+import NosqlVisual from './visuals/NosqlVisual';
 
 interface DiagramProps {
   type: string;
@@ -136,67 +140,6 @@ const FlowchartDiagram = () => (
 
       <defs>
         <marker id="a3" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
-          <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
-        </marker>
-      </defs>
-    </svg>
-  </div>
-);
-
-const DatabaseDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">テーブルの構造と結合</h4>
-    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
-      <div>
-        <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 6, color: '#2da3d9' }}>社員テーブル</div>
-        <table className="truth-table" style={{ fontSize: 13 }}>
-          <thead><tr><th>社員ID</th><th>氏名</th><th>部署ID</th></tr></thead>
-          <tbody>
-            <tr><td>1</td><td>田中</td><td style={{ color: '#e53e3e', fontWeight: 700 }}>10</td></tr>
-            <tr><td>2</td><td>鈴木</td><td style={{ color: '#e53e3e', fontWeight: 700 }}>20</td></tr>
-            <tr><td>3</td><td>佐藤</td><td style={{ color: '#e53e3e', fontWeight: 700 }}>10</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div style={{ display: 'flex', alignItems: 'center', fontSize: 24, color: '#718096' }}>⟷</div>
-      <div>
-        <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 6, color: '#48bb78' }}>部署テーブル</div>
-        <table className="truth-table" style={{ fontSize: 13 }}>
-          <thead><tr><th>部署ID</th><th>部署名</th></tr></thead>
-          <tbody>
-            <tr><td style={{ color: '#e53e3e', fontWeight: 700 }}>10</td><td>開発部</td></tr>
-            <tr><td style={{ color: '#e53e3e', fontWeight: 700 }}>20</td><td>営業部</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div style={{ textAlign: 'center', marginTop: 12, fontSize: 12, color: '#718096' }}>
-      部署IDが外部キー（Foreign Key）
-    </div>
-  </div>
-);
-
-const TransactionDiagram = () => (
-  <div className="diagram-container">
-    <h4 className="diagram-title">トランザクションの流れ（銀行振込の例）</h4>
-    <svg viewBox="0 0 480 180" className="diagram-svg">
-      {[
-        { x: 10, label: 'BEGIN', sub: 'トランザクション開始', color: '#2da3d9' },
-        { x: 130, label: '引き落とし', sub: 'A口座 -1万円', color: '#ed8936' },
-        { x: 250, label: '入金', sub: 'B口座 +1万円', color: '#48bb78' },
-        { x: 370, label: 'COMMIT', sub: '確定', color: '#38a169' },
-      ].map((step, i) => (
-        <g key={step.label}>
-          <rect x={step.x} y="50" width="100" height="60" rx="8" fill={step.color} opacity="0.2" stroke={step.color} strokeWidth="2"/>
-          <text x={step.x + 50} y="77" textAnchor="middle" fill="#4a5568" fontSize="12" fontWeight="bold">{step.label}</text>
-          <text x={step.x + 50} y="97" textAnchor="middle" fill="#718096" fontSize="10">{step.sub}</text>
-          {i < 3 && <path d={`M ${step.x + 100} 80 L ${step.x + 128} 80`} stroke="#718096" strokeWidth="1.5" markerEnd="url(#a4)"/>}
-        </g>
-      ))}
-      <path d="M 200 115 Q 200 150 240 150 Q 280 150 280 115" stroke="#fc8181" strokeWidth="1.5" fill="none" strokeDasharray="4"/>
-      <text x="240" y="168" textAnchor="middle" fill="#fc8181" fontSize="11">失敗時 → ROLLBACK（全て元に戻す）</text>
-      <defs>
-        <marker id="a4" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
           <polygon points="0 0, 8 3, 0 6" fill="#718096"/>
         </marker>
       </defs>
@@ -478,8 +421,8 @@ const diagrams: Record<string, React.FC> = {
   clock: PerformanceVisual,
   os: OsVisual,
   filesystem: FilesystemVisual,
-  database: DatabaseDiagram,
-  transaction: TransactionDiagram,
+  database: DatabaseVisual,
+  transaction: TransactionVisual,
   waterfall: WaterfallDiagram,
   testing: TestingDiagram,
   gantt: GanttDiagram,
@@ -504,46 +447,8 @@ const diagrams: Record<string, React.FC> = {
   paging: PagingVisual,
   cloud: CloudVisual,
   virtualization: VirtualizationVisual,
-  'er-diagram': (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">ER図の例（社員と部署）</h4>
-      <svg viewBox="0 0 480 160" className="diagram-svg">
-        <rect x="20" y="40" width="140" height="80" rx="8" fill="#2da3d9" opacity="0.15" stroke="#2da3d9" strokeWidth="2"/>
-        <text x="90" y="65" textAnchor="middle" fill="#2da3d9" fontWeight="bold" fontSize="13">社員</text>
-        <text x="90" y="83" textAnchor="middle" fill="#4a5568" fontSize="11">社員ID (PK)</text>
-        <text x="90" y="98" textAnchor="middle" fill="#4a5568" fontSize="11">氏名, 年齢</text>
-        <text x="90" y="113" textAnchor="middle" fill="#e53e3e" fontSize="11">部署ID (FK)</text>
-        <rect x="320" y="40" width="140" height="80" rx="8" fill="#48bb78" opacity="0.15" stroke="#48bb78" strokeWidth="2"/>
-        <text x="390" y="65" textAnchor="middle" fill="#48bb78" fontWeight="bold" fontSize="13">部署</text>
-        <text x="390" y="83" textAnchor="middle" fill="#4a5568" fontSize="11">部署ID (PK)</text>
-        <text x="390" y="98" textAnchor="middle" fill="#4a5568" fontSize="11">部署名</text>
-        <line x1="162" y1="80" x2="318" y2="80" stroke="#718096" strokeWidth="2"/>
-        <text x="190" y="72" fill="#4a5568" fontSize="12" fontWeight="bold">多</text>
-        <text x="295" y="72" fill="#4a5568" fontSize="12" fontWeight="bold">1</text>
-        <text x="240" y="72" textAnchor="middle" fill="#718096" fontSize="11">所属する</text>
-        <text x="240" y="140" textAnchor="middle" fill="#718096" fontSize="11">多対1：複数の社員が1つの部署に所属</text>
-      </svg>
-    </div>
-  )) as React.FC,
-  nosql: (() => (
-    <div className="diagram-container">
-      <h4 className="diagram-title">NoSQLの種類と用途</h4>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-        {[
-          { type: 'キーバリュー型', example: 'Redis, DynamoDB', use: 'セッション・キャッシュ', color: '#2da3d9' },
-          { type: 'ドキュメント型', example: 'MongoDB, Firestore', use: 'WebアプリのデータAPI', color: '#48bb78' },
-          { type: 'カラム型', example: 'Cassandra, HBase', use: 'ビッグデータ・IoT分析', color: '#ed8936' },
-          { type: 'グラフ型', example: 'Neo4j', use: 'SNS関係・推薦エンジン', color: '#282867' },
-        ].map(n => (
-          <div key={n.type} style={{ border: `2px solid ${n.color}`, borderRadius: 8, padding: '10px 12px', background: `${n.color}10` }}>
-            <div style={{ color: n.color, fontWeight: 800, fontSize: 13 }}>{n.type}</div>
-            <div style={{ fontSize: 11, color: '#718096', marginTop: 2 }}>{n.example}</div>
-            <div style={{ fontSize: 12, color: '#4a5568', marginTop: 4 }}>→ {n.use}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )) as React.FC,
+  'er-diagram': NormalizeVisual,
+  nosql: NosqlVisual,
   uml: (() => (
     <div className="diagram-container">
       <h4 className="diagram-title">主なUML図の種類</h4>
